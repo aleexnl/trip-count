@@ -2,10 +2,14 @@
 body {
     background-color: #ffffff;
     font-family: "Roboto", sans-serif;
+    text-rendering: auto;
 }
-
+.content {
+    width: 80%;
+    margin: auto;
+}
 /* Estilos del formulario*/
-.login-form {
+.centered-form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -19,7 +23,7 @@ body {
 }
 .form-group > input {
     margin: 5px 0 0 0;
-    padding: 1rem 1.5rem;
+    padding: 0.7rem 1.5rem;
     font-size: 1.25rem;
     border-radius: 7px;
     color: #495057;
@@ -27,10 +31,10 @@ body {
 }
 .form-group > label {
     color: #495057;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
 }
 .form-group > input[type="submit"] {
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
     border: 0;
     background-color: #18c3f8;
     color: #ffffff;
@@ -38,7 +42,10 @@ body {
     box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
     cursor: pointer;
 }
-
+.form-checkbox {
+    display: flex;
+    flex-direction: row;
+}
 /* Estilos de los mensajes del servidor.*/
 .message {
     padding: 1em 2em;
