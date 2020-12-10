@@ -144,7 +144,7 @@
             vertical-align: text-bottom;
         }
 
-        .anim2 {
+        /*.anim2 {
             animation: 1s animationAddLabelMail both;
         }
 
@@ -179,7 +179,7 @@
                 z-index: 2;
                 transform: skewY(0deg) translateY(0%);
             }
-        }
+        }*/
     </style>
 </head>
 
