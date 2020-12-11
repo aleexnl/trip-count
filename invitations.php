@@ -41,7 +41,6 @@
         header>a.link:hover,
         header>a.link.active {
             color: #00daff;
-            font-weight: bold;
         }
 
         p.title {
@@ -98,7 +97,7 @@
             z-index: 2;
             width: 75%;
             font-size: 1em;
-            background-image: url(https://cdn2.iconfinder.com/data/icons/font-awesome/1792/envelope-512.png);
+            background-image: url(images/envelope.png);
             padding-left: 35px;
             background-position: 6px;
             background-size: 23px;
