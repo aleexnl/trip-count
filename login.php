@@ -42,6 +42,27 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
     <div class="content">
         <div class="centered-form">
             <h1>INICIAR SESIÓN</h1>
+            <?php
+            if (isset($msgType)) { // Check if the communication is needed
+                switch ($msgType) {
+                    case 'error': ?>
+                        <div class="message error-message">
+                            <?= $msg ?>
+                        </div>
+                        <?php break;
+                    case 'success': ?>
+                        <div class="message success-message">
+                            <?= $msg ?>
+                        </div>
+                        <?php break;
+                    default: ?>
+                        <div class="message  error-message">
+                            <?= $msg ?>
+                        </div>
+                        <?php break;
+                }
+            }
+            ?>
             <form action="" method="POST">
                 <div class="form-group">
                     <label for="userMail">Correo electrónico</label>
@@ -60,27 +81,6 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
                     <button class="button-primary" type="submit">Iniciar sesión</button>
                 </div>
             </form>
-            <?php
-            if (isset($msgType)) { // Check if the communication is needed
-                switch ($msgType) {
-                    case 'error': ?>
-                        <div class="message error-message">
-                            <?= $msg ?>
-                        </div>
-                    <?php break;
-                    case 'success': ?>
-                        <div class="message success-message">
-                            <?= $msg ?>
-                        </div>
-                    <?php break;
-                    default: ?>
-                        <div class="message  error-message">
-                            <?= $msg ?>
-                        </div>
-            <?php break;
-                }
-            }
-            ?>
         </div>
     </div>
 </body>
