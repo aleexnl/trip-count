@@ -1,0 +1,20 @@
+header {
+	display: flex;
+	background-color: #FFFFFF;
+	padding: 1.5vw;
+	border-bottom: 1px solid black;
+	justify-content: space-around;
+	align-items: center;
+}
+
+button {
+	background-color: transparent;
+	outline: none;
+	cursor: pointer;
+	border: none;
+	font-size: 2vw;
+}
+
+header p {
+	font-size: 1vw;
+}
