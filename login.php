@@ -15,18 +15,25 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
     if ($_POST["userMail"] && $_POST["userPass"]) { // Check that both variables are not empty
         $email = filter_var($_POST["userMail"], FILTER_SANITIZE_EMAIL); // Sanitize email input
         if (filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if the variable contains an email.
-            $userPass = filter_var($_POST["userPass"], FILTER_SANITIZE_STRING); // Ssanitize string
-            /* Insert en la base de datos */
-            $msgType = "success";
-            $msg = $email . $userPass;
-            // $msg = "Inicio de sesión correcto, redireccionando...";
-        } else {
+            $password = hash("sha256", filter_var($_POST["userPass"], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
+            $query = $bd -> prepare("SELECT * FROM users WHERE email = ? AND password = ?"); // Prepare the query.
+            $query->bindParam(1, $email); // Bind parameters.
+            $query->bindParam(2, $password);
+            $query->execute(); // Execute the query
+            if ($query->rowCount() > 0) { // Chef if the query returned something.
+                $msgType = "success";
+                $msg = "Inicio de sesión correcto, redireccionando...";
+            } else { // If no user was found witth that credentials.
+                $msgType = "error";
+                $msg = "<b>ERROR:</b> El usuario o la contraseña no existe.";
+            }
+        } else { // If the mail is not valid.
             $msgType = "error";
-            $msg = "El email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.";
+            $msg = "<b>ERROR:</b> El email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.";
         }
     } else { // If any field was empty, throw error.
         $msgType = "error";
-        $msg = "No se ha proporcionado información en todos los campos, por favor, reenvia el formulario con los datos rellenados.";
+        $msg = "<b>ERROR:</b> No se ha proporcionado información en todos los campos, por favor, reenvia el formulario con los datos rellenados.";
     }
 }
 ?>
@@ -50,7 +57,7 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
                     <label for="rememberUser">Guardar mi información</label>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Iniciar sesión">
+                    <button class="button-primary" type="submit">Iniciar sesión</button>
                 </div>
             </form>
             <?php
