@@ -1,0 +1,55 @@
+
+/* Importacion de fuente */
+
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
+
+body {
+	background-color: #FFFFFF;
+}
+
+
+
+/* Titulo de bienvenida de la pagina */
+
+#cabecera {
+	text-align: center;
+	margin: 30vh auto 10vh auto;
+}
+
+#cabecera h1 {
+	font-size: 3vw;
+	font-family: 'East Sea Dokdo', cursive;
+	color: #323039;
+	font-weight: bold;
+}
+
+
+
+/* Panel central y botones centrales */
+
+#centro {
+	display: flex;
+}
+
+#registrarse {
+	margin: auto 10% auto auto;
+}
+
+#entrar {
+	margin: auto auto auto 10%;
+}
+
+button {
+	background-color: white;
+	color: #323039;
+	border: 3px solid #323039;
+	font-size: 1vw;
+	padding: 1vw;
+	border-radius: 5px;
+	font-weight: bold;
+}
+
+button:hover {
+	background-color: #323039;
+	color: white;
+}
