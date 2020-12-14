@@ -20,7 +20,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color: #ccbcbc;
+            background-color: #fff;
         }
 
         header {
@@ -208,14 +208,6 @@
             <label for="email-1">Correo 1:</label>
             <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
         </div>
-        <div class="box-mail">
-            <label for="email-2">Correo 2:</label>
-            <input type="email" class="mails" name="email-2" placeholder="user@mail.com">
-        </div>
-        <div class="box-mail">
-            <label for="email-3" class="anim2">Correo 3:</label>
-            <input type="email" class="mails anim" name="email-3" placeholder="user@mail.com">
-        </div>
         <div class="box-btn">
             <button class="add-mail">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
             <button class="send" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
@@ -267,6 +259,27 @@
             }
         }
 
+        function createInputMail() {
+            let nextIndexMail = document.getElementsByClassName("mails").length + 1;
+            let sibling = document.getElementsByClassName("box-btn")[0];
+            let divBoxMail = document.createElement("div");
+            divBoxMail.className = "box-mail";
+
+            let label = document.createElement("label");
+            label.innerText = "Correo " + nextIndexMail + ":";
+
+            let input = document.createElement("input");
+            input.type = "email";
+            input.className = "mails";
+            input.name = "email-" + nextIndexMail;
+            input.placeholder = "user@mail.com";
+
+            divBoxMail.appendChild(label);
+            divBoxMail.appendChild(input);
+
+            sibling.parentNode.insertBefore(divBoxMail, sibling);
+        }
+
         document.getElementsByClassName("send")[0].onclick = (e) => {
             e.preventDefault();
             validate();
@@ -275,6 +288,7 @@
         document.getElementsByClassName("add-mail")[0].onclick = (e) => {
             e.preventDefault();
             generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages");
+            createInputMail();
         }
     </script>
 </body>
