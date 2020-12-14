@@ -20,7 +20,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color: #ccbcbc;
+            background-color: #fff;
         }
 
         header {
@@ -143,7 +143,7 @@
             vertical-align: text-bottom;
         }
 
-        .anim2 {
+        /*.anim2 {
             animation: 1s animationAddLabelMail both;
         }
 
@@ -178,7 +178,7 @@
                 z-index: 2;
                 transform: skewY(0deg) translateY(0%);
             }
-        }
+        }*/
     </style>
 </head>
 
@@ -267,11 +267,10 @@
 
             let label = document.createElement("label");
             label.innerText = "Correo " + nextIndexMail + ":";
-            label.className = "anim2";
 
             let input = document.createElement("input");
             input.type = "email";
-            input.className = "mails anim";
+            input.className = "mails";
             input.name = "email-" + nextIndexMail;
             input.placeholder = "user@mail.com";
 
@@ -288,7 +287,7 @@
 
         document.getElementsByClassName("add-mail")[0].onclick = (e) => {
             e.preventDefault();
-            //generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages");
+            generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages");
             createInputMail();
         }
     </script>

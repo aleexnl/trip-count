@@ -16,7 +16,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color: #eaeaea;
+            background-color: #fff;
         }
 
         header {
@@ -86,7 +86,7 @@
 
         form.new-trip>div>input[type="text"] {
             width: -webkit-fill-available;
-            background-color: #eaeaea;
+            background-color: #fff;
             border: 0;
             border-bottom: 2px solid #000;
             font-size: 19px;
@@ -97,7 +97,7 @@
             margin-left: 15px;
             border: 0;
             font-size: 17px;
-            background-color: #eaeaea;
+            background-color: #fff;
             border-bottom: 2px solid #000;
         }
 
@@ -195,6 +195,16 @@
             <button class="create-trip">Crear Viaje <i class="fas fa-plane fa-v-align"></i></button>
         </div>
     </form>
+    <script>
+        let btnRedo = document.getElementsByClassName("redo")[0];
+
+        btnRedo.onclick = (e) => {
+            e.preventDefault();
+            document.getElementsByName("nameTrip")[0].value = "";
+            document.getElementsByName("descriptionTrip")[0].value = "";
+
+        }
+    </script>
 </body>
 
 </html>
