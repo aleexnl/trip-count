@@ -47,9 +47,12 @@ button {
 	padding: 1vw;
 	border-radius: 5px;
 	font-weight: bold;
+	transition: 0.3s;
+	cursor: pointer;
 }
 
 button:hover {
 	background-color: #323039;
 	color: white;
+	transition: 0.3s;
 }
