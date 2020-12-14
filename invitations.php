@@ -20,7 +20,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-color: #ccbcbc;
+            background-color: #fff;
         }
 
         header {
@@ -41,31 +41,30 @@
         header>a.link:hover,
         header>a.link.active {
             color: #00daff;
-            font-weight: bold;
         }
 
-        p.titulo {
+        p.title {
             text-align: center;
             font-size: 4em;
             font-weight: bold;
             margin: 2% 0 0 0;
         }
 
-        p.destino {
+        p.destiny {
             text-align: center;
             font-size: 2.5em;
             margin-top: 20px;
             margin-bottom: 10px;
         }
 
-        div.contenedor-mensajes {
+        div.container-messages {
             width: 100%;
             display: flex;
             flex-flow: column wrap;
             justify-content: center;
         }
 
-        div.contenedor-mensajes div {
+        div.container-messages div {
             width: 65%;
             margin: 5px auto;
             border-radius: 5px;
@@ -73,7 +72,7 @@
             padding: 10px 0;
         }
 
-        form.invitaciones {
+        form.invitations {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
@@ -83,22 +82,22 @@
             margin: 0 auto;
         }
 
-        form.invitaciones>div.box-mail {
+        form.invitations>div.box-mail {
             width: 60%;
             display: flex;
             justify-content: space-evenly;
             margin-bottom: 10px;
         }
 
-        form.invitaciones>div.box-mail>label {
+        form.invitations>div.box-mail>label {
             font-size: 2em;
         }
 
-        form.invitaciones>div.box-mail>input[type="email"] {
+        form.invitations>div.box-mail>input[type="email"] {
             z-index: 2;
             width: 75%;
             font-size: 1em;
-            background-image: url(https://cdn2.iconfinder.com/data/icons/font-awesome/1792/envelope-512.png);
+            background-image: url(images/envelope.png);
             padding-left: 35px;
             background-position: 6px;
             background-size: 23px;
@@ -108,23 +107,23 @@
             box-shadow: 0 0 3px black;
         }
 
-        form.invitaciones>div.box-mail>input[type="email"]:hover {
+        form.invitations>div.box-mail>input[type="email"]:hover {
             border: 2px solid #000;
         }
 
-        form.invitaciones>div.box-mail>input[type="email"]:focus {
+        form.invitations>div.box-mail>input[type="email"]:focus {
             outline: none;
             border: 2px solid #000;
         }
 
-        form.invitaciones>div.box-btns {
+        form.invitations>div.box-btn {
             width: 50%;
             margin-top: 20px;
             display: flex;
             justify-content: space-evenly;
         }
 
-        form.invitaciones>div.box-btns>button {
+        form.invitations>div.box-btn>button {
             font-size: 1.2em;
             background-color: #18c3f8;
             box-shadow: 0 0 4px #18c3f8;
@@ -135,7 +134,7 @@
             cursor: pointer;
         }
 
-        form.invitaciones>div.box-btns>button:focus {
+        form.invitations>div.box-btn>button:focus {
             outline: none;
             border: 2px solid #549ab3;
         }
@@ -144,7 +143,7 @@
             vertical-align: text-bottom;
         }
 
-        .anim2 {
+        /*.anim2 {
             animation: 1s animationAddLabelMail both;
         }
 
@@ -179,7 +178,7 @@
                 z-index: 2;
                 transform: skewY(0deg) translateY(0%);
             }
-        }
+        }*/
     </style>
 </head>
 
@@ -201,41 +200,33 @@
             <p><i class="fas fa-user"></i> Carlos</p>
         </a>
     </header>
-    <p class="titulo">Invitaciones</p>
-    <p class="destino">Introduce los correos de tus amigos con los que vas a viajar a <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i>.</p>
-    <div class="contenedor-mensajes"></div>
-    <form class="invitaciones" action="#" method="post">
+    <p class="title">Invitaciones</p>
+    <p class="destiny">Introduce los correos de tus amigos con los que vas a viajar a <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i>.</p>
+    <div class="container-messages"></div>
+    <form class="invitations" action="#" method="post">
         <div class="box-mail">
             <label for="email-1">Correo 1:</label>
             <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
         </div>
-        <div class="box-mail">
-            <label for="email-2">Correo 2:</label>
-            <input type="email" class="mails" name="email-2" placeholder="user@mail.com">
-        </div>
-        <div class="box-mail">
-            <label for="email-3" class="anim2">Correo 3:</label>
-            <input type="email" class="mails anim" name="email-3" placeholder="user@mail.com">
-        </div>
-        <div class="box-btns">
-            <button class="agregar-mail">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
-            <button class="enviar" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
+        <div class="box-btn">
+            <button class="add-mail">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
+            <button class="send" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
         </div>
     </form>
     <script>
-        function generarMensaje(type, text, parentName) {
+        function generateMessages(type, text, parentName) {
             let parent = document.getElementsByClassName(parentName)[0];
             let msg = document.createElement("div");
-            if (type == "info") coloresDelMensaje(msg, "#fff", "#2196F3", "#58748a", "#2196F3");
-            else if (type == "success") coloresDelMensaje(msg, "#fff", "#4CAF50", "#39883c", "#4CAF50");
-            else if (type == "error") coloresDelMensaje(msg, "#fff", "#f44336", "#a0342c", "#f44336");
-            else if (type == "warning") coloresDelMensaje(msg, "#fff", "#ff9800", "#ad7c33", "#ff9800");
+            if (type == "info") messageColors(msg, "#fff", "#2196F3", "#58748a", "#2196F3");
+            else if (type == "success") messageColors(msg, "#fff", "#4CAF50", "#39883c", "#4CAF50");
+            else if (type == "error") messageColors(msg, "#fff", "#f44336", "#a0342c", "#f44336");
+            else if (type == "warning") messageColors(msg, "#fff", "#ff9800", "#ad7c33", "#ff9800");
             msg.appendChild(document.createTextNode(text));
-            parent.appendChild(msg);
-            tiempoAtras(parent);
+            parent.prepend(msg);
+            countdown(parent);
         }
 
-        function coloresDelMensaje(element, text, bg, border, shadow) {
+        function messageColors(element, text, bg, border, shadow) {
             element.style.color = text;
             element.style.backgroundColor = bg;
             element.style.border = "1px solid " + border;
@@ -243,7 +234,7 @@
             return element;
         }
 
-        function tiempoAtras(parent) {
+        function countdown(parent) {
             setTimeout(() => {
                 parent.removeChild(parent.lastElementChild);
             }, 4000);
@@ -258,24 +249,46 @@
             let emails = document.getElementsByClassName("mails");
             for (var i = 0; i < emails.length; i++) {
                 if (emails[i].value.replace(" ", "") == "")
-                    generarMensaje("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "contenedor-mensajes");
+                    generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages");
                 else {
                     if (validateEmail(emails[i].value))
-                        generarMensaje("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "contenedor-mensajes");
+                        generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages");
                     else
-                        generarMensaje("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "contenedor-mensajes");
+                        generateMessages("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "container-messages");
                 }
             }
         }
 
-        document.getElementsByClassName("enviar")[0].onclick = (e) => {
+        function createInputMail() {
+            let nextIndexMail = document.getElementsByClassName("mails").length + 1;
+            let sibling = document.getElementsByClassName("box-btn")[0];
+            let divBoxMail = document.createElement("div");
+            divBoxMail.className = "box-mail";
+
+            let label = document.createElement("label");
+            label.innerText = "Correo " + nextIndexMail + ":";
+
+            let input = document.createElement("input");
+            input.type = "email";
+            input.className = "mails";
+            input.name = "email-" + nextIndexMail;
+            input.placeholder = "user@mail.com";
+
+            divBoxMail.appendChild(label);
+            divBoxMail.appendChild(input);
+
+            sibling.parentNode.insertBefore(divBoxMail, sibling);
+        }
+
+        document.getElementsByClassName("send")[0].onclick = (e) => {
             e.preventDefault();
             validate();
         }
 
-        document.getElementsByClassName("agregar-mail")[0].onclick = (e) => {
+        document.getElementsByClassName("add-mail")[0].onclick = (e) => {
             e.preventDefault();
-            generarMensaje("info", "INFO: Se ha agregado un nuevo correo.", "contenedor-mensajes");
+            generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages");
+            createInputMail();
         }
     </script>
 </body>
