@@ -6,6 +6,7 @@
 # cosas
 .history
 .idea/
+.htaccess
 
 # User-specific files
 *.rsuser
