@@ -1,20 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
 header {
 	display: flex;
 	background-color: #FFFFFF;
 	padding: 1.5vw;
 	border-bottom: 1px solid black;
 	justify-content: space-around;
-	align-items: center;
+	align-items: center
 }
 
-button {
+header > img {
 	background-color: transparent;
 	outline: none;
 	cursor: pointer;
 	border: none;
 	font-size: 2vw;
+	height: 6vh;
 }
 
-header p {
-	font-size: 1vw;
+header p.hello {
+	font-size: 1.2vw;
+	font-family: 'Roboto', sans-serif;
+}
+
+header p.hello span.welcome {
+	font-weight: bold;
 }
