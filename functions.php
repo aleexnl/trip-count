@@ -12,6 +12,9 @@ function insertQuery($bd, $sql, $params)
 }
 
 if (isset($_POST['nameTrip'])) {
+    // si la session expira enviar al login con un mensaje de error
+    /* CODE */
+    
     $params = [];
     // PARAMETERS OF TRAVEL
     foreach ($_POST as $value)
