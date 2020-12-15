@@ -1,6 +1,7 @@
 <?php
 
 require_once("./connection.php");
+session_start();
 
 function insertQuery($bd, $sql, $params)
 {
@@ -11,6 +12,7 @@ function insertQuery($bd, $sql, $params)
 }
 
 if (isset($_POST['nameTrip'])) {
+    
     $params = [];
     // PARAMETERS OF TRAVEL
     foreach ($_POST as $value)

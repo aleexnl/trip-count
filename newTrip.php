@@ -221,16 +221,16 @@
     <form class="new-trip" action="functions.php" method="post">
         <div class="name">
             <label for="nameTrip">Nombre del viaje: </label>
-            <input type="text" name="nameTrip" value="Viaje a Cantabria">
+            <input type="text" name="nameTrip">
         </div>
         <div class="description">
             <label for="descriptionTrip">Descripción: </label>
-            <input type="text" name="descriptionTrip" value="Casa del campo con vacas">
+            <input type="text" name="descriptionTrip">
         </div>
         <label for="departureDate">Salida:&#160;</label>
-        <input type="datetime-local" name="departureDate" placeholder="DD/MM/YYYY HH:MM" value="2021-06-12T19:30">
+        <input type="datetime-local" name="departureDate" placeholder="DD/MM/YYYY HH:MM">
         <label for="returnDate">&#160;&#160;&#160;Regreso:&#160;</label>
-        <input type="datetime-local" name="returnDate" placeholder="DD/MM/YYYY HH:MM" value="2022-06-12T19:30">
+        <input type="datetime-local" name="returnDate" placeholder="DD/MM/YYYY HH:MM">
         <div class="coin">
             <label for="coinTrip">Moneda que se utilizará: </label>
             <select name="coinTrip">
