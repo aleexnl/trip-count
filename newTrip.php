@@ -49,6 +49,22 @@
             margin: 2% 0 0 0;
         }
 
+        div.container-messages {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            white-space: pre-line;
+        }
+
+        div.container-messages div {
+            width: 65%;
+            margin: 5px auto;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px 0;
+        }
+
         form.new-trip {
             display: flex;
             flex-direction: row;
@@ -69,11 +85,16 @@
             width: 100%;
             display: flex;
             margin-bottom: 0;
+            margin-top: 20px;
             place-content: center;
         }
 
         form.new-trip>div>label {
             font-size: 23px;
+        }
+
+        form.new-trip>label {
+            font-size: 20px;
         }
 
         form.new-trip>div>label[for="nameTrip"] {
@@ -86,6 +107,7 @@
 
         form.new-trip>div>input[type="text"] {
             width: -webkit-fill-available;
+            width: -moz-available;
             background-color: #fff;
             border: 0;
             border-bottom: 2px solid #000;
@@ -144,6 +166,34 @@
         .fa-v-align {
             vertical-align: text-bottom;
         }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
+        }
     </style>
     <?php require("./foreignExchange.php"); ?>
 </head>
@@ -167,15 +217,20 @@
         </a>
     </header>
     <p class="title"><i class="fas fa-globe-americas"></i> Nuevo Viaje <i class="fas fa-globe-europe"></i></p>
-    <form class="new-trip" action="#" method="post">
+    <div class="container-messages"></div>
+    <form class="new-trip" action="functions.php" method="post">
         <div class="name">
             <label for="nameTrip">Nombre del viaje: </label>
-            <input type="text" name="nameTrip">
+            <input type="text" name="nameTrip" value="Viaje a Cantabria">
         </div>
         <div class="description">
             <label for="descriptionTrip">Descripción: </label>
-            <input type="text" name="descriptionTrip">
+            <input type="text" name="descriptionTrip" value="Casa del campo con vacas">
         </div>
+        <label for="departureDate">Salida:&#160;</label>
+        <input type="datetime-local" name="departureDate" placeholder="DD/MM/YYYY HH:MM" value="2021-06-12T19:30">
+        <label for="returnDate">&#160;&#160;&#160;Regreso:&#160;</label>
+        <input type="datetime-local" name="returnDate" placeholder="DD/MM/YYYY HH:MM" value="2022-06-12T19:30">
         <div class="coin">
             <label for="coinTrip">Moneda que se utilizará: </label>
             <select name="coinTrip">
@@ -197,12 +252,93 @@
     </form>
     <script>
         let btnRedo = document.getElementsByClassName("redo")[0];
+        let createTrip = document.getElementsByClassName("new-trip")[0];
+        let departureDate = document.getElementsByName("departureDate")[0];
+        let returnDate = document.getElementsByName("returnDate")[0];
+
+
+        function generateMessages(type, text, parentName, seconds) {
+            let parent = document.getElementsByClassName(parentName)[0];
+            let msg = document.createElement("div");
+            if (type == "info") msg.className = "msg-info";
+            else if (type == "success") msg.className = "msg-success";
+            else if (type == "error") msg.className = "msg-error";
+            else if (type == "warning") msg.className = "msg-warning";
+            msg.appendChild(document.createTextNode(text));
+            parent.prepend(msg);
+            countdown(parent, seconds);
+        }
+
+        function countdown(parent, seconds) {
+            setTimeout(() => {
+                parent.removeChild(parent.lastElementChild);
+            }, seconds * 1000);
+        }
+
+        function validateInputTextLength(name, size) {
+            let input = document.getElementsByName(name)[0];
+            if (input.value.length < size) return true;
+            else return false;
+        }
+
+        function isNull(name) {
+            return document.getElementsByName(name)[0].value.replace(/ /g, "");
+        }
+
+        function validateInputDate(input) {
+            return Date.parse(input.value);
+        }
+
+        // IF date1 IS GREATER THAN date2, RETURN TRUE
+        function compareDates(date1, date2) {
+            return date1 > date2;
+        }
 
         btnRedo.onclick = (e) => {
             e.preventDefault();
+            generateMessages("warning", "WARNING: Los datos del viaje se han restablecido.", "container-messages");
             document.getElementsByName("nameTrip")[0].value = "";
             document.getElementsByName("descriptionTrip")[0].value = "";
+            document.getElementsByName("departureDate")[0].value = "";
+            document.getElementsByName("returnDate")[0].value = "";
+            document.getElementsByName("coinTrip")[0].selectedIndex = "39";
+        }
 
+        /*window.addEventListener("load", (event) => {
+            console.log(navigator.onLine ? "Online" : "OFFline");
+        });*/
+
+        createTrip.onsubmit = (e) => {
+            e.preventDefault();
+            let textError = "";
+
+            // CHECK INPUT NAME
+            if (!isNull("nameTrip")) textError += "Error, el nombre está vacio.\n\r";
+            else {
+                if (!validateInputTextLength("nameTrip", 50)) textError += "Error, el nombre tiene una logitud superior a 50 caracteres.\n";
+            }
+
+            // CHECK INPUT DESCRIPTION
+            if (!isNull("descriptionTrip")) textError += "Error, la descripción está vacia.\n";
+            else {
+                if (!validateInputTextLength("descriptionTrip", 255)) textError += "Error, la descripción tiene una logitud superior a 255 caracteres.\n";
+            }
+
+            // CHECK INPUT DEPARTURE DATE
+            if (!validateInputDate(departureDate)) textError += "Error, fecha de salida no valida.\n";
+            else {
+                if (!compareDates(new Date(departureDate.value).getTime(), new Date().getTime())) textError += "Error, la fecha de salida es mas pequeña que la fecha actual.\n";
+            }
+
+            // CHECK INPUT RETURN DATE
+            if (!validateInputDate(returnDate)) textError += "Error, fecha de regreso no valida.\n";
+            else {
+                if (!compareDates(new Date(returnDate.value).getTime(), new Date(departureDate.value).getTime())) textError += "Error, la fecha de regreso es mas pequeña que la fecha de salida.\n";
+            }
+
+            if (textError != "")
+                generateMessages("error", textError, "container-messages", 7);
+            else e.currentTarget.submit();
         }
     </script>
 </body>
