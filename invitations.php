@@ -11,8 +11,17 @@
     $tripName = "Madrid";
     ?>
     <style>
-        * {
-            font-family: Ubuntu, "sans-serif";
+        @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+        .button-primary {
+            padding: 1rem 0.5rem;
+            border: 0;
+            background-color: #18c3f8;
+            color: #ffffff;
+            font-size: 1.25rem;
+            border-radius: 7px;
+            box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+            cursor: pointer;
         }
 
         body {
@@ -21,6 +30,8 @@
             height: 100vh;
             margin: 0;
             background-color: #fff;
+            font-family: "Roboto", sans-serif;
+            text-rendering: auto;
         }
 
         header {
@@ -123,17 +134,6 @@
             justify-content: space-evenly;
         }
 
-        form.invitations>div.box-btn>button {
-            font-size: 1.2em;
-            background-color: #18c3f8;
-            box-shadow: 0 0 4px #18c3f8;
-            border: 2px solid #18c3f8;
-            padding: 10px;
-            border-radius: 5px;
-            color: #f3f3f3;
-            cursor: pointer;
-        }
-
         form.invitations>div.box-btn>button:focus {
             outline: none;
             border: 2px solid #549ab3;
@@ -141,6 +141,34 @@
 
         .fa-v-align {
             vertical-align: text-bottom;
+        }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
         }
 
         /*.anim2 {
@@ -209,29 +237,21 @@
             <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
         </div>
         <div class="box-btn">
-            <button class="add-mail">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
-            <button class="send" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
+            <button class="add-mail button-primary">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
+            <button class="send button-primary" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
         </div>
     </form>
     <script>
         function generateMessages(type, text, parentName) {
             let parent = document.getElementsByClassName(parentName)[0];
             let msg = document.createElement("div");
-            if (type == "info") messageColors(msg, "#fff", "#2196F3", "#58748a", "#2196F3");
-            else if (type == "success") messageColors(msg, "#fff", "#4CAF50", "#39883c", "#4CAF50");
-            else if (type == "error") messageColors(msg, "#fff", "#f44336", "#a0342c", "#f44336");
-            else if (type == "warning") messageColors(msg, "#fff", "#ff9800", "#ad7c33", "#ff9800");
+            if (type == "info") msg.className = "msg-info";
+            else if (type == "success") msg.className = "msg-success";
+            else if (type == "error") msg.className = "msg-error";
+            else if (type == "warning") msg.className = "msg-warning";
             msg.appendChild(document.createTextNode(text));
             parent.prepend(msg);
             countdown(parent);
-        }
-
-        function messageColors(element, text, bg, border, shadow) {
-            element.style.color = text;
-            element.style.backgroundColor = bg;
-            element.style.border = "1px solid " + border;
-            element.style.boxShadow = "0 0 5px " + shadow;
-            return element;
         }
 
         function countdown(parent) {
