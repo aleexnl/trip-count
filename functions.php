@@ -12,7 +12,6 @@ function insertQuery($bd, $sql, $params)
 }
 
 if (isset($_POST['nameTrip'])) {
-    
     $params = [];
     // PARAMETERS OF TRAVEL
     foreach ($_POST as $value)
@@ -23,5 +22,6 @@ if (isset($_POST['nameTrip'])) {
     $userId = 1;
     insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $travelId)", []); // INSERT NEW GROUP
 
+    $_SESSION['trip_name'] = $params[0];
     header("location: ./invitations.php");
 }
