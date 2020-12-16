@@ -6,6 +6,9 @@
 # cosas
 .history
 .idea/
+composer.*
+.env*
+connection_compo.php
 
 # User-specific files
 *.rsuser
@@ -352,3 +355,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+/vendor/
