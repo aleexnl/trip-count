@@ -195,7 +195,10 @@
             box-shadow: 0 0 5px #f44336;
         }
     </style>
-    <?php require("./foreignExchange.php"); ?>
+    <?php 
+        // comprobar que la session no ha expirado
+        require("./foreignExchange.php");
+    ?>
 </head>
 
 <body>
@@ -221,16 +224,16 @@
     <form class="new-trip" action="functions.php" method="post">
         <div class="name">
             <label for="nameTrip">Nombre del viaje: </label>
-            <input type="text" name="nameTrip" value="Viaje a Cantabria">
+            <input type="text" name="nameTrip">
         </div>
         <div class="description">
             <label for="descriptionTrip">Descripción: </label>
-            <input type="text" name="descriptionTrip" value="Casa del campo con vacas">
+            <input type="text" name="descriptionTrip">
         </div>
         <label for="departureDate">Salida:&#160;</label>
-        <input type="datetime-local" name="departureDate" placeholder="DD/MM/YYYY HH:MM" value="2021-06-12T19:30">
+        <input type="datetime-local" name="departureDate" placeholder="DD/MM/YYYY HH:MM">
         <label for="returnDate">&#160;&#160;&#160;Regreso:&#160;</label>
-        <input type="datetime-local" name="returnDate" placeholder="DD/MM/YYYY HH:MM" value="2022-06-12T19:30">
+        <input type="datetime-local" name="returnDate" placeholder="DD/MM/YYYY HH:MM">
         <div class="coin">
             <label for="coinTrip">Moneda que se utilizará: </label>
             <select name="coinTrip">
@@ -304,36 +307,32 @@
             document.getElementsByName("coinTrip")[0].selectedIndex = "39";
         }
 
-        /*window.addEventListener("load", (event) => {
-            console.log(navigator.onLine ? "Online" : "OFFline");
-        });*/
-
         createTrip.onsubmit = (e) => {
             e.preventDefault();
             let textError = "";
 
             // CHECK INPUT NAME
-            if (!isNull("nameTrip")) textError += "Error, el nombre está vacio.\n\r";
+            if (!isNull("nameTrip")) textError += "ERROR: El nombre está vacio.\n\r";
             else {
-                if (!validateInputTextLength("nameTrip", 50)) textError += "Error, el nombre tiene una logitud superior a 50 caracteres.\n";
+                if (!validateInputTextLength("nameTrip", 50)) textError += "ERROR: El nombre tiene una logitud superior a 50 caracteres.\n";
             }
 
             // CHECK INPUT DESCRIPTION
-            if (!isNull("descriptionTrip")) textError += "Error, la descripción está vacia.\n";
+            if (!isNull("descriptionTrip")) textError += "ERROR: La descripción está vacia.\n";
             else {
-                if (!validateInputTextLength("descriptionTrip", 255)) textError += "Error, la descripción tiene una logitud superior a 255 caracteres.\n";
+                if (!validateInputTextLength("descriptionTrip", 255)) textError += "ERROR: La descripción tiene una logitud superior a 255 caracteres.\n";
             }
 
             // CHECK INPUT DEPARTURE DATE
-            if (!validateInputDate(departureDate)) textError += "Error, fecha de salida no valida.\n";
+            if (!validateInputDate(departureDate)) textError += "ERROR: Fecha de salida no valida.\n";
             else {
-                if (!compareDates(new Date(departureDate.value).getTime(), new Date().getTime())) textError += "Error, la fecha de salida es mas pequeña que la fecha actual.\n";
+                if (!compareDates(new Date(departureDate.value).getTime(), new Date().getTime())) textError += "ERROR: La fecha de salida es mas pequeña que la fecha actual.\n";
             }
 
             // CHECK INPUT RETURN DATE
-            if (!validateInputDate(returnDate)) textError += "Error, fecha de regreso no valida.\n";
+            if (!validateInputDate(returnDate)) textError += "ERROR: Fecha de regreso no valida.\n";
             else {
-                if (!compareDates(new Date(returnDate.value).getTime(), new Date(departureDate.value).getTime())) textError += "Error, la fecha de regreso es mas pequeña que la fecha de salida.\n";
+                if (!compareDates(new Date(returnDate.value).getTime(), new Date(departureDate.value).getTime())) textError += "ERROR: La fecha de regreso es mas pequeña que la fecha de salida.\n";
             }
 
             if (textError != "")

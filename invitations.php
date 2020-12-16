@@ -7,8 +7,10 @@
     <title>Invitaciones</title>
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <?php
-    // AQUÍ SE SUPONE QUE HAGO UNA CONSULTA A LA DB Y OBTENGO LA INFO :)
-    $tripName = "Madrid";
+    // Comprobar que la session esté activa
+    session_start();
+    $tripName = $_SESSION['trip_name'];
+    echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
     ?>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -229,7 +231,7 @@
         </a>
     </header>
     <p class="title">Invitaciones</p>
-    <p class="destiny">Introduce los correos de tus amigos con los que vas a viajar a <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i>.</p>
+    <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
     <div class="container-messages"></div>
     <form class="invitations" action="#" method="post">
         <div class="box-mail">
@@ -242,7 +244,7 @@
         </div>
     </form>
     <script>
-        function generateMessages(type, text, parentName) {
+        function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];
             let msg = document.createElement("div");
             if (type == "info") msg.className = "msg-info";
@@ -251,13 +253,13 @@
             else if (type == "warning") msg.className = "msg-warning";
             msg.appendChild(document.createTextNode(text));
             parent.prepend(msg);
-            countdown(parent);
+            countdown(parent, seconds);
         }
 
-        function countdown(parent) {
+        function countdown(parent, seconds) {
             setTimeout(() => {
                 parent.removeChild(parent.lastElementChild);
-            }, 4000);
+            }, seconds * 1000);
         }
 
         function validateEmail(email) {
@@ -265,16 +267,16 @@
             return re.test(email);
         }
 
-        function validate() {
+        function validateInvitationsMails() {
             let emails = document.getElementsByClassName("mails");
             for (var i = 0; i < emails.length; i++) {
                 if (emails[i].value.replace(" ", "") == "")
-                    generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages");
+                    generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages", 4);
                 else {
                     if (validateEmail(emails[i].value))
-                        generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages");
+                        generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages", 4);
                     else
-                        generateMessages("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "container-messages");
+                        generateMessages("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "container-messages", 4);
                 }
             }
         }
@@ -302,12 +304,12 @@
 
         document.getElementsByClassName("send")[0].onclick = (e) => {
             e.preventDefault();
-            validate();
+            validateInvitationsMails();
         }
 
         document.getElementsByClassName("add-mail")[0].onclick = (e) => {
             e.preventDefault();
-            generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages");
+            generateMessages("info", "INFO: Se ha agregado un nuevo correo.", "container-messages", 4);
             createInputMail();
         }
     </script>

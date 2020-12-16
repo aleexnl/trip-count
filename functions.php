@@ -1,6 +1,7 @@
 <?php
 
 require_once("./connection.php");
+session_start();
 
 function insertQuery($bd, $sql, $params)
 {
@@ -11,6 +12,9 @@ function insertQuery($bd, $sql, $params)
 }
 
 if (isset($_POST['nameTrip'])) {
+    // si la session expira enviar al login con un mensaje de error
+    /* CODE */
+    
     $params = [];
     // PARAMETERS OF TRAVEL
     foreach ($_POST as $value)
@@ -21,5 +25,6 @@ if (isset($_POST['nameTrip'])) {
     $userId = 1;
     insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $travelId)", []); // INSERT NEW GROUP
 
+    $_SESSION['trip_name'] = $params[0];
     header("location: ./invitations.php");
 }
