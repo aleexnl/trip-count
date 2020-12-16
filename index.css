@@ -2,27 +2,20 @@
 /* Importacion de fuente */
 
 @import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
-
-body {
-	background-color: #FFFFFF;
-}
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 
 /* Titulo de bienvenida de la pagina */
 
 #cabecera {
 	text-align: center;
-	margin: 30vh auto 10vh auto;
+	margin: 20vh auto 10vh auto;
+	max-height: 30vw;
 }
 
-#cabecera h1 {
-	font-size: 3vw;
-	font-family: 'East Sea Dokdo', cursive;
-	color: #323039;
-	font-weight: bold;
+#cabecera img {
+	max-height: 25vh;
 }
-
 
 
 /* Panel central y botones centrales */
@@ -31,25 +24,31 @@ body {
 	display: flex;
 }
 
-#registrarse {
+.registrarse {
 	margin: auto 10% auto auto;
 }
 
-#entrar {
+.entrar {
 	margin: auto auto auto 10%;
 }
 
-button {
-	background-color: white;
-	color: #323039;
-	border: 3px solid #323039;
-	font-size: 1vw;
-	padding: 1vw;
-	border-radius: 5px;
-	font-weight: bold;
+
+a {
+    padding: 1.25rem 0.8rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.2rem;
+    border-radius: 7px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
 }
 
-button:hover {
+a:hover {
 	background-color: #323039;
 	color: white;
+	transition: 0.3s;
 }

@@ -1,0 +1,28 @@
+@import url("header.css");
+@import url("footer.css");
+
+table,td {
+	border: 1px solid black;
+}
+
+table {
+	margin-top: 10px;
+	border-collapse: collapse;
+}
+
+table td, table th{
+	font-family: 'Roboto', sans-serif;
+	padding: 10px;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+button {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

@@ -1,8 +1,6 @@
 <header>
-	<form action="#">
-		<button>Trip Count</button>
-	</form>
+	<img src="logo_small.png">
 	<?php
-	if (isset($_SESSION['user'])) { echo "<p>".$_SESSION['user']."</p>"; } 
+	if (isset($_SESSION['user'])) { echo "<p class='hello'> Hola, <span class='welcome'>".$_SESSION['user']."</span></p>"; } 
 	?>
 </header>
