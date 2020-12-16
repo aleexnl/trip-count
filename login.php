@@ -9,41 +9,41 @@
 </head>
 <?php
 session_start();
-include_once(__DIR__ . "/connection.php");
+include_once(__DIR__ . '/connection.php');
 $error_messages = []; // Create an error variable to store errors.
 $has_errors = false;
 
-if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server recived a post signal.
-    if (empty($_POST["userPass"])) { // Check that both variables are not empty
+if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server recived a post signal.
+    if (empty($_POST['userPass'])) { // Check that both variables are not empty
         $has_errors = true;
-        array_push($error_messages, "<b>ERROR:</b> No se ha proporcionado el campo de contraseña.");
+        array_push($error_messages, '<b>ERROR:</b> No se ha proporcionado el campo de contraseña.');
     }
-    if (empty($_POST["userMail"])) {
+    if (empty($_POST['userMail'])) {
         $has_errors = true;
-        array_push($error_messages, "<b>ERROR:</b> No se ha proporcionado el campo de correo electrónico.");
+        array_push($error_messages, '<b>ERROR:</b> No se ha proporcionado el campo de correo electrónico.');
     } else {
-        $email = filter_var($_POST["userMail"], FILTER_SANITIZE_EMAIL); // Sanitize email input
+        $email = filter_var($_POST['userMail'], FILTER_SANITIZE_EMAIL); // Sanitize email input
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if the variable contains an email.
             $has_errors = true;
-            array_push($error_messages, "<b>ERROR:</b> El email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
+            array_push($error_messages, '<b>ERROR:</b> El email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.');
         }
     }
     if (!$has_errors) {
-        $password = hash("sha256", filter_var($_POST["userPass"], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
+        $password = hash('sha256', filter_var($_POST['userPass'], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
         $query = $bd -> prepare("SELECT * FROM users WHERE email = ? AND password = ?"); // Prepare the query.
         $query->bindParam(1, $email); // Bind parameters.
         $query->bindParam(2, $password);
         $query->execute(); // Execute the query
         if ($query->rowCount() > 0) { // Chef if the query returned something.
             $row = $query->fetch();
-            $msg = "Inicio de sesión correcto, redireccionando...";
-            $_SESSION["user"] = [$row["user_id"], $row["email"]];
+            $msg = 'Inicio de sesión correcto, redireccionando...';
+            $_SESSION['user'] = [$row['user_id'], $row['email']];
         } else { // If no user was found witth that credentials.
             $has_errors = true;
             array_push($error_messages, "<b>ERROR:</b> El usuario o la contraseña no existe.");
         }
     }
-    unset($_POST["userMail"], $_POST["userPass"]);
+    unset($_POST['userMail'], $_POST['userPass']);
 }
 ?>
 
@@ -54,19 +54,19 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
             <h1>INICIAR SESIÓN</h1>
             <?php
             if ($has_errors) { // If user had errors during log in
-                echo "<div class=\"message error-message\">";
+                echo '<div class=\'message error-message\'>';
                 foreach ($error_messages as $key => $error) {
                     echo $error . "</br>";
                 }
-                echo "</div>";
+                echo '</div>';
             } else if  (isset($_SESSION["user"])){ // If user is logged in
-                echo "<div class=\"message success-message\">";
-                echo "<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>";
-                echo "</div>";
+                echo '<div class=\'message success-message\'>';
+                echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
+                echo '</div>';
             } else {
-                echo "<div class=\"message\">";
-                echo "<p></p>";
-                echo "</div>";
+                echo '<div class=\'message\'>';
+                echo '<p></p>';
+                echo '</div>';
             }
             ?>
             <form action="" method="POST">

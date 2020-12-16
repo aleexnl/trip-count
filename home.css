@@ -10,6 +10,13 @@ table {
 	border-collapse: collapse;
 }
 
+table button.order_creation, table button.order_update {
+	background-color: transparent;
+	font-family: 'Roboto', sans-serif;
+	border: none;
+	outline: none;
+}
+
 table td, table th{
 	font-family: 'Roboto', sans-serif;
 	padding: 10px;
@@ -20,9 +27,10 @@ main {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	min-height:72vh;
 }
 
-button {
+main > button {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }

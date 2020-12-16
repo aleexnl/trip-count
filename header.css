@@ -6,7 +6,8 @@ header {
 	padding: 1.5vw;
 	border-bottom: 1px solid black;
 	justify-content: space-around;
-	align-items: center
+	align-items: center;
+	height: 8vh;
 }
 
 header > img {
