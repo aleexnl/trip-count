@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="login.css">
 </head>
 <?php
+session_start();
 include_once(__DIR__ . "/connection.php");
 $error_messages = []; // Create an error variable to store errors.
 $has_errors = false;
@@ -34,29 +35,37 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
         $query->bindParam(2, $password);
         $query->execute(); // Execute the query
         if ($query->rowCount() > 0) { // Chef if the query returned something.
+            $row = $query->fetch();
             $msg = "Inicio de sesión correcto, redireccionando...";
+            $_SESSION["user"] = [$row["user_id"], $row["email"]];
         } else { // If no user was found witth that credentials.
             $has_errors = true;
             array_push($error_messages, "<b>ERROR:</b> El usuario o la contraseña no existe.");
         }
     }
+    unset($_POST["userMail"], $_POST["userPass"]);
 }
 ?>
 
 <body>
     <div class="content">
         <div class="centered-form">
+        <img src="images/logo_small.png" alt="Trivide logo">
             <h1>INICIAR SESIÓN</h1>
             <?php
-            if ($has_errors) {
+            if ($has_errors) { // If user had errors during log in
                 echo "<div class=\"message error-message\">";
                 foreach ($error_messages as $key => $error) {
                     echo $error . "</br>";
                 }
                 echo "</div>";
-            } else {
+            } else if  (isset($_SESSION["user"])){ // If user is logged in
                 echo "<div class=\"message success-message\">";
                 echo "<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>";
+                echo "</div>";
+            } else {
+                echo "<div class=\"message\">";
+                echo "<p></p>";
                 echo "</div>";
             }
             ?>

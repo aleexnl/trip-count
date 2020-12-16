@@ -6,6 +6,7 @@
 # cosas
 .history
 .idea/
+.htaccess
 composer.*
 .env*
 connection_compo.php
