@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="login.css">
 </head>
 <?php
+session_start();
 include_once(__DIR__ . "/connection.php");
 $error_messages = []; // Create an error variable to store errors.
 $has_errors = false;
@@ -49,6 +50,7 @@ if (isset($_POST["userMail"], $_POST["userPass"])) { // Check that the server re
 <body>
     <div class="content">
         <div class="centered-form">
+        <img src="images/logo_small.png" alt="Trivide logo">
             <h1>INICIAR SESIÓN</h1>
             <?php
             if ($has_errors) { // If user had errors during log in

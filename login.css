@@ -50,16 +50,19 @@ body {
 }
 /* Estilos de los mensajes del servidor.*/
 .message {
+    display: none;
     padding: 0.55em 2em;
     margin: 1.2em 0 1.2em 0;
     border-radius: 10px;
 }
 .success-message {
+    display: block;
     color: green;
     background-color: rgba(173, 255, 47, 0.2);
     border: 1px solid green;
 }
 .error-message {
+    display: block;
     color: red;
     background-color: rgba(255, 0, 0, 0.2);
     border: 1px solid red;
