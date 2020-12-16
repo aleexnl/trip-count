@@ -10,6 +10,24 @@
     // Comprobar que la session esté activa
     session_start();
     $tripName = $_SESSION['trip_name'];
+    $error_messages = []; // Create an error variable to store errors.
+    $has_errors = false;
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
+        if (isset($_POST['email-1'])) { // If there is at least one email iterate through them
+            foreach ($_POST as $key => $value){
+                $email = filter_var($value, FILTER_SANITIZE_EMAIL); // Sanitize email input
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if the variable contains an email.
+                    $has_errors = true;
+                    array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
+                } else {
+                    mail($email, '¡Un nuevo viaje te espera!',
+                        "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje.");
+                }
+            }
+        }
+    }
+
     echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
     ?>
     <style>
@@ -172,43 +190,6 @@
             border: 1px solid #a0342c;
             box-shadow: 0 0 5px #f44336;
         }
-
-        /*.anim2 {
-            animation: 1s animationAddLabelMail both;
-        }
-
-        .anim {
-            animation: 1.5s animationAddInputMail both;
-        }
-
-        @keyframes animationAddLabelMail {
-            0% {
-                opacity: 0;
-                transform: skewY(-12deg) translateX(150%);
-            }
-
-            100% {
-                opacity: 1;
-                transform: skewY(0deg) translateX(0%);
-            }
-        }
-
-        @keyframes animationAddInputMail {
-            0% {
-                z-index: 1;
-                transform: skewY(0deg) translateY(-120%);
-            }
-
-            50% {
-                z-index: 1;
-                transform: skewY(-2.5deg) translateY(-45%);
-            }
-
-            100% {
-                z-index: 2;
-                transform: skewY(0deg) translateY(0%);
-            }
-        }*/
     </style>
 </head>
 
@@ -232,14 +213,30 @@
     </header>
     <p class="title">Invitaciones</p>
     <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
-    <div class="container-messages"></div>
+    <?php
+    if ($has_errors) { // If user had errors during log in
+        echo '<div class=\'message error-message\'>';
+        foreach ($error_messages as $key => $error) {
+            echo $error . "</br>";
+        }
+        echo '</div>';
+    } else if  (isset($_SESSION["user"])){ // If user is logged in
+        echo '<div class=\'message success-message\'>';
+        echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
+        echo '</div>';
+    } else {
+        echo '<div class=\'container-messages\'>';
+        echo '<p></p>';
+        echo '</div>';
+    }
+    ?>
     <form class="invitations" action="#" method="post">
         <div class="box-mail">
             <label for="email-1">Correo 1:</label>
             <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
         </div>
         <div class="box-btn">
-            <button class="add-mail button-primary">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
+            <button class="add-mail button-primary" type="button">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
             <button class="send button-primary" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
         </div>
     </form>
@@ -268,18 +265,26 @@
         }
 
         function validateInvitationsMails() {
+            let isValid = false;
             let emails = document.getElementsByClassName("mails");
             for (var i = 0; i < emails.length; i++) {
-                if (emails[i].value.replace(" ", "") == "")
-                    generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages", 4);
+                if (emails[i].value.replace(" ", "") == "") {
+                    isValid = false;
+                    generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages", 4)
+                }
                 else {
-                    if (validateEmail(emails[i].value))
+                    if (validateEmail(emails[i].value)) {
+                        isValid = true;
                         generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages", 4);
-                    else
+                    }else {
+                        isValid = false;
                         generateMessages("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "container-messages", 4);
+                    }
                 }
             }
+            return isValid
         }
+
 
         function createInputMail() {
             let nextIndexMail = document.getElementsByClassName("mails").length + 1;
@@ -302,9 +307,9 @@
             sibling.parentNode.insertBefore(divBoxMail, sibling);
         }
 
-        document.getElementsByClassName("send")[0].onclick = (e) => {
+        document.getElementsByClassName("invitations")[0].onsubmit = (e) => {
             e.preventDefault();
-            validateInvitationsMails();
+            validateInvitationsMails() ? e.currentTarget.submit() : null;
         }
 
         document.getElementsByClassName("add-mail")[0].onclick = (e) => {
