@@ -178,11 +178,16 @@
             border: 1px solid #a0342c;
             box-shadow: 0 0 5px #f44336;
         }
+	    
+	main { 
+	    min-height: 82vh;
+	}
     </style>
 </head>
 
 <body>
     <?php require_once('header.php'); ?>
+    <main>
     <p class="title">Invitaciones</p>
     <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
     <div class="container-messages">
@@ -202,6 +207,7 @@
             <button class="send button-primary" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
         </div>
     </form>
+    </main>
     <?php require_once('footer.php'); ?>
     <script>
         function generateMessages(type, text, parentName, seconds) {
