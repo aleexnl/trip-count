@@ -12,19 +12,19 @@ function insertQuery($bd, $sql, $params)
 }
 
 if (isset($_POST['nameTrip'])) {
-    // si la session expira enviar al login con un mensaje de error
-    /* CODE */
-    
-    $params = [];
-    // PARAMETERS OF TRAVEL
-    foreach ($_POST as $value)
-        array_push($params, filter_var($value, FILTER_SANITIZE_STRING));
-    insertQuery($bd, "INSERT INTO `Travels` VALUES (null, ?, ?, ?, ?, ?, now(), now());", $params); // INSERT NEW TRAVEL
+    if (isset($_SESSION['user'][0])) {
+        $userId = $_SESSION['user'][0];
+        $_SESSION['first_load_invitation_page'] = true;
+        $params = [];
+        // PARAMETERS OF TRAVEL
+        foreach ($_POST as $value)
+            array_push($params, filter_var($value, FILTER_SANITIZE_STRING));
+        insertQuery($bd, "INSERT INTO `Travels`(`name`, `description`, `coin`) VALUES (?, ?, ?);", $params); // INSERT NEW TRAVEL
 
-    $travelId = $bd->lastInsertId();
-    $userId = 1;
-    insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $travelId)", []); // INSERT NEW GROUP
+        $travelId = $bd->lastInsertId();
+        insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $travelId)", []); // INSERT NEW GROUP
 
-    $_SESSION['trip_name'] = $params[0];
-    header("location: ./invitations.php");
+        $_SESSION['trip_name'] = $params[0];
+        header("location: ./invitations.php");
+    } else header("location:login.php?status=session_expired");
 }

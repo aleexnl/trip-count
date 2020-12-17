@@ -6,29 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitaciones</title>
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="header.css">
+	<link rel="stylesheet" type="text/css" href="footer.css">
     <?php
-    // Comprobar que la session esté activa
     session_start();
-    $tripName = $_SESSION['trip_name'];
+    $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : header("location:login.php?status=session_expired");
     $error_messages = []; // Create an error variable to store errors.
     $has_errors = false;
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
         if (isset($_POST['email-1'])) { // If there is at least one email iterate through them
-            foreach ($_POST as $key => $value){
+            foreach ($_POST as $key => $value) {
                 $email = filter_var($value, FILTER_SANITIZE_EMAIL); // Sanitize email input
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) { // Check if the variable contains an email.
                     $has_errors = true;
                     array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
                 } else {
-                    mail($email, '¡Un nuevo viaje te espera!',
-                        "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje.");
+                    echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se han enviado los mails.', 'container-messages', 4); }</script>";
+                    mail(
+                        $email,
+                        '¡Un nuevo viaje te espera!',
+                        "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje."
+                    );
                 }
             }
         }
     }
 
-    echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
+    if ($_SESSION['first_load_invitation_page']) {
+        $_SESSION['first_load_invitation_page'] = false;
+        echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
+    }
     ?>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -52,26 +60,6 @@
             background-color: #fff;
             font-family: "Roboto", sans-serif;
             text-rendering: auto;
-        }
-
-        header {
-            background-color: #323039;
-            display: flex;
-            flex-direction: row;
-            padding: 0 20px;
-        }
-
-        header>a.link {
-            margin-right: 25px;
-            font-size: 1.4em;
-            text-decoration: none;
-            color: #fff;
-            text-shadow: 0 0 2px black;
-        }
-
-        header>a.link:hover,
-        header>a.link.active {
-            color: #00daff;
         }
 
         p.title {
@@ -194,43 +182,17 @@
 </head>
 
 <body>
-    <header>
-        <a class="link" href="#home">
-            <p><i class="fas fa-home"></i> Home</p>
-        </a>
-        <a class="link" href="#login">
-            <p><i class="fas fa-lock-open"></i> Login</p>
-        </a>
-        <a class="link" href="#cerrar-sesion">
-            <p><i class="fas fa-lock"></i> Cerrar Sesión</p>
-        </a>
-        <a class="link" href="#registrarse">
-            <p><i class="fas fa-file-signature"></i> Registrarse</p>
-        </a>
-        <a class="link" href="#username">
-            <p><i class="fas fa-user"></i> Carlos</p>
-        </a>
-    </header>
+    <?php require_once('header.php'); ?>
     <p class="title">Invitaciones</p>
     <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
-    <?php
-    if ($has_errors) { // If user had errors during log in
-        echo '<div class=\'message error-message\'>';
-        foreach ($error_messages as $key => $error) {
-            echo $error . "</br>";
-        }
-        echo '</div>';
-    } else if  (isset($_SESSION["user"])){ // If user is logged in
-        echo '<div class=\'message success-message\'>';
-        echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
-        echo '</div>';
-    } else {
-        echo '<div class=\'container-messages\'>';
-        echo '<p></p>';
-        echo '</div>';
-    }
-    ?>
-    <form class="invitations" action="#" method="post">
+    <div class="container-messages">
+        <?php
+        if ($has_errors) // If user had errors during log in
+            foreach ($error_messages as $key => $error)
+                echo $error . "</br>";
+        ?>
+    </div>
+    <form class="invitations" action="./invitations.php" method="post">
         <div class="box-mail">
             <label for="email-1">Correo 1:</label>
             <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
@@ -271,18 +233,17 @@
                 if (emails[i].value.replace(" ", "") == "") {
                     isValid = false;
                     generateMessages("error", `ERROR: No se ha introducido ningún dato en el correo ${i+1}.`, "container-messages", 4)
-                }
-                else {
+                } else {
                     if (validateEmail(emails[i].value)) {
                         isValid = true;
-                        generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages", 4);
-                    }else {
+                        // generateMessages("success", `SUCCESS: El correo '${emails[i].value}' se ha introducido correctamente.`, "container-messages", 4);
+                    } else {
                         isValid = false;
                         generateMessages("error", `ERROR: El correo '${emails[i].value}' no se ha introducido correctamente.`, "container-messages", 4);
                     }
                 }
             }
-            return isValid
+            return isValid;
         }
 
 
