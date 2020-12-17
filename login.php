@@ -30,15 +30,16 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
     }
     if (!$has_errors) {
         $password = hash('sha256', filter_var($_POST['userPass'], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
-        $query = $bd -> prepare("SELECT * FROM users WHERE email = ? AND password = ?"); // Prepare the query.
+        $query = $bd -> prepare("SELECT * FROM Users WHERE email = ? AND `password` = ?"); // Prepare the query.
         $query->bindParam(1, $email); // Bind parameters.
         $query->bindParam(2, $password);
         $query->execute(); // Execute the query
         if ($query->rowCount() > 0) { // Chef if the query returned something.
             $row = $query->fetch();
             $msg = 'Inicio de sesión correcto, redireccionando...';
-            $_SESSION['user'] = [$row['user_id'], $row['email']];
-        } else { // If no user was found witth that credentials.
+            $_SESSION['user'] = [$row['user_id'], $row['name'], $row['email']];
+            header( "refresh:1;url=home.php" );
+        } else { // If no user was found with that credentials.
             $has_errors = true;
             array_push($error_messages, "<b>ERROR:</b> El usuario o la contraseña no existe.");
         }
@@ -48,6 +49,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
 ?>
 
 <body>
+    
     <div class="content">
         <div class="centered-form">
         <img src="images/logo_small.png" alt="Trivide logo">
@@ -63,6 +65,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
                 echo '<div class=\'message success-message\'>';
                 echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
                 echo '</div>';
+                header( "refresh:1;url=home.php" );
             } else {
                 echo '<div class=\'message\'>';
                 echo '<p></p>';

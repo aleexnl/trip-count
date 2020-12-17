@@ -1,7 +1,8 @@
 @import url("header.css");
 @import url("footer.css");
 
-table,td {
+table,
+td {
 	border: 1px solid black;
 }
 
@@ -10,15 +11,28 @@ table {
 	border-collapse: collapse;
 }
 
-table button.order_creation, table button.order_update {
+table thead {
+	background-color: #323039;
+	color: #fff;
+}
+
+table tbody {
+	background-color: #a6d2f7;
+}
+
+table tbody tr:nth-child(odd) {
+	background-color: #c9e3f9;
+}
+
+table button.order_creation,
+table button.order_update {
 	background-color: transparent;
-	font-family: 'Roboto', sans-serif;
 	border: none;
 	outline: none;
 }
 
-table td, table th{
-	font-family: 'Roboto', sans-serif;
+table thead th,
+table tbody td {
 	padding: 10px;
 }
 
@@ -27,10 +41,10 @@ main {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	min-height:72vh;
+	min-height: 84vh;
 }
 
-main > button {
+main>button {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
