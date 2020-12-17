@@ -30,7 +30,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
     }
     if (!$has_errors) {
         $password = hash('sha256', filter_var($_POST['userPass'], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
-        $query = $bd -> prepare("SELECT * FROM users WHERE email = ? AND `password` = ?"); // Prepare the query.
+        $query = $bd -> prepare("SELECT * FROM Users WHERE email = ? AND `password` = ?"); // Prepare the query.
         $query->bindParam(1, $email); // Bind parameters.
         $query->bindParam(2, $password);
         $query->execute(); // Execute the query
