@@ -92,6 +92,8 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
             </form>
         </div>
     </div>
+
+<?php include_once 'footer.php' ?>
 </body>
 
 </html>
