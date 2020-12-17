@@ -3,12 +3,22 @@
 
 <head>
 	<?php session_start(); ?>
+	<?php require_once('connection.php'); ?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="home.css">
 	<title>Home</title>
 	<script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
 	<style>
+		body {
+			font-family: 'Roboto', sans-serif;
+			padding: 0;
+			margin: 0;
+		}
+		th a {
+			color: #fff;
+		}
+
 		p.title {
 			text-align: center;
 			font-size: 4em;
@@ -37,7 +47,7 @@
 			flex-direction: row;
 			flex-wrap: wrap;
 			justify-content: center;
-			width: 75%;
+			width: 35%;
 			padding: 10px;
 			margin: 0 auto 0 auto;
 		}
@@ -113,7 +123,7 @@
 			justify-content: space-evenly;
 		}
 
-		form.new-trip>div.box-btn>button {
+		button {
 			font-size: 1.2em;
 			background-color: #18c3f8;
 			box-shadow: 0 0 4px #18c3f8;
@@ -124,7 +134,7 @@
 			cursor: pointer;
 		}
 
-		form.new-trip>div.box-btn>button:focus {
+		button:focus {
 			outline: none;
 			border: 2px solid #549ab3;
 		}
@@ -164,85 +174,74 @@
 </head>
 
 <body>
+	<?php
+	require_once('header.php');
+
+	$userId = $_SESSION['user'][0];
+	$sql = "";
+	$creation_date_text = "Fecha de Creación ▲";
+	$modify_date_text = "Fecha de Modificación ▲";
+	$creation_href = "?col=creation_date&order=asc";
+	$modify_href = "?col=modify_date&order=asc";
+
+	if (
+		isset($_GET['col'], $_GET['order']) &&
+		($_GET['col'] == "creation_date" || $_GET['col'] == "modify_date") &&
+		($_GET['order'] == "asc" || $_GET['order'] == "desc")
+	) {
+		if ($_GET['col'] == "creation_date" && $_GET['order'] == "asc") {
+			$creation_href = "?col=creation_date&order=desc";
+			$creation_date_text = "Fecha de Creación ▼";
+		} else if ($_GET['col'] == "modify_date" && $_GET['order'] == "asc") {
+			$modify_href = "?col=modify_date&order=desc";
+			$modify_date_text = "Fecha de Modificación ▼";
+		}
+		$sql = "SELECT * FROM Travels t where t.trip_id in (select g.trip_id from `Groups` g where g.user_id = $userId) ORDER BY $_GET[col] $_GET[order];";
+	} else {
+		$sql = "SELECT * FROM Travels t where t.trip_id in (select g.trip_id from `Groups` g where g.user_id = $userId);";
+	}
+
+	$queryTravels = $bd->prepare($sql);
+	$queryTravels->execute();
+	?>
+
+	<main>
+		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					<th>Descripción</th>
+					<th>Moneda</th>
+					<th><a class='order_creation' href="<?= $creation_href ?>"><?= $creation_date_text ?></a></th>
+					<th><a class='order_update' href="<?= $modify_href ?>"><?= $modify_date_text ?></a></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php
+				foreach ($queryTravels as $travel) {
+					echo "<tr>";
+					echo "<td>$travel[name]</td>";
+					echo "<td>$travel[description]</td>";
+					echo "<td>$travel[coin]</td>";
+					echo "<td>$travel[creation_date]</td>";
+					echo "<td>$travel[modify_date]</td>";
+					echo "</tr>";
+				}
+				?>
+			</tbody>
+		</table>
+		<button class='add_travel button-primary'>Añadir Viaje <i class="fas fa-atlas fa-v-align"></i></button>
+	</main>
 
 	<?php
-
-	include_once 'header.php';
-
-
-	if (!isset($_SESSION['order_creation']) && !isset($_SESSION['order_update'])) {
-		$_SESSION['order_creation'] = "asc";
-		$_SESSION['order_update'] = "asc";
-		$buttoncreation = "▲";
-		$buttonupdate = "▲";
-	}
-
-	if (isset($_POST['order_update'])) {
-		if ($_POST['order_update'] == "asc") {
-			$_SESSION['order_update'] = "desc";
-			$buttonupdate = "▼";
-		} elseif ($_POST['order_update'] == "desc") {
-			$_SESSION['order_update'] = "asc";
-			$buttonupdate = "▲";
-		}
-	}
-
-	if (isset($_POST['order_creation'])) {
-		if ($_POST['order_creation'] == "asc") {
-			$_SESSION['order_creation'] = "desc";
-			$buttoncreation = "▼";
-		} elseif ($_POST['order_creation'] == "desc") {
-			$_SESSION['order_creaton'] = "asc";
-			$buttoncreation = "▲";
-		}
-	}
-
-
-	include 'connection.php';
-
-
-
-	$querytravels = $bd->prepare("SELECT * FROM Travels t where t.trip_id in (select g.trip_id from `Groups` g where g.user_id= :user_id ) order by 6 " . $_SESSION['order_creation'] . ", 7 " . $_SESSION['order_update'] . " ;");
-
-	$querytravels->bindParam(':user_id', $_SESSION['$user_id']);
-
-	$querytravels->execute();
-
-	echo "<main>";
-
-	echo "<table>";
-	echo "<tr>";
-	echo "<form action='home.php' method='post'><th colspan='4'>Ordenar por:</th><th><button type='submit' name='order_creation' class='order_creation'>Fecha de Creacion " . $buttoncreation . " </button></th><th><button type='submit' name='order_update' class='order_update'>Fecha de Modificacion " . $buttonupdate . "</button></th><form>";
-	echo "</tr>";
-
-
-	foreach ($querytravels as $rowtravel) {
-		echo "<tr>";
-		echo "<td>" . $rowtravel['destiny'] . "</td>";
-		echo "<td>" . $rowtravel['coin'] . "</td>";
-		echo "<td>" . $rowtravel['departure_date'] . "</td>";
-		echo "<td>" . $rowtravel['return_date'] . "</td>";
-		echo "<td>" . $rowtravel['creation_date'] . "</td>";
-		echo "<td>" . $rowtravel['modify_date'] . "</td>";
-		echo "</tr>";
-	}
-
-	echo "</table>";
-
-	echo "<button class='add_travel'>Añadir Viaje</button>";
-
-	echo "</main>";
-
-	include_once 'footer.php';
-
-	unset($querytravels);
+	require_once('footer.php');
+	unset($queryTravels);
 	unset($bd);
-
 	?>
 </body>
 <script>
 	let newTrip = document.getElementsByClassName("add_travel")[0];
-	let createTrip = "";
 	let foreignExchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
 
 
@@ -272,15 +271,6 @@
 
 	function isNull(name) {
 		return document.getElementsByName(name)[0].value.replace(/ /g, "");
-	}
-
-	function validateInputDate(input) {
-		return Date.parse(input.value);
-	}
-
-	// IF date1 IS GREATER THAN date2, RETURN TRUE
-	function compareDates(date1, date2) {
-		return date1 > date2;
 	}
 
 	function setAttributes(ele, attr) {
@@ -326,22 +316,11 @@
 			if (!validateInputTextLength("descriptionTrip", 255)) textError += "ERROR: La descripción tiene una logitud superior a 255 caracteres.\n";
 		}
 
-		// CHECK INPUT DEPARTURE DATE
-		if (!validateInputDate(departureDate)) textError += "ERROR: Fecha de salida no valida.\n";
-		else {
-			if (!compareDates(new Date(departureDate.value).getTime(), new Date().getTime())) textError += "ERROR: La fecha de salida es mas pequeña que la fecha actual.\n";
-		}
-
-		// CHECK INPUT RETURN DATE
-		if (!validateInputDate(returnDate)) textError += "ERROR: Fecha de regreso no valida.\n";
-		else {
-			if (!compareDates(new Date(returnDate.value).getTime(), new Date(departureDate.value).getTime())) textError += "ERROR: La fecha de regreso es mas pequeña que la fecha de salida.\n";
-		}
-
 		return textError;
 	}
 
-	newTrip.onclick = () => {
+	newTrip.onclick = (e) => {
+		e.preventDefault();
 		if (document.getElementsByClassName("new-trip").length == 0) {
 			let form = createElement("form", null, newTrip, "after", {
 				class: "new-trip",
@@ -416,7 +395,7 @@
 			createElement("div", null, newTrip, "after", {
 				class: "container-messages"
 			})
-			createTrip.onclick = (e) => {
+			form.onsubmit = (e) => {
 				e.preventDefault();
 				let textError = validationCreateTrip();
 				if (textError != "")
