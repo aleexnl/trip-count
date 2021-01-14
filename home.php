@@ -258,14 +258,13 @@
 		$travel_details->execute();
 
 		$json_with_travel_details .= "$travel[0]: { id: $travel[0], coin: '$travel[coin]',  creation_date: '$travel[creation_date]', expenses: [";
-		// ¡¡¡ ESTO TIENE QUE SER EN FLOAT !!!
-		$sum_total = 0;
+		$sum_total = '0.00';
 
 		foreach ($travel_details as $details) {
-			$sum_total += intval($details[2]);
-			$json_with_travel_details .= "{ paid_by: '$details[0]', content: '$details[1]', amount: $details[2] }, ";
+			$sum_total = number_format(floatval($sum_total) + floatval($details[2]), 2);
+			$json_with_travel_details .= "{ paid_by: '$details[0]', content: '$details[1]', amount: '$details[2]' }, ";
 		}
-		$json_with_travel_details .= "], total_amount: $sum_total }, ";
+		$json_with_travel_details .= "], total_amount: '$sum_total' }, ";
 
 		$table_main_rows .= ("
 			<tr id='$travel[0]'>\n
@@ -491,7 +490,7 @@
 
 	function showTravelDetails(details) {
 		if (details != undefined) {
-			//console.log(details);
+			console.log(details);
 			const tdContainer = document.getElementById(details.id).nextElementSibling.children[0];
 			if (tdContainer.children[0] == undefined) {
 				if (previousID != null) {
@@ -512,10 +511,7 @@
 					class: "general-details"
 				})
 				createElement("p", `Fecha de salida: ${details.creation_date}`, divGeneralDetails, null, {})
-				if (details.total_amount == 0)
-					createElement("p", `Total gastado: 0 ${details.coin}`, divGeneralDetails, null, {})
-				else
-					createElement("p", `Total gastado: ${details.total_amount} ${details.coin}`, divGeneralDetails, null, {})
+				createElement("p", `Total gastado: ${details.total_amount} ${details.coin}`, divGeneralDetails, null, {})
 
 				var divBtnDetails = createElement("div", null, divBox, null, {
 					class: "button-details"
