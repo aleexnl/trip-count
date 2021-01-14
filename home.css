@@ -20,10 +20,6 @@ table tbody {
 	background-color: #a6d2f7;
 }
 
-table tbody tr:nth-child(odd) {
-	background-color: #c9e3f9;
-}
-
 table button.order_creation,
 table button.order_update {
 	background-color: transparent;
