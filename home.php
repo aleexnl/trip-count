@@ -15,8 +15,13 @@
 			padding: 0;
 			margin: 0;
 		}
+
 		th a {
 			color: #fff;
+		}
+
+		tr {
+			cursor: pointer;
 		}
 
 		p.title {
@@ -40,6 +45,7 @@
 			border-radius: 5px;
 			text-align: center;
 			padding: 10px 0;
+			transition: 2s;
 		}
 
 		form.new-trip {
@@ -170,10 +176,49 @@
 			border: 1px solid #a0342c;
 			box-shadow: 0 0 5px #f44336;
 		}
-	</style>
-</head>
 
-<body>
+		.text-center {
+			text-align: center;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.bg-cornflowerblue {
+			background-color: #2a76ff !important;
+			color: white !important;
+		}
+
+		.travel-details {
+			background-color: #e4f2ff;
+			cursor: default;
+			box-shadow: 0 0 2px 1px inset black;
+		}
+
+		.travel-details>td {
+			padding: 0 10px;
+			overflow: hidden;
+			transition: 2s;
+		}
+
+		.box-details>p {
+			font-size: 2.5em;
+			text-align: center;
+			margin: 0.5em 0 0.3em 0;
+		}
+
+		.box-details>div {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-evenly;
+			margin-bottom: 10px;
+		}
+
+		.spend-details-list {
+			margin: 20px auto;
+		}
+	</style>
 	<?php
 	require_once('header.php');
 
@@ -203,8 +248,52 @@
 
 	$queryTravels = $bd->prepare($sql);
 	$queryTravels->execute();
-	?>
 
+	$table_main_rows = "";
+	$json_with_travel_details = "const travelDetails = {";
+	$cont = 1;
+	$array_index = [];
+	foreach ($queryTravels as $travel) {
+		$travel_details = $bd->prepare("SELECT u.name, ge.description, ge.price FROM Group_Expenses ge, Users u WHERE ge.group_id = (SELECT DISTINCT group_id FROM `Groups` WHERE trip_id = $travel[0]) AND ge.paid_by=u.user_id ORDER BY ge.date");
+		$travel_details->execute();
+
+		$json_with_travel_details .= "$travel[0]: { id: $travel[0], coin: '$travel[coin]',  creation_date: '$travel[creation_date]', expenses: [";
+		$sum_total = '0.00';
+
+		foreach ($travel_details as $details) {
+			$sum_total = number_format(floatval($sum_total) + floatval($details[2]), 2);
+			$json_with_travel_details .= "{ paid_by: '$details[0]', content: '$details[1]', amount: '$details[2]' }, ";
+		}
+		$json_with_travel_details .= "], total_amount: '$sum_total' }, ";
+
+		$table_main_rows .= ("
+			<tr id='$travel[0]'>\n
+			<td>$travel[name]</td>\n
+			<td>$travel[description]</td>\n
+			<td>$travel[coin]</td>\n
+			<td>$travel[creation_date]</td>\n
+			<td>$travel[modify_date]</td>\n
+			</tr>\n
+			<tr class='travel-details'>\n
+			<td colspan='5' class='hidden'></td>\n
+			</tr>
+		");
+
+		if ($cont % 2 == 1) array_push($array_index, $cont);
+		$cont += 2;
+	}
+	$json_with_travel_details .= "};";
+
+	$background_color_table = "";
+	for ($i = 0; $i < sizeOf($array_index); $i++)
+		if ($i % 2 == 1) $background_color_table .= "table tbody tr:nth-child($array_index[$i]) { background-color: #c9e3f9; }\n";
+	?>
+	<style>
+		<?= $background_color_table ?>
+	</style>
+</head>
+
+<body>
 	<main>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
 		<table>
@@ -217,18 +306,8 @@
 					<th><a class='order_update' href="<?= $modify_href ?>"><?= $modify_date_text ?></a></th>
 				</tr>
 			</thead>
-			<tbody>
-				<?php
-				foreach ($queryTravels as $travel) {
-					echo "<tr>";
-					echo "<td>$travel[name]</td>";
-					echo "<td>$travel[description]</td>";
-					echo "<td>$travel[coin]</td>";
-					echo "<td>$travel[creation_date]</td>";
-					echo "<td>$travel[modify_date]</td>";
-					echo "</tr>";
-				}
-				?>
+			<tbody name="main-travels">
+				<?= $table_main_rows ?>
 			</tbody>
 		</table>
 		<button class='add_travel button-primary'>Añadir Viaje <i class="fas fa-atlas fa-v-align"></i></button>
@@ -241,8 +320,10 @@
 	?>
 </body>
 <script>
+	<?= $json_with_travel_details ?>
 	let newTrip = document.getElementsByClassName("add_travel")[0];
 	let foreignExchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
+	let lastElementCreated = null;
 
 
 	function generateMessages(type, text, parentName, seconds) {
@@ -404,6 +485,85 @@
 			}
 		}
 	}
+
+	let previousID = null;
+
+	function showTravelDetails(details) {
+		if (details != undefined) {
+			console.log(details);
+			const tdContainer = document.getElementById(details.id).nextElementSibling.children[0];
+			if (tdContainer.children[0] == undefined) {
+				if (previousID != null) {
+					let previousElementSelected = document.getElementById(previousID).nextElementSibling.children[0];
+					previousElementSelected.removeChild(previousElementSelected.children[0]);
+					previousElementSelected.className = "hidden";
+					document.getElementById(previousID).className = "";
+				}
+
+				document.getElementById(details.id).nextElementSibling.children[0].className = "";
+				document.getElementById(details.id).className = "bg-cornflowerblue";
+
+				var divBox = createElement("div", null, tdContainer, null, {
+					class: "box-details"
+				})
+				createElement("p", "Detalles del viaje", divBox, null, {})
+				var divGeneralDetails = createElement("div", null, divBox, null, {
+					class: "general-details"
+				})
+				createElement("p", `Fecha de salida: ${details.creation_date}`, divGeneralDetails, null, {})
+				createElement("p", `Total gastado: ${details.total_amount} ${details.coin}`, divGeneralDetails, null, {})
+
+				var divBtnDetails = createElement("div", null, divBox, null, {
+					class: "button-details"
+				})
+				var btnNewSpend = createElement("button", "Agregar gasto ", divBtnDetails, null, {
+					class: "button-primary"
+				})
+				createElement("i", null, btnNewSpend, null, {
+					class: "fas fa-comment-dollar fa-v-align"
+				})
+				var btnBalance = createElement("button", "Balance", divBtnDetails, null, {
+					class: "button-primary"
+				})
+				createElement("button", "Gestionar usuarios", divBtnDetails, null, {
+					class: "button-primary"
+				})
+				var tableList = createElement("table", null, divBox, null, {
+					class: "spend-details-list"
+				})
+				var tableHead = createElement("thead", null, tableList, null, {})
+				createElement("th", "Pagado por", tableHead, null, {})
+				createElement("th", "Concepto", tableHead, null, {})
+				createElement("th", "Gasto", tableHead, null, {})
+				var tableBody = createElement("tbody", null, tableList, null, {})
+				if (details.expenses.length > 0) {
+					for (const spend of details.expenses) {
+						var tr = createElement("tr", null, tableBody, null, {})
+						createElement("td", spend.paid_by, tr, null, {})
+						createElement("td", spend.content, tr, null, {})
+						createElement("td", `${spend.amount} ${details.coin}`, tr, null, {})
+					}
+				} else
+					createElement("td", "No hay ningún gasto registrado", tableBody, null, {
+						colspan: 3,
+						class: "text-center"
+					})
+
+				previousID = details.id;
+			} else {
+				if (previousID == details.id) {
+					let previousElementSelected = document.getElementById(previousID).nextElementSibling.children[0];
+					previousElementSelected.removeChild(previousElementSelected.children[0]);
+					previousElementSelected.className = "hidden";
+					document.getElementById(previousID).className = "";
+					previousID = null;
+				}
+			}
+		}
+	}
 </script>
+<?php
+echo "<script>\nvar tableRows = document.getElementsByName('main-travels')[0].children\nfor (const row of tableRows) row.onclick = function() {showTravelDetails(travelDetails[row.id])}\n</script>";
+?>
 
 </html>
