@@ -3,6 +3,7 @@
 
 <head>
 	<?php session_start(); ?>
+	<?php if (!isset($_SESSION['user'])) header("location: login.php") ?>
 	<?php require_once('connection.php'); ?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -220,8 +221,6 @@
 		}
 	</style>
 	<?php
-	require_once('header.php');
-
 	$userId = $_SESSION['user'][0];
 	$sql = "";
 	$creation_date_text = "Fecha de Creación ▲";
@@ -294,6 +293,7 @@
 </head>
 
 <body>
+	<?php require_once('header.php'); ?>
 	<main>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
 		<table>
@@ -451,13 +451,6 @@
 			let divBoxBtn = createElement("div", null, form, null, {
 				class: "box-btn"
 			})
-			let btnRedo = createElement("button", "Restablecer ", divBoxBtn, null, {
-				class: "redo",
-				type: "reset"
-			})
-			createElement("i", null, btnRedo, null, {
-				class: "fas fa-redo-alt fa-v-align"
-			})
 			let btnCreateTrip = createElement("button", "Crear Viaje ", divBoxBtn, null, {
 				class: "redo"
 			})
@@ -517,7 +510,8 @@
 					class: "button-details"
 				})
 				var btnNewSpend = createElement("button", "Agregar gasto ", divBtnDetails, null, {
-					class: "button-primary"
+					class: "button-primary",
+					onclick: `window.location.href = 'functions.php?action=new-spend&id=${details.id}'`
 				})
 				createElement("i", null, btnNewSpend, null, {
 					class: "fas fa-comment-dollar fa-v-align"
