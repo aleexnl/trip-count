@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar sesión</title>
+    <title>Registro</title>
     <link rel="stylesheet" href="registro.css">
 </head>
 <?php
@@ -116,7 +116,7 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
                     <input type="password" name="userPass2" id="userPass2">
                 </div>
                 <div class="form-group">
-                    <button class="button-primary" type="submit">REGISTRAR</button>
+		    <button class="button-primary" type="submit" accesskey="r"><u>R</u>EGISTRAR</button>
                 </div>
             </form>
         </div>
