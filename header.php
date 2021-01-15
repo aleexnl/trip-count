@@ -1,8 +1,8 @@
 <header>
 	<a href="./home.php"><img src="images/logo_small.png"></a>
 	<div class="menu">
-		<a class="link" href="./home.php">
-			<p><i class="fas fa-home"></i> Home</p>
+		<a class="link" href="./home.php" accesskey="h">
+			<p><i class="fas fa-home"></i> <u>H</u>ome</p>
 		</a>
 		<!-- <a class="link" href="#login">
 			<p><i class="fas fa-lock-open"></i> Login</p>
