@@ -65,6 +65,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
                 echo '<div class=\'message success-message\'>';
                 echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
                 echo '</div>';
+                header( "refresh:1;url=home.php" );
             } else {
                 echo '<div class=\'message\'>';
                 echo '<p></p>';
@@ -81,16 +82,18 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
                     <input type="password" name="userPass" id="userPass">
                 </div>
                 <div class="form-group form-checkbox">
-                    <input type="checkbox" name="rememberUser" id="rememberUser">
+                    <input type="checkbox" name="rememberUser" id="rememberUser" accesskey="g">
                     &nbsp;
-                    <label for="rememberUser">Guardar mi información</label>
+                    <label for="rememberUser"><u>G</u>uardar mi información</label>
                 </div>
                 <div class="form-group">
-                    <button class="button-primary" type="submit">Iniciar sesión</button>
+                    <button class="button-primary" type="submit" accesskey="i"><u>I</u>niciar sesión</button>
                 </div>
             </form>
         </div>
     </div>
+
+<?php include_once 'footer.php' ?>
 </body>
 
 </html>
