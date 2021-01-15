@@ -9,7 +9,7 @@
 </head>
 <?php
 session_start();
-
+include_once('./connection.php');
 $error_messages = []; // Create an error variable to store errors.
 $has_errors = false;
 
