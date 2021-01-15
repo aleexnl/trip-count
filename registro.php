@@ -87,11 +87,6 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
                     echo $error . "</br>";
                 }
                 echo '</div>';
-            } else if  (isset($_SESSION["user"])){ // If user is logged in
-                echo '<div class=\'message success-message\'>';
-                echo '<p>Iniciando session, redirigiendo a la página principal...</p>';
-                echo '</div>';
-                header( "refresh:1;url=home.php" );
             } else {
                 echo '<div class=\'message\'>';
                 echo '<p></p>';
