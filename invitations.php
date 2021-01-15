@@ -204,7 +204,7 @@
         </div>
         <div class="box-btn">
             <button class="add-mail button-primary" type="button">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
-            <button class="send button-primary" type="submit">Enviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
+	    <button class="send button-primary" type="submit" accesskey="e"><u>E</u>nviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
         </div>
     </form>
     </main>
