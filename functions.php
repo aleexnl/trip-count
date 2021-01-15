@@ -27,4 +27,18 @@ if (isset($_POST['nameTrip'])) {
         $_SESSION['trip_name'] = $params[0];
         header("location: ./invitations.php");
     } else header("location:login.php?status=session_expired");
+} else if (isset($_GET['action']) == "new-spend" && isset($_GET['id']) && isset($_SESSION['user'][0])) {
+    $id_travel = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+    $travel_details = $bd->prepare("SELECT trip_id FROM Travels WHERE trip_id = $id_travel");
+    $travel_details->execute();
+    $id_travel = $travel_details->fetch();
+
+    if ($id_travel) {
+        $_SESSION['travelSelected'] = $id_travel[0];
+        header("location: enterPayment.php");
+    } else {
+        $_SESSION['travelSelected'] = null;
+        header("location: home.php?msg=ID del vuelo no encontrado.");
+    }
+    print_r($_SESSION);
 }
