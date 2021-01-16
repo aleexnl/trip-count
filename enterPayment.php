@@ -169,7 +169,7 @@
                 </div>
                 <div class="form-group">
                     <label for="total-expend">Importe</label>
-                    <input type="number" name="total-expend" value="0" required>
+                    <input type="text" name="total-expend" value="10" required>
                 </div>
                 <div class="form-group">
                     <button class="button-primary" type="submit">Guardar gasto</button>
@@ -193,6 +193,8 @@
         const userNames = document.getElementsByTagName("option");
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
+        let minValue = (numUsers < 10) ? "0.0" + numUsers : "0." + numUsers;
+        let previousTotalExpend = totalExpend.value;
 
         function createElement(tag, text, element, direction, attr) {
             let newElement = document.createElement(tag);
@@ -229,55 +231,104 @@
             return true;
         }
 
-        function checkTotalPrice(price, inputPrice) {
-            var totalPrice = price * numUsers;
-            var decimal = 0;
+        function checkTotalPrice(arrayPrices, inputPrice) {
             var array = [];
+            /* function reduce: sum all the positions of the array */
+            var totalPrice = arrayPrices.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            var decimal = 0;
             if (totalPrice < inputPrice)
                 decimal = (inputPrice - totalPrice).toFixed(2);
             for (let i = 0; i < numUsers; i++) {
-                if (i == 0) array.push((parseFloat(price) + parseFloat(decimal)).toFixed(2));
-                else array.push(price);
+                if (decimal > 0) {
+                    array.push((parseFloat(arrayPrices[i]) + parseFloat("0.01")).toFixed(2));
+                    decimal -= 0.01;
+                } else array.push(arrayPrices[i]);
             }
             return array;
         }
 
-        function changeInputUsers(previousText, newText) {
-            if (boolAdvancedOption) {
+        function changeInputUsers(newText) {
+            if (boolAdvancedOption && totalExpend.value >= minValue) {
                 let usersChecked = [];
+                let arrayPercentages = [];
+                let arrayNewPrices = [];
                 let usersBox = document.getElementsByClassName("individual-spend")[0];
                 let numOfUsersActivated = 0;
-                let arrayPrices = [];
+
                 for (const user of usersBox.children) {
-                    if (user.className == "user" && user.lastElementChild.checked)
+                    if (user.className == "user" && user.lastElementChild.checked) {
                         usersChecked.push(user);
+                        arrayPercentages.push(getPriceToPercentage(user.children[1].firstElementChild.value));
+                    }
                 }
-                
+                previousTotalExpend = totalExpend.value;
+                for (var i = 0; i < usersChecked.length; i++)
+                    arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], totalExpend.value));
+                    
+                let arrayOfCents = getCents(arrayNewPrices, arrayPercentages);
+
+                for (var i = 0; i < usersChecked.length; i++)
+                    arrayNewPrices[i] = roundToTwoDecimals(arrayNewPrices[i] + arrayOfCents[i], "up");
+
+                arrayNewPrices = checkTotalPrice(arrayNewPrices, parseFloat(totalExpend.value));
+
+                for (var i = 0; i < usersChecked.length; i++)
+                    usersChecked[i].children[1].firstElementChild.value = arrayNewPrices[i];
             }
         }
 
-        totalExpend.onchange = (e) => {
-            console.log("eeee")
-        };
+        function roundToTwoDecimals(num, direction) {
+            return (direction === "up") ? Math.ceil(num * 100) / 100 : Math.floor(num * 100) / 100;
+        }
 
-        totalExpend.onkeypress = (e) => {
-            let status = isNumberKey(e);
-            if (status) {
-                var text = e.target.value + e.key;
-                var regex = new RegExp(/^[0-9]+.[0-9][0-9]$/);
-                console.log("match", regex.match(text));
-                changeInputUsers(e.target.value, text);
-            }
-            return status;
+
+        function getCents(array, percentages) {
+            /* function reduce: sum all the positions of the array */
+            var actualTotalPriceInputs = array.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            var arrayCents = [];
+            for (const percentage of percentages)
+                arrayCents.push(getPercentageToPrice(percentage, parseFloat(totalExpend.value) - actualTotalPriceInputs));
+            return arrayCents;
+        }
+
+        function validateWithRegex(rgx, text) {
+            var regex = new RegExp(rgx);
+            return text.match(regex);
+        }
+
+        function getPriceToPercentage(price) {
+            return roundToTwoDecimals(((price * 100) / previousTotalExpend) / 100);
+        }
+
+        function getPercentageToPrice(percentage, totalPrice) {
+            return roundToTwoDecimals(roundToTwoDecimals(parseFloat(totalPrice)) * percentage);
+        }
+
+        totalExpend.oninput = () => {
+            var text = totalExpend.value;
+            if (text != "" || parseFloat(text) < minValue) {
+                if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
+                    changeInputUsers(text);
+                    return;
+                }
+                totalExpend.value = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+            } else totalExpend.value = minValue;
         };
 
         btnAdvanced.onclick = () => {
-            if (btnAdvanced.innerText === "Habilitar") {
+            var text = totalExpend.value;
+            if (btnAdvanced.innerText === "Habilitar" && parseFloat(text) >= minValue) {
                 boolAdvancedOption = true;
-                var totalPrice = parseInt(document.getElementsByName("total-expend")[0].value);
-                var price = (totalPrice / numUsers).toFixed(2);
-
-                var arrayPrices = checkTotalPrice(price, totalPrice);
+                var totalPrice = parseFloat(totalExpend.value);
+                var arrayPrices = [];
+                for (let i = 0; i < numUsers; i++) {
+                    arrayPrices.push(roundToTwoDecimals(totalPrice / numUsers));
+                }
+                var arrayNewPrices = checkTotalPrice(arrayPrices, totalPrice);
 
                 btnAdvanced.innerText = "Deshabilitar";
 
@@ -297,7 +348,7 @@
                     createElement("input", null, divInput, null, {
                         name: "price",
                         type: "text",
-                        value: arrayPrices[i],
+                        value: arrayNewPrices[i],
                         onkeypress: "return isNumberKey(event)"
                     })
                     createElement("input", null, divUser, null, {
