@@ -193,7 +193,6 @@
         const userNames = document.getElementsByTagName("option");
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
-        let minValue = (numUsers < 10) ? "0.0" + numUsers : "0." + numUsers;
         let previousTotalExpend = totalExpend.value;
 
         function createElement(tag, text, element, direction, attr) {
@@ -232,29 +231,54 @@
         }
 
         function checkTotalPrice(arrayPrices, inputPrice) {
-            var array = [];
+            var decimal = 0;
             /* function reduce: sum all the positions of the array */
             var totalPrice = arrayPrices.reduce(function(a, b) {
                 return a + b;
             }, 0);
-            var decimal = 0;
-            // console.log(arrayPrices)
             if (totalPrice < inputPrice)
                 decimal = (inputPrice - totalPrice).toFixed(2);
-            for (let i = 0; i < numUsers; i++) {
-                if (decimal > 0) {
-                    array.push((parseFloat(arrayPrices[i]) + parseFloat("0.01")).toFixed(2));
-                    decimal -= 0.01;
-                } else array.push(arrayPrices[i]);
+
+            let subtractDecimal = "";
+            let num = arrayPrices[0];
+            let firstTime = true;
+            while (true) {
+                if (num % 1 == 0) {
+                    subtractDecimal += "1";
+                    break;
+                } else {
+                    num = (num * 10).toFixed(2);
+                    if (firstTime) {
+                        firstTime = false;
+                        subtractDecimal = "0.";
+                    } else subtractDecimal += "0";
+                }
             }
-            return array;
+            // console.log("checkTotalPrice", inputPrice, arrayPrices, subtractDecimal, decimal)
+            let cont = 0;
+            while (decimal > 0) {
+                if (cont >= arrayPrices.length) cont = 0;
+                arrayPrices[cont] = (parseFloat(arrayPrices[cont]) + parseFloat(subtractDecimal)).toFixed(2);
+                decimal -= parseFloat(subtractDecimal);
+                cont++;
+                totalPrice = arrayPrices.reduce(function(a, b) {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0);
+                // console.log("LOG TOTAL PRICE: ", totalPrice)
+                if (totalPrice == inputPrice) break;
+            }
+            for (let i = 0; i < arrayPrices.length; i++) {
+                arrayPrices[i] = parseFloat(arrayPrices[i]).toFixed(2);
+            }
+            return arrayPrices;
         }
 
         function changeInputUsers(newText) {
-            if (boolAdvancedOption && totalExpend.value >= minValue) {
-                let usersChecked = [];
-                let arrayPercentages = [];
-                let arrayNewPrices = [];
+            if (boolAdvancedOption) {
+                let usersChecked, arrayPercentages, arrayNewPrices;
+                usersChecked = [];
+                arrayPercentages = [];
+                arrayNewPrices = [];
                 let usersBox = document.getElementsByClassName("individual-spend")[0];
                 let numOfUsersActivated = 0;
 
@@ -264,10 +288,11 @@
                         arrayPercentages.push(getPriceToPercentage(user.children[1].firstElementChild.value));
                     }
                 }
+                // console.log("percentage: ", arrayPercentages)
                 for (var i = 0; i < usersChecked.length; i++)
                     arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], totalExpend.value));
 
-                console.log("new prices", arrayNewPrices);
+                // console.log("new prices", arrayNewPrices);
                 let arrayOfCents = getCents(arrayNewPrices, arrayPercentages);
                 // console.log("arrayOfCents", arrayOfCents)
 
@@ -280,6 +305,11 @@
                     usersChecked[i].children[1].firstElementChild.value = arrayNewPrices[i];
 
                 previousTotalExpend = totalExpend.value;
+
+                // var aaa = parseFloat(usersChecked[0].children[1].firstElementChild.value);
+                // aaa += parseFloat(usersChecked[1].children[1].firstElementChild.value);
+                // aaa += parseFloat(usersChecked[2].children[1].firstElementChild.value);
+                // console.log("TOTAL FINAL: ", aaa);
             }
         }
 
@@ -293,7 +323,7 @@
             var actualTotalPriceInputs = array.reduce(function(a, b) {
                 return a + b;
             }, 0);
-            console.log("actualTotalPriceInputs 2: ", array, percentages, actualTotalPriceInputs, previousTotalExpend, totalExpend.value, parseFloat(previousTotalExpend) - actualTotalPriceInputs)
+            // console.log("actualTotalPriceInputs 2: ", array, percentages, actualTotalPriceInputs, previousTotalExpend, totalExpend.value, parseFloat(totalExpend.value) - actualTotalPriceInputs)
             var arrayCents = [];
             for (const percentage of percentages)
                 arrayCents.push(getPercentageToPrice(percentage, parseFloat(totalExpend.value) - actualTotalPriceInputs));
@@ -306,7 +336,7 @@
         }
 
         function getPriceToPercentage(price) {
-            // console.log("getPriceToPercentage", price, previousTotalExpend)
+            // console.log("getPriceToPercentage", price, previousTotalExpend, ((price * 100) / previousTotalExpend) / 100)
             return roundToTwoDecimals(((price * 100) / previousTotalExpend) / 100);
         }
 
@@ -323,21 +353,20 @@
                 if (parseFloat(text) < 1) {
                     totalExpend.value = 1;
                     text = 1;
-                } else if (parseFloat(text) > 1000) {
-                    totalExpend.value = 1000;
-                    text = 1000;
+                } else if (parseFloat(text) > 10000) {
+                    totalExpend.value = 10000;
+                    text = 10000;
                 }
                 changeInputUsers(text);
             } else
                 totalExpend.value = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
 
             previousTotalExpend = totalExpend.value;
-            console.log("sss", previousTotalExpend)
         };
 
         btnAdvanced.onclick = () => {
             var text = totalExpend.value;
-            if (btnAdvanced.innerText === "Habilitar" && parseFloat(text) >= minValue) {
+            if (btnAdvanced.innerText === "Habilitar") {
                 boolAdvancedOption = true;
                 var totalPrice = parseFloat(totalExpend.value);
                 var arrayPrices = [];
