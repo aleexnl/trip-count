@@ -238,6 +238,7 @@
                 return a + b;
             }, 0);
             var decimal = 0;
+            // console.log(arrayPrices)
             if (totalPrice < inputPrice)
                 decimal = (inputPrice - totalPrice).toFixed(2);
             for (let i = 0; i < numUsers; i++) {
@@ -263,11 +264,12 @@
                         arrayPercentages.push(getPriceToPercentage(user.children[1].firstElementChild.value));
                     }
                 }
-                previousTotalExpend = totalExpend.value;
                 for (var i = 0; i < usersChecked.length; i++)
                     arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], totalExpend.value));
-                    
+
+                console.log("new prices", arrayNewPrices);
                 let arrayOfCents = getCents(arrayNewPrices, arrayPercentages);
+                // console.log("arrayOfCents", arrayOfCents)
 
                 for (var i = 0; i < usersChecked.length; i++)
                     arrayNewPrices[i] = roundToTwoDecimals(arrayNewPrices[i] + arrayOfCents[i], "up");
@@ -276,6 +278,8 @@
 
                 for (var i = 0; i < usersChecked.length; i++)
                     usersChecked[i].children[1].firstElementChild.value = arrayNewPrices[i];
+
+                previousTotalExpend = totalExpend.value;
             }
         }
 
@@ -289,6 +293,7 @@
             var actualTotalPriceInputs = array.reduce(function(a, b) {
                 return a + b;
             }, 0);
+            console.log("actualTotalPriceInputs 2: ", array, percentages, actualTotalPriceInputs, previousTotalExpend, totalExpend.value, parseFloat(previousTotalExpend) - actualTotalPriceInputs)
             var arrayCents = [];
             for (const percentage of percentages)
                 arrayCents.push(getPercentageToPrice(percentage, parseFloat(totalExpend.value) - actualTotalPriceInputs));
@@ -301,22 +306,33 @@
         }
 
         function getPriceToPercentage(price) {
+            // console.log("getPriceToPercentage", price, previousTotalExpend)
             return roundToTwoDecimals(((price * 100) / previousTotalExpend) / 100);
         }
 
         function getPercentageToPrice(percentage, totalPrice) {
+            // console.log("getPercentageToPrice", percentage, roundToTwoDecimals(parseFloat(totalPrice)))
             return roundToTwoDecimals(roundToTwoDecimals(parseFloat(totalPrice)) * percentage);
         }
 
         totalExpend.oninput = () => {
+            if (totalExpend.value == "") totalExpend.value = 1;
             var text = totalExpend.value;
-            if (text != "" || parseFloat(text) < minValue) {
-                if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
-                    changeInputUsers(text);
-                    return;
+
+            if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
+                if (parseFloat(text) < 1) {
+                    totalExpend.value = 1;
+                    text = 1;
+                } else if (parseFloat(text) > 1000) {
+                    totalExpend.value = 1000;
+                    text = 1000;
                 }
+                changeInputUsers(text);
+            } else
                 totalExpend.value = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
-            } else totalExpend.value = minValue;
+
+            previousTotalExpend = totalExpend.value;
+            console.log("sss", previousTotalExpend)
         };
 
         btnAdvanced.onclick = () => {
