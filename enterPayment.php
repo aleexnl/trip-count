@@ -6,6 +6,7 @@
     <?php if (!isset($_SESSION['user']) || !isset($_SESSION['travelSelected'])) header("location: login.php") ?>
     <?php include_once('connection.php'); ?>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="images/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Nuevo Gasto</title>
     <link rel="stylesheet" href="header.css">
@@ -250,6 +251,7 @@
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
         let previousTotalExpend = totalExpend.value;
+        let totalInputUsers = 0;
 
         function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];
@@ -298,13 +300,6 @@
 
         function insertAfter(newElement, element) {
             element.parentNode.insertBefore(newElement, element.nextElementSibling);
-        }
-
-        function isNumberKey(e) {
-            var charCode = (e.which) ? e.which : e.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
-                return false;
-            return true;
         }
 
         function checkTotalPrice(arrayPrices, inputPrice) {
@@ -367,7 +362,7 @@
                 }
                 // console.log("percentage: ", arrayPercentages)
                 for (var i = 0; i < usersChecked.length; i++)
-                    arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], totalExpend.value));
+                    arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], newText));
 
                 // console.log("new prices", arrayNewPrices);
                 let arrayOfCents = getCents(arrayNewPrices, arrayPercentages);
@@ -376,12 +371,10 @@
                 for (var i = 0; i < usersChecked.length; i++)
                     arrayNewPrices[i] = roundToTwoDecimals(arrayNewPrices[i] + arrayOfCents[i], "up");
 
-                arrayNewPrices = checkTotalPrice(arrayNewPrices, parseFloat(totalExpend.value));
+                arrayNewPrices = checkTotalPrice(arrayNewPrices, parseFloat(newText));
 
                 for (var i = 0; i < usersChecked.length; i++)
                     usersChecked[i].children[1].firstElementChild.value = arrayNewPrices[i];
-
-                previousTotalExpend = totalExpend.value;
 
                 // var aaa = parseFloat(usersChecked[0].children[1].firstElementChild.value);
                 // aaa += parseFloat(usersChecked[1].children[1].firstElementChild.value);
@@ -422,6 +415,45 @@
             return roundToTwoDecimals(roundToTwoDecimals(parseFloat(totalPrice)) * percentage);
         }
 
+
+        function checkTotalInputPrice(id) {
+            const inputUsers = document.getElementsByName("price");
+            var sumTotal = 0;
+            for (const user of inputUsers)
+                if (user.id != id && user.parentElement.nextElementSibling.checked)
+                    sumTotal += (isNaN(parseFloat(user.value))) ? 0 : parseFloat(user.value);
+
+            return parseFloat(totalExpend.value) - sumTotal;
+        }
+
+        function checkInputListener(text) {
+            // console.log(text, totalExpend.value, (text - parseFloat(totalExpend.value)))
+            var numToSubtract = (text - parseFloat(totalExpend.value)).toFixed(2);
+            return (text - numToSubtract).toFixed(2);
+        }
+
+        function singleUserInputListener(e) {
+            var text = e.target.value;
+
+            if (text != "") {
+                if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
+                    if (parseFloat(text) > parseFloat(totalExpend.value)) {
+                        text = checkInputListener(parseFloat(text));
+                        text = checkTotalInputPrice(e.target.id);
+                    } else {
+                        const totalInputs = checkTotalInputPrice(e.target.id);
+                        if (totalInputs < parseFloat(text)) text = totalInputs;
+                    }
+                } else {
+                    text = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+                    if (isNaN(text)) text = "";
+                }
+            }
+            e.target.value = text;
+        }
+
+        function userCheckboxListener(e) {}
+
         totalExpend.oninput = () => {
             if (totalExpend.value == "") totalExpend.value = 1;
             var text = totalExpend.value;
@@ -449,6 +481,7 @@
                     document.getElementsByClassName("container-messages")[0].firstElementChild.style.opacity = "1";
                 }, 1);
                 boolAdvancedOption = true;
+                totalInputUsers = parseFloat(totalExpend.value);
                 var totalPrice = parseFloat(totalExpend.value);
                 var arrayPrices = [];
                 for (let i = 0; i < numUsers; i++) {
@@ -472,15 +505,17 @@
                     createElement("p", userNames[i].innerText, divUser, null, {})
                     var divInput = createElement("div", null, divUser, null, {})
                     createElement("input", null, divInput, null, {
+                        id: i,
                         name: "price",
                         type: "text",
                         value: arrayNewPrices[i],
-                        onkeypress: "return isNumberKey(event)"
+                        oninput: "singleUserInputListener(event);"
                     })
                     createElement("input", null, divUser, null, {
                         type: "checkbox",
                         name: "apply",
-                        checked: ""
+                        checked: "",
+                        onchange: "userCheckboxListener(event);"
                     })
                 }
                 individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
