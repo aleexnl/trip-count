@@ -129,6 +129,7 @@
         .user>:nth-child(3) {
             width: 20%;
             margin: 0;
+            cursor: pointer;
         }
 
         .user input[type="text"] {
@@ -185,6 +186,75 @@
             background-color: #f44336;
             border: 1px solid #a0342c;
             box-shadow: 0 0 5px #f44336;
+        }
+
+        /*** CUSTOM CHECKBOX ***/
+        :root {
+            --color: rebeccapurple;
+            --disabled: #959495;
+        }
+
+        .checkbox {
+            display: grid;
+            grid-gap: 0.5em;
+            font-size: 1.3rem;
+            color: var(--color);
+        }
+
+        .checkbox-control {
+            display: inline-grid;
+            width: 1em;
+            height: 1em;
+            border-radius: 0.25em;
+            border: 0.1em solid currentColor;
+            box-sizing: border-box;
+        }
+
+        .checkbox-control svg {
+            transition: transform 0.1s ease-in 25ms;
+            transform: scale(0);
+            transform-origin: bottom left;
+            width: 17px;
+            height: 17px;
+        }
+
+        .checkbox-control svg image {
+            width: 17px;
+            height: 17px;
+        }
+
+
+        .checkbox-input {
+            display: grid;
+            grid-template-areas: "checkbox";
+
+        }
+
+        .checkbox-input input {
+            opacity: 0;
+            width: 1em;
+            height: 1em;
+            display: none;
+        }
+
+
+        .checkbox-input input:focus+.checkbox-control {
+            box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
+        }
+
+        .checkbox-input input:checked+.checkbox-control svg {
+            transform: scale(1);
+        }
+
+        .checkbox-input input:disabled+.checkbox-control {
+            color: var(--disabled);
+        }
+
+        div.checkbox-container {
+            display: grid;
+            place-content: center;
+            grid-gap: 2rem;
+            line-height: 1;
         }
     </style>
     <?php
@@ -452,7 +522,19 @@
             e.target.value = text;
         }
 
-        function userCheckboxListener(e) {}
+        function userCheckboxListener(e) {
+            var input = e.target;
+            if (input.checked) {
+                // input.parentElement.style.opacity = "1";
+                // input.previousElementSibling.firstElementChild.removeAttribute("disabled");
+            } else {
+                // input.parentElement.style.opacity = "0.4";
+                // input.parentElement.style.cursor = "not-allowed";
+                // input.previousElementSibling.firstElementChild.value = "0";
+                // input.previousElementSibling.firstElementChild.style.cursor = "not-allowed";
+                // input.previousElementSibling.firstElementChild.setAttribute("disabled", "");
+            }
+        }
 
         totalExpend.oninput = () => {
             if (totalExpend.value == "") totalExpend.value = 1;
@@ -511,13 +593,62 @@
                         value: arrayNewPrices[i],
                         oninput: "singleUserInputListener(event);"
                     })
-                    createElement("input", null, divUser, null, {
+                    /*createElement("input", null, divUser, null, {
+                        type: "checkbox",
+                        name: "apply",
+                        checked: "",
+                        onchange: "userCheckboxListener(event);"
+                    })*/
+
+                    var divCbContainer = createElement("div", null, divUser, null, {
+                        class: "checkbox-container"
+                    })
+                    var labelCb = createElement("label", null, divCbContainer, null, {
+                        class: "checkbox"
+                    })
+                    var spanInput = createElement("span", null, labelCb, null, {
+                        class: "checkbox-input"
+                    })
+                    createElement("input", null, spanInput, null, {
                         type: "checkbox",
                         name: "apply",
                         checked: "",
                         onchange: "userCheckboxListener(event);"
                     })
+                    var spanControl = createElement("span", null, spanInput, null, {
+                        class: "checkbox-control"
+                    })
+                    /*var svg = createElement("svg", null, spanControl, null, {
+                        xmlns: 'http://www.w3.org/2000/svg',
+                        viewBox: '0 0 24 24',
+                        "aria-hidden": "true",
+                        focusable: "false"
+                    })
+                    createElement("path", null, svg, null, {
+                        fill: 'none',
+                        stroke: 'currentColor',
+                        "stroke-width": '3',
+                        d: 'M1.73 12.91l6.37 6.37L22.79 4.59'
+                    })*/
+
+                    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'xlink', 'http://www.w3.org/1999/xlink');
+                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', '200');
+                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', '200');
+                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'id', 'test2');
+
+                    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'height', '100');
+                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'width', '100');
+                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'id', 'testimg2');
+                    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'images/checkbox.svg');
+                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'x', '0');
+                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'y', '0');
+
+                    svg.appendChild(svgimg);
+                    spanControl.appendChild(svg);
                 }
+
                 individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
             } else {
                 generateMessages("info", "Opciones avanzadas deshabilitadas.", "container-messages", 2);
