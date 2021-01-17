@@ -28,6 +28,13 @@
 
         .container {
             display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: 80vw;
+        }
+
+        .container-forms {
+            display: flex;
             flex-direction: row;
             justify-content: space-evenly;
             width: 80vw;
@@ -133,6 +140,51 @@
             border: 1px solid #ced4da;
             box-shadow: 0 0 5px #18c3d859;
         }
+
+        div.container-messages {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+        }
+
+        div.container-messages div {
+            width: 65%;
+            margin: 5px auto;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px 0;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
+        }
     </style>
     <?php
     $travel = $bd->prepare("SELECT g.group_id, g.user_id, g.trip_id, u.name, t.name AS 'trip_name' FROM `Groups` g, Users u, Travels t WHERE g.trip_id=t.trip_id AND g.user_id=u.user_id AND g.trip_id=$_SESSION[travelSelected]");
@@ -152,35 +204,39 @@
 <body>
     <?php include_once("./header.php") ?>
     <div class="container">
-        <div class="container-spend">
-            <h1>AGREGAR UN NUEVO GASTO</h1>
-            <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
-            <form class="form-new-spend" action="#function.php" method="POST">
-                <div class="form-group">
-                    <label for="paid-by">Pagado por</label>
-                    <select name="paid-by">
-                        <?php
-                        foreach ($_SESSION['newSpend']['users'] as $user_data) {
-                            list($id, $user) = explode(" - ", $user_data);
-                            echo "<option name='$id'>$user</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="total-expend">Importe</label>
-                    <input type="text" name="total-expend" value="10" required>
-                </div>
-                <div class="form-group">
-                    <button class="button-primary" type="submit">Guardar gasto</button>
-                </div>
-            </form>
+        <div class="container-messages">
         </div>
-        <div class="container-advanced">
-            <h1>OPCIONES AVANZADAS</h1>
-            <div class="advanced-options">
-                <button id="btn-advanced" style="width: 100%;" class="button-primary">Habilitar</button>
-                <div class="individual-spend">
+        <div class="container-forms">
+            <div class="container-spend">
+                <h1>AGREGAR UN NUEVO GASTO</h1>
+                <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
+                <form class="form-new-spend" action="#function.php" method="POST">
+                    <div class="form-group">
+                        <label for="paid-by">Pagado por</label>
+                        <select name="paid-by">
+                            <?php
+                            foreach ($_SESSION['newSpend']['users'] as $user_data) {
+                                list($id, $user) = explode(" - ", $user_data);
+                                echo "<option name='$id'>$user</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="total-expend">Importe</label>
+                        <input type="text" name="total-expend" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <button class="button-primary" type="submit">Guardar gasto</button>
+                    </div>
+                </form>
+            </div>
+            <div class="container-advanced">
+                <h1>OPCIONES AVANZADAS</h1>
+                <div class="advanced-options">
+                    <button id="btn-advanced" style="width: 100%;" class="button-primary">Habilitar</button>
+                    <div class="individual-spend">
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,6 +250,27 @@
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
         let previousTotalExpend = totalExpend.value;
+
+        function generateMessages(type, text, parentName, seconds) {
+            let parent = document.getElementsByClassName(parentName)[0];
+            let msg = document.createElement("div");
+            if (type == "info") msg.className = "msg-info";
+            else if (type == "success") msg.className = "msg-success";
+            else if (type == "error") msg.className = "msg-error";
+            else if (type == "warning") msg.className = "msg-warning";
+            msg.appendChild(document.createTextNode(text));
+            parent.prepend(msg);
+            countdown(parent, seconds);
+        }
+
+        function countdown(parent, seconds) {
+            setTimeout(() => {
+                parent.lastElementChild.style.opacity = "0";
+                setTimeout(() => {
+                    parent.removeChild(parent.lastElementChild);
+                }, 400);
+            }, seconds * 1000);
+        }
 
         function createElement(tag, text, element, direction, attr) {
             let newElement = document.createElement(tag);
@@ -367,6 +444,10 @@
         btnAdvanced.onclick = () => {
             var text = totalExpend.value;
             if (btnAdvanced.innerText === "Habilitar") {
+                generateMessages("info", "Opciones avanzadas habilitadas.", "container-messages", 2);
+                setTimeout(() => {
+                    document.getElementsByClassName("container-messages")[0].firstElementChild.style.opacity = "1";
+                }, 1);
                 boolAdvancedOption = true;
                 var totalPrice = parseFloat(totalExpend.value);
                 var arrayPrices = [];
@@ -404,6 +485,10 @@
                 }
                 individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
             } else {
+                generateMessages("info", "Opciones avanzadas deshabilitadas.", "container-messages", 2);
+                setTimeout(() => {
+                    document.getElementsByClassName("container-messages")[0].firstElementChild.style.opacity = "1";
+                }, 1);
                 boolAdvancedOption = false;
                 individualSpend.style.height = "0";
                 btnAdvanced.innerText = "Habilitar";
