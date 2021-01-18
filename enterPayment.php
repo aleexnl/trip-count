@@ -128,8 +128,6 @@
 
         .user>:nth-child(3) {
             width: 20%;
-            margin: 0;
-            cursor: pointer;
         }
 
         .user input[type="text"] {
@@ -189,16 +187,12 @@
         }
 
         /*** CUSTOM CHECKBOX ***/
-        :root {
-            --color: rebeccapurple;
-            --disabled: #959495;
-        }
 
         .checkbox {
             display: grid;
             grid-gap: 0.5em;
             font-size: 1.3rem;
-            color: var(--color);
+            color: #000;
         }
 
         .checkbox-control {
@@ -208,6 +202,7 @@
             border-radius: 0.25em;
             border: 0.1em solid currentColor;
             box-sizing: border-box;
+            cursor: pointer;
         }
 
         .checkbox-control svg {
@@ -244,10 +239,6 @@
 
         .checkbox-input input:checked+.checkbox-control svg {
             transform: scale(1);
-        }
-
-        .checkbox-input input:disabled+.checkbox-control {
-            color: var(--disabled);
         }
 
         div.checkbox-container {
@@ -344,6 +335,20 @@
             }, seconds * 1000);
         }
 
+        function createSvgImage(parent) {
+            const linkSvg = "http://www.w3.org/2000/svg";
+            const xLink = "http://www.w3.org/1999/xlink";
+
+            var svg = document.createElementNS(linkSvg, 'svg');
+            svg.setAttributeNS(linkSvg, 'xlink', xLink);
+
+            var image = document.createElementNS(linkSvg, 'image');
+            image.setAttributeNS(xLink, 'href', 'images/checkbox.svg');
+
+            svg.appendChild(image);
+            parent.appendChild(svg);
+        }
+
         function createElement(tag, text, element, direction, attr) {
             let newElement = document.createElement(tag);
             if (text) {
@@ -376,13 +381,14 @@
             var decimal = 0;
             /* function reduce: sum all the positions of the array */
             var totalPrice = arrayPrices.reduce(function(a, b) {
-                return a + b;
+                return parseFloat(a) + parseFloat(b);
             }, 0);
             if (totalPrice < inputPrice)
                 decimal = (inputPrice - totalPrice).toFixed(2);
 
+            // console.log(totalPrice)
             let subtractDecimal = "";
-            let num = arrayPrices[0];
+            let num = totalPrice;
             let firstTime = true;
             while (true) {
                 if (num % 1 == 0) {
@@ -417,15 +423,14 @@
 
         function changeInputUsers(newText) {
             if (boolAdvancedOption) {
-                let usersChecked, arrayPercentages, arrayNewPrices;
-                usersChecked = [];
-                arrayPercentages = [];
-                arrayNewPrices = [];
-                let usersBox = document.getElementsByClassName("individual-spend")[0];
+                let usersChecked = [];
+                let arrayPercentages = [];
+                let arrayNewPrices = [];
                 let numOfUsersActivated = 0;
 
-                for (const user of usersBox.children) {
-                    if (user.className == "user" && user.lastElementChild.checked) {
+                for (const user of individualSpend.children) {
+                    var inputCheckbox = user.lastElementChild.getElementsByTagName("input")[0];
+                    if (user.className == "user" && inputCheckbox.checked) {
                         usersChecked.push(user);
                         arrayPercentages.push(getPriceToPercentage(user.children[1].firstElementChild.value));
                     }
@@ -449,7 +454,7 @@
                 // var aaa = parseFloat(usersChecked[0].children[1].firstElementChild.value);
                 // aaa += parseFloat(usersChecked[1].children[1].firstElementChild.value);
                 // aaa += parseFloat(usersChecked[2].children[1].firstElementChild.value);
-                // console.log("TOTAL FINAL: ", aaa);
+                // console.log("TOTAL FINAL: ", aaa);*/
             }
         }
 
@@ -485,15 +490,46 @@
             return roundToTwoDecimals(roundToTwoDecimals(parseFloat(totalPrice)) * percentage);
         }
 
+        function redistributeUserPrice(input) {
+            const id = input.id;
+            const inputPrices = document.getElementsByName("price");
+            const inputCheckbox = document.getElementsByName("apply");
+            let numUsersActive = 0;
+            let arrayPrices = [];
+            let usersChecked = [];
+            for (const cb of inputCheckbox)
+                if (cb.checked) numUsersActive++;
+
+            if (numUsersActive != 0) {
+                var addPrice = roundToTwoDecimals(parseFloat(input.value) / numUsersActive);
+                // console.log(addPrice, parseFloat(input.value) / numUsersActive)
+                for (var i = 0; i < inputPrices.length; i++) {
+                    if (inputPrices[i].id != id && inputCheckbox[i].checked) {
+                        inputPrices[i].value = (parseFloat(inputPrices[i].value) + parseFloat(addPrice)).toFixed(2);
+                        arrayPrices.push(inputPrices[i].value);
+                        usersChecked.push(inputPrices[i]);
+                    }
+                }
+
+                var arrayNewPrices = checkTotalPrice(arrayPrices, parseFloat(totalExpend.value));
+                for (let i = 0; i < arrayNewPrices.length; i++)
+                    usersChecked[i].value = arrayNewPrices[i];
+            }
+            input.value = 0;
+        }
 
         function checkTotalInputPrice(id) {
             const inputUsers = document.getElementsByName("price");
             var sumTotal = 0;
-            for (const user of inputUsers)
-                if (user.id != id && user.parentElement.nextElementSibling.checked)
+            for (const user of inputUsers) {
+                let inputCheckbox = user.parentElement.nextElementSibling.getElementsByTagName("input")[0];
+                // console.log(inputCheckbox)
+                if (user.id != id && inputCheckbox.checked)
                     sumTotal += (isNaN(parseFloat(user.value))) ? 0 : parseFloat(user.value);
-
-            return parseFloat(totalExpend.value) - sumTotal;
+            }
+            sumTotal = sumTotal.toFixed(2);
+            // console.log("sumTotal", sumTotal)
+            return (parseFloat(totalExpend.value) - sumTotal).toFixed(2);
         }
 
         function checkInputListener(text) {
@@ -510,6 +546,7 @@
                     if (parseFloat(text) > parseFloat(totalExpend.value)) {
                         text = checkInputListener(parseFloat(text));
                         text = checkTotalInputPrice(e.target.id);
+                        // console.log(text)
                     } else {
                         const totalInputs = checkTotalInputPrice(e.target.id);
                         if (totalInputs < parseFloat(text)) text = totalInputs;
@@ -524,15 +561,21 @@
 
         function userCheckboxListener(e) {
             var input = e.target;
+            var parent = input.parentElement.parentElement.parentElement.parentElement;
+            var inputPrice = parent.children[1].firstElementChild;
             if (input.checked) {
-                // input.parentElement.style.opacity = "1";
-                // input.previousElementSibling.firstElementChild.removeAttribute("disabled");
+                parent.style.opacity = "1";
+                parent.style.cursor = "default";
+                inputPrice.style.cursor = "text";
+                inputPrice.removeAttribute("disabled");
             } else {
-                // input.parentElement.style.opacity = "0.4";
-                // input.parentElement.style.cursor = "not-allowed";
-                // input.previousElementSibling.firstElementChild.value = "0";
-                // input.previousElementSibling.firstElementChild.style.cursor = "not-allowed";
-                // input.previousElementSibling.firstElementChild.setAttribute("disabled", "");
+                parent.style.opacity = "0.4";
+                parent.style.cursor = "not-allowed";
+                inputPrice.style.cursor = "not-allowed";
+                inputPrice.setAttribute("disabled", "");
+
+                if (inputPrice.value != "0")
+                    redistributeUserPrice(inputPrice);
             }
         }
 
@@ -593,12 +636,6 @@
                         value: arrayNewPrices[i],
                         oninput: "singleUserInputListener(event);"
                     })
-                    /*createElement("input", null, divUser, null, {
-                        type: "checkbox",
-                        name: "apply",
-                        checked: "",
-                        onchange: "userCheckboxListener(event);"
-                    })*/
 
                     var divCbContainer = createElement("div", null, divUser, null, {
                         class: "checkbox-container"
@@ -618,35 +655,7 @@
                     var spanControl = createElement("span", null, spanInput, null, {
                         class: "checkbox-control"
                     })
-                    /*var svg = createElement("svg", null, spanControl, null, {
-                        xmlns: 'http://www.w3.org/2000/svg',
-                        viewBox: '0 0 24 24',
-                        "aria-hidden": "true",
-                        focusable: "false"
-                    })
-                    createElement("path", null, svg, null, {
-                        fill: 'none',
-                        stroke: 'currentColor',
-                        "stroke-width": '3',
-                        d: 'M1.73 12.91l6.37 6.37L22.79 4.59'
-                    })*/
-
-                    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'xlink', 'http://www.w3.org/1999/xlink');
-                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'height', '200');
-                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'width', '200');
-                    svg.setAttributeNS('http://www.w3.org/2000/svg', 'id', 'test2');
-
-                    var svgimg = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'height', '100');
-                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'width', '100');
-                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'id', 'testimg2');
-                    svgimg.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'images/checkbox.svg');
-                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'x', '0');
-                    svgimg.setAttributeNS('http://www.w3.org/2000/svg', 'y', '0');
-
-                    svg.appendChild(svgimg);
-                    spanControl.appendChild(svg);
+                    createSvgImage(spanControl);
                 }
 
                 individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
