@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesión</title>
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <?php
 session_start();
-include_once(__DIR__ . '/connection.php');
+include_once(__DIR__ . '/../connection.php');
 $error_messages = []; // Create an error variable to store errors.
 $has_errors = false;
 
@@ -30,7 +30,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
     }
     if (!$has_errors) {
         $password = hash('sha256', filter_var($_POST['userPass'], FILTER_SANITIZE_STRING)); // Sanitize string anmd encrypt in SHA256.
-        $query = $bd -> prepare("SELECT * FROM Users WHERE email = ? AND `password` = ?"); // Prepare the query.
+        $query = $bd->prepare("SELECT * FROM Users WHERE email = ? AND `password` = ?"); // Prepare the query.
         $query->bindParam(1, $email); // Bind parameters.
         $query->bindParam(2, $password);
         $query->execute(); // Execute the query
@@ -38,7 +38,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
             $row = $query->fetch();
             $msg = 'Inicio de sesión correcto, redireccionando...';
             $_SESSION['user'] = [$row['user_id'], $row['name'], $row['email']];
-            header( "refresh:1;url=home.php" );
+            header("refresh:1;url=home.php");
         } else { // If no user was found with that credentials.
             $has_errors = true;
             array_push($error_messages, "<b>ERROR:</b> El usuario o la contraseña no existe.");
@@ -49,10 +49,10 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
 ?>
 
 <body>
-    
+
     <div class="content">
         <div class="centered-form">
-        <img src="images/logo_small.png" alt="Trivide logo">
+            <img src="../images/logo_small.png" alt="Trivide logo">
             <h1>INICIAR SESIÓN</h1>
             <?php
             if ($has_errors) { // If user had errors during log in
@@ -61,11 +61,11 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
                     echo $error . "</br>";
                 }
                 echo '</div>';
-            } else if  (isset($_SESSION["user"])){ // If user is logged in
+            } else if (isset($_SESSION["user"])) { // If user is logged in
                 echo '<div class=\'message success-message\'>';
                 echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
                 echo '</div>';
-                header( "refresh:1;url=home.php" );
+                header("refresh:1;url=home.php");
             } else {
                 echo '<div class=\'message\'>';
                 echo '<p></p>';
@@ -75,16 +75,11 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
             <form action="" method="POST">
                 <div class="form-group">
                     <label for="userMail">Correo electrónico</label>
-                    <input type="email" name="userMail" id="userMail" placeholder="user@mail.com" >
+                    <input type="email" name="userMail" id="userMail" placeholder="user@mail.com">
                 </div>
                 <div class="form-group">
                     <label for="userPass">Contraseña</label>
                     <input type="password" name="userPass" id="userPass">
-                </div>
-                <div class="form-group form-checkbox">
-                    <input type="checkbox" name="rememberUser" id="rememberUser" accesskey="g">
-                    &nbsp;
-                    <label for="rememberUser"><u>G</u>uardar mi información</label>
                 </div>
                 <div class="form-group">
                     <button class="button-primary" type="submit" accesskey="i"><u>I</u>niciar sesión</button>
@@ -93,7 +88,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
         </div>
     </div>
 
-<?php include_once 'footer.php' ?>
+    <?php include_once 'footer.php' ?>
 </body>
 
 </html>
