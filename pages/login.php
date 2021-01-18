@@ -38,7 +38,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
             $row = $query->fetch();
             $msg = 'Inicio de sesión correcto, redireccionando...';
             $_SESSION['user'] = [$row['user_id'], $row['name'], $row['email']];
-            header("refresh:1;url=home.php");
+            header("refresh:1;url=../home.php");
         } else { // If no user was found with that credentials.
             $has_errors = true;
             array_push($error_messages, "<b>ERROR:</b> El usuario o la contraseña no existe.");
@@ -65,7 +65,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
                 echo '<div class=\'message success-message\'>';
                 echo '<p>Inicio de sesión correcto, redirigiendo a la página principal...</p>';
                 echo '</div>';
-                header("refresh:1;url=home.php");
+                header("refresh:1;url=../home.php");
             } else {
                 echo '<div class=\'message\'>';
                 echo '<p></p>';
