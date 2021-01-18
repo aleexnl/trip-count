@@ -88,7 +88,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
         </div>
     </div>
 
-    <?php include_once 'footer.php' ?>
+    <?php include_once(__DIR__ . '/../templates/footer.html'); ?>
 </body>
 
 </html>

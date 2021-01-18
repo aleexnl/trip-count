@@ -117,7 +117,7 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
         </div>
     </div>
 
-    <?php include_once 'footer.php' ?>
+    <?php include_once(__DIR__ . '/../templates/footer.html'); ?>
 </body>
 
 </html>
