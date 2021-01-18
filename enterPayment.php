@@ -272,14 +272,14 @@
             <div class="container-spend">
                 <h1>AGREGAR UN NUEVO GASTO</h1>
                 <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
-                <form class="form-new-spend" action="#function.php" method="POST">
+                <form class="form-new-spend" action="functions.php?action=new-spend" method="POST">
                     <div class="form-group">
                         <label for="paid-by">Pagado por</label>
                         <select name="paid-by">
                             <?php
                             foreach ($_SESSION['newSpend']['users'] as $user_data) {
                                 list($id, $user) = explode(" - ", $user_data);
-                                echo "<option name='$id'>$user</option>";
+                                echo "<option value='$id'>$user</option>";
                             }
                             ?>
                         </select>
@@ -307,12 +307,12 @@
     <script>
         let numUsers = <?= sizeOf($_SESSION['newSpend']['users']) ?>;
         let btnAdvanced = document.getElementById("btn-advanced");
+        let formAddNewSpend = document.getElementsByClassName("form-new-spend")[0];
         let individualSpend = document.getElementsByClassName("individual-spend")[0];
         const userNames = document.getElementsByTagName("option");
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
         let previousTotalExpend = totalExpend.value;
-        let totalInputUsers = 0;
 
         function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];
@@ -323,6 +323,9 @@
             else if (type == "warning") msg.className = "msg-warning";
             msg.appendChild(document.createTextNode(text));
             parent.prepend(msg);
+            setTimeout(() => {
+                parent.firstElementChild.style.opacity = "1";
+            }, 1);
             countdown(parent, seconds);
         }
 
@@ -592,84 +595,109 @@
                     text = 10000;
                 }
                 changeInputUsers(text);
-            } else
-                totalExpend.value = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+            } else {
+                text = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+                totalExpend.value = (isNaN(text)) ? 1 : text;
+            }
 
             previousTotalExpend = totalExpend.value;
         };
 
         btnAdvanced.onclick = () => {
             var text = totalExpend.value;
-            if (btnAdvanced.innerText === "Habilitar") {
-                generateMessages("info", "Opciones avanzadas habilitadas.", "container-messages", 2);
-                setTimeout(() => {
-                    document.getElementsByClassName("container-messages")[0].firstElementChild.style.opacity = "1";
-                }, 1);
-                boolAdvancedOption = true;
-                totalInputUsers = parseFloat(totalExpend.value);
-                var totalPrice = parseFloat(totalExpend.value);
-                var arrayPrices = [];
-                for (let i = 0; i < numUsers; i++) {
-                    arrayPrices.push(roundToTwoDecimals(totalPrice / numUsers));
-                }
-                var arrayNewPrices = checkTotalPrice(arrayPrices, totalPrice);
+            if (parseFloat(text) >= 1 && parseFloat(text) <= 10000) {
+                if (btnAdvanced.innerText === "Habilitar") {
+                    generateMessages("info", "Opciones avanzadas habilitadas.", "container-messages", 2);
+                    boolAdvancedOption = true;
+                    var totalPrice = parseFloat(totalExpend.value);
+                    var arrayPrices = [];
+                    for (let i = 0; i < numUsers; i++) {
+                        arrayPrices.push(roundToTwoDecimals(totalPrice / numUsers));
+                    }
+                    var arrayNewPrices = checkTotalPrice(arrayPrices, totalPrice);
 
-                btnAdvanced.innerText = "Deshabilitar";
+                    btnAdvanced.innerText = "Deshabilitar";
 
-                var divHeader = createElement("div", null, individualSpend, null, {
-                    class: "user header"
-                });
-                createElement("p", "Nombre", divHeader, null, {})
-                createElement("p", "Precio", divHeader, null, {})
-                createElement("p", "Aplicar", divHeader, null, {})
-
-                for (let i = 0; i < userNames.length; i++) {
-                    var divUser = createElement("div", null, individualSpend, null, {
-                        class: "user"
+                    var divHeader = createElement("div", null, individualSpend, null, {
+                        class: "user header"
                     });
-                    createElement("p", userNames[i].innerText, divUser, null, {})
-                    var divInput = createElement("div", null, divUser, null, {})
-                    createElement("input", null, divInput, null, {
-                        id: i,
-                        name: "price",
-                        type: "text",
-                        value: arrayNewPrices[i],
-                        oninput: "singleUserInputListener(event);"
-                    })
+                    createElement("p", "Nombre", divHeader, null, {})
+                    createElement("p", "Precio", divHeader, null, {})
+                    createElement("p", "Aplicar", divHeader, null, {})
 
-                    var divCbContainer = createElement("div", null, divUser, null, {
-                        class: "checkbox-container"
-                    })
-                    var labelCb = createElement("label", null, divCbContainer, null, {
-                        class: "checkbox"
-                    })
-                    var spanInput = createElement("span", null, labelCb, null, {
-                        class: "checkbox-input"
-                    })
-                    createElement("input", null, spanInput, null, {
-                        type: "checkbox",
-                        name: "apply",
-                        checked: "",
-                        onchange: "userCheckboxListener(event);"
-                    })
-                    var spanControl = createElement("span", null, spanInput, null, {
-                        class: "checkbox-control"
-                    })
-                    createSvgImage(spanControl);
+                    for (let i = 0; i < userNames.length; i++) {
+                        var divUser = createElement("div", null, individualSpend, null, {
+                            class: "user"
+                        });
+                        createElement("p", userNames[i].innerText, divUser, null, {})
+                        var divInput = createElement("div", null, divUser, null, {})
+                        createElement("input", null, divInput, null, {
+                            id: i,
+                            name: "price",
+                            type: "text",
+                            value: arrayNewPrices[i],
+                            oninput: "singleUserInputListener(event);"
+                        })
+
+                        var divCbContainer = createElement("div", null, divUser, null, {
+                            class: "checkbox-container"
+                        })
+                        var labelCb = createElement("label", null, divCbContainer, null, {
+                            class: "checkbox"
+                        })
+                        var spanInput = createElement("span", null, labelCb, null, {
+                            class: "checkbox-input"
+                        })
+                        createElement("input", null, spanInput, null, {
+                            type: "checkbox",
+                            name: "apply",
+                            checked: "",
+                            onchange: "userCheckboxListener(event);"
+                        })
+                        var spanControl = createElement("span", null, spanInput, null, {
+                            class: "checkbox-control"
+                        })
+                        createSvgImage(spanControl);
+                    }
+
+                    individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
+                } else {
+                    generateMessages("info", "Opciones avanzadas deshabilitadas.", "container-messages", 2);
+                    boolAdvancedOption = false;
+                    individualSpend.style.height = "0";
+                    btnAdvanced.innerText = "Habilitar";
+                    while (individualSpend.firstChild)
+                        individualSpend.removeChild(individualSpend.firstChild);
                 }
+            } else generateMessages("error", "Valor invalido en el precio total del gasto.", "container-messages", 3);
+        }
 
-                individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
-            } else {
-                generateMessages("info", "Opciones avanzadas deshabilitadas.", "container-messages", 2);
-                setTimeout(() => {
-                    document.getElementsByClassName("container-messages")[0].firstElementChild.style.opacity = "1";
-                }, 1);
-                boolAdvancedOption = false;
-                individualSpend.style.height = "0";
-                btnAdvanced.innerText = "Habilitar";
-                while (individualSpend.firstChild)
-                    individualSpend.removeChild(individualSpend.firstChild);
-            }
+        formAddNewSpend.onsubmit = (e) => {
+            e.preventDefault();
+            var textMsg = "";
+            //solucionar NaN de totalInputs
+
+            var text = totalExpend.value;
+            if (parseFloat(text) >= 1 && parseFloat(text) <= 10000) {
+                if (boolAdvancedOption) {
+                    var total = checkTotalInputPrice(null);
+                    if (total == 0) {
+                        generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
+                        setTimeout(() => {
+                            formAddNewSpend.submit();
+                        }, 1600);
+                    } else if (total < 0) {
+                        generateMessages("error", `El dinero total de los usuarios supera el total por: ${Math.abs(total)}`, "container-messages", 3);
+                    } else {
+                        generateMessages("error", `El dinero total de los usuarios no alcanza el total por: ${total}`, "container-messages", 3);
+                    }
+                } else {
+                    generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
+                    setTimeout(() => {
+                        formAddNewSpend.submit();
+                    }, 1600);
+                }
+            } else generateMessages("error", "Valor invalido en el precio total del gasto.", "container-messages", 3);
         }
     </script>
 </body>
