@@ -50,7 +50,7 @@ if (isset($_POST['nameTrip'])) {
         filter_var($price, FILTER_SANITIZE_STRING),
         $group_id
     ];
-    // insertQuery($bd, "INSERT INTO Group_Expenses(paid_by, price, group_id) VALUES (?, ?, ?);", $params); // INSERT NEW GROUP EXPEND
+    insertQuery($bd, "INSERT INTO Group_Expenses(paid_by, price, group_id) VALUES (?, ?, ?);", $params); // INSERT NEW GROUP EXPEND
 
     $new_group_expend_id = $bd->lastInsertId();
     $params = [
@@ -59,10 +59,10 @@ if (isset($_POST['nameTrip'])) {
         random_int(0, 1),
         $new_group_expend_id
     ];
-    // insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
+    insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
     
     if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
-    $msg = ["success", "Se ha agregado un nuevo gasto al viaje ".$_SESSION['newSpend']['tripName']." de $price.", "container-messages", 2];
+    $msg = ["success", "Se ha agregado un nuevo gasto al viaje ".$_SESSION['newSpend']['tripName']." de $price.", "container-messages", 5];
     array_push($_SESSION['msg'], $msg);
     header("location: home.php");
 }

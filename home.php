@@ -295,6 +295,8 @@
 <body>
 	<?php require_once('header.php'); ?>
 	<main>
+		<div class="container-messages">
+		</div>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
 		<table>
 			<thead>
@@ -335,12 +337,18 @@
 		else if (type == "warning") msg.className = "msg-warning";
 		msg.appendChild(document.createTextNode(text));
 		parent.prepend(msg);
+		setTimeout(() => {
+			parent.firstElementChild.style.opacity = "1";
+		}, 1);
 		countdown(parent, seconds);
 	}
 
 	function countdown(parent, seconds) {
 		setTimeout(() => {
-			parent.removeChild(parent.lastElementChild);
+			parent.lastElementChild.style.opacity = "0";
+			setTimeout(() => {
+				parent.removeChild(parent.lastElementChild);
+			}, 400);
 		}, seconds * 1000);
 	}
 
@@ -556,8 +564,20 @@
 		}
 	}
 </script>
-<?php
-echo "<script>\nvar tableRows = document.getElementsByName('main-travels')[0].children\nfor (const row of tableRows) row.onclick = function() {showTravelDetails(travelDetails[row.id])}\n</script>";
-?>
+
+<script>
+	<?php
+	foreach ($_SESSION['msg'] as $msg)
+		echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);";
+	$_SESSION['msg'] = [];
+
+	echo ("
+	var tableRows = document.getElementsByName('main-travels')[0].children\n
+	for (const row of tableRows)\n
+		row.onclick = function() {\n
+			showTravelDetails(travelDetails[row.id])\n
+		}");
+	?>
+</script>
 
 </html>
