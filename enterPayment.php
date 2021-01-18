@@ -3,14 +3,14 @@
 
 <head>
     <?php session_start(); ?>
-    <?php if (!isset($_SESSION['user']) || !isset($_SESSION['travelSelected'])) header("location: login.php") ?>
+    <?php if (!isset($_SESSION['user']) || !isset($_SESSION['travelSelected'])) header("location: pages/login.php") ?>
     <?php include_once('connection.php'); ?>
     <meta charset="UTF-8">
     <link rel="shortcut icon" href="images/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Nuevo Gasto</title>
-    <link rel="stylesheet" href="header.css">
-    <link rel="stylesheet" href="footer.css">
+    <!-- <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="footer.css"> -->
     <style>
         body {
             margin: 0;
@@ -272,7 +272,7 @@
             <div class="container-spend">
                 <h1>AGREGAR UN NUEVO GASTO</h1>
                 <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
-                <form class="form-new-spend" action="functions.php?action=new-spend" method="POST">
+                <form class="form-new-spend" method="POST">
                     <div class="form-group">
                         <label for="paid-by">Pagado por</label>
                         <select name="paid-by">
@@ -674,18 +674,31 @@
 
         formAddNewSpend.onsubmit = (e) => {
             e.preventDefault();
-            var textMsg = "";
-            //solucionar NaN de totalInputs
+            var textMsg = ""
 
             var text = totalExpend.value;
             if (parseFloat(text) >= 1 && parseFloat(text) <= 10000) {
                 if (boolAdvancedOption) {
                     var total = checkTotalInputPrice(null);
                     if (total == 0) {
-                        generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
-                        setTimeout(() => {
-                            formAddNewSpend.submit();
-                        }, 1600);
+                        var ids = [];
+                        var prices = [];
+                        let users = document.getElementsByName("price");
+                        let checkbox = document.getElementsByName("apply");
+                        if (checkbox.length > 0) {
+                            for (let i = 0; i < users.length; i++) {
+                                if (checkbox[i].checked && users[i].value > 0) {
+                                    ids.push(users[i].id);
+                                    prices.push(users[i].value);
+                                }
+                            }
+                            generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
+                            setTimeout(() => {
+                                formAddNewSpend.setAttribute("action", `functions.php?action=new-spend-advanced&ids=${ids.join("-")}&prices=${prices.join("-")}`);
+                                formAddNewSpend.submit();
+                            }, 1600);
+                        } else generateMessages("error", "No hay ningún usuario activo, desactiva las opciones avanzadas o habilita algún usuario.", "container-messages", 3);
+
                     } else if (total < 0) {
                         generateMessages("error", `El dinero total de los usuarios supera el total por: ${Math.abs(total)}`, "container-messages", 3);
                     } else {
@@ -694,6 +707,7 @@
                 } else {
                     generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
                     setTimeout(() => {
+                        formAddNewSpend.setAttribute("action", "functions.php?action=new-spend");
                         formAddNewSpend.submit();
                     }, 1600);
                 }

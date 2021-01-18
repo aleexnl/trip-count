@@ -44,25 +44,42 @@ if (isset($_POST['nameTrip'])) {
     $group_id = $_SESSION['newSpend']['groupId'];
     $paid_by = $_POST['paid-by'];
     $price = $_POST['total-expend'];
-    
+
     $params = [
         filter_var($paid_by, FILTER_SANITIZE_STRING),
         filter_var($price, FILTER_SANITIZE_STRING),
         $group_id
     ];
     insertQuery($bd, "INSERT INTO Group_Expenses(paid_by, price, group_id) VALUES (?, ?, ?);", $params); // INSERT NEW GROUP EXPEND
-
     $new_group_expend_id = $bd->lastInsertId();
-    $params = [
-        filter_var($paid_by, FILTER_SANITIZE_STRING),
-        filter_var($price, FILTER_SANITIZE_STRING),
-        random_int(0, 1),
-        $new_group_expend_id
-    ];
-    insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
-    
+    if ($_GET['action'] == "new-spend") {
+        $params = [
+            filter_var($paid_by, FILTER_SANITIZE_STRING),
+            filter_var($price, FILTER_SANITIZE_STRING),
+            random_int(0, 1),
+            $new_group_expend_id
+        ];
+        insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
+    } else if ($_GET['action'] == "new-spend-advanced" && isset($_GET['ids']) && isset($_GET['prices'])) {
+        $ids = [];
+        $id_positions = explode("-", $_GET['ids']);
+        for ($i = 0; $i < sizeOf($id_positions); $i++)
+            array_push($ids, explode(" - ", $_SESSION['newSpend']['users'][$id_positions[$i]])[0]);
+
+        $prices = explode("-", $_GET['prices']);
+
+        for ($i = 0; $i < sizeOf($ids); $i++) {
+            $params = [
+                filter_var($ids[$i], FILTER_SANITIZE_STRING),
+                filter_var($prices[$i], FILTER_SANITIZE_STRING),
+                random_int(0, 1),
+                $new_group_expend_id
+            ];
+            insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
+        }
+    }
     if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
-    $msg = ["success", "Se ha agregado un nuevo gasto al viaje ".$_SESSION['newSpend']['tripName']." de $price.", "container-messages", 5];
+    $msg = ["success", "Se ha agregado un nuevo gasto al viaje " . $_SESSION['newSpend']['tripName'] . " de $price.", "container-messages", 5];
     array_push($_SESSION['msg'], $msg);
     header("location: home.php");
 }
