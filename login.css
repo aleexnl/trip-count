@@ -1,10 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 @import url("footer.css");
-@import url("https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
-
-/* Login */
-
 body {
     background-color: #ffffff;
     font-family: "Roboto", sans-serif;
@@ -73,64 +68,4 @@ body {
     background-color: rgba(255, 0, 0, 0.2);
     border: 1px solid red;
     box-shadow: 0px 18px 40px -12px rgba(255, 0, 0, 0.35);
-}
-
-/* Footer */
-
-footer {
-    background-color: #323039;
-    text-align: center;
-    padding: 0.5vw;
-    border-top: 1px solid black;
-    height: 8vh;
-}
-
-footer p {
-    font-size: 1.4vw;
-    font-family: "Roboto", sans-serif;
-    color: #fff;
-}
-
-/* Index */
-
-#cabecera {
-    text-align: center;
-    margin: 20vh auto 10vh auto;
-    max-height: 30vw;
-}
-
-#cabecera img {
-    max-height: 25vh;
-}
-
-#centro {
-    display: flex;
-}
-
-.registrarse {
-    margin: auto 10% auto auto;
-}
-
-.entrar {
-    margin: auto auto auto 10%;
-}
-
-a {
-    padding: 1.25rem 0.8rem;
-    border: 0;
-    background-color: #18c3f8;
-    color: #ffffff;
-    font-size: 1.2rem;
-    border-radius: 7px;
-    font-family: Roboto, sans-serif;
-    font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
-    cursor: pointer;
-}
-
-a:hover {
-    background-color: #323039;
-    color: white;
-    transition: 0.3s;
 }

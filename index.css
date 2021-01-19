@@ -1,0 +1,54 @@
+
+/* Importacion de fuente */
+
+@import url('https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+/* Titulo de bienvenida de la pagina */
+
+#cabecera {
+	text-align: center;
+	margin: 20vh auto 10vh auto;
+	max-height: 30vw;
+}
+
+#cabecera img {
+	max-height: 25vh;
+}
+
+
+/* Panel central y botones centrales */
+
+#centro {
+	display: flex;
+}
+
+.registrarse {
+	margin: auto 10% auto auto;
+}
+
+.entrar {
+	margin: auto auto auto 10%;
+}
+
+
+a {
+    padding: 1.25rem 0.8rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.2rem;
+    border-radius: 7px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+a:hover {
+	background-color: #323039;
+	color: white;
+	transition: 0.3s;
+}
