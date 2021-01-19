@@ -40,29 +40,5 @@ if (isset($_POST['nameTrip'])) {
         $_SESSION['travelSelected'] = null;
         header("location: home.php?msg=ID del vuelo no encontrado.");
     }
-} else if ((isset($_GET['action']) == "new-spend" || isset($_GET['action']) == "new-spend-advanced") && isset($_POST['paid-by']) && isset($_POST['total-expend']) >= 1 && isset($_POST['total-expend']) <= 10000) {
-    $group_id = $_SESSION['newSpend']['groupId'];
-    $paid_by = $_POST['paid-by'];
-    $price = $_POST['total-expend'];
-    
-    $params = [
-        filter_var($paid_by, FILTER_SANITIZE_STRING),
-        filter_var($price, FILTER_SANITIZE_STRING),
-        $group_id
-    ];
-    // insertQuery($bd, "INSERT INTO Group_Expenses(paid_by, price, group_id) VALUES (?, ?, ?);", $params); // INSERT NEW GROUP EXPEND
-
-    $new_group_expend_id = $bd->lastInsertId();
-    $params = [
-        filter_var($paid_by, FILTER_SANITIZE_STRING),
-        filter_var($price, FILTER_SANITIZE_STRING),
-        random_int(0, 1),
-        $new_group_expend_id
-    ];
-    // insertQuery($bd, "INSERT INTO Personal_Expenses(`user_id`, amount, payment_status, group_expense_id) VALUES (?, ?, ?, ?);", $params); // INSERT NEW PERSONAL EXPEND
-    
-    if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
-    $msg = ["success", "Se ha agregado un nuevo gasto al viaje ".$_SESSION['newSpend']['tripName']." de $price.", "container-messages", 2];
-    array_push($_SESSION['msg'], $msg);
-    header("location: home.php");
+    print_r($_SESSION);
 }
