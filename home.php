@@ -7,6 +7,7 @@
 	<?php require_once('connection.php'); ?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="stylesheet" type="text/css" href="home.css">
 	<title>Home</title>
 	<script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
@@ -293,7 +294,7 @@
 </head>
 
 <body>
-	<?php require_once('header.php'); ?>
+	<?php include_once(__DIR__ . '/templates/header.html'); ?>
 	<main>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
 		<table>
@@ -314,7 +315,7 @@
 	</main>
 
 	<?php
-	require_once('footer.php');
+	include_once(__DIR__ . '/templates/footer.html');
 	unset($queryTravels);
 	unset($bd);
 	?>

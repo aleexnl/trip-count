@@ -6,6 +6,7 @@
     <?php if (!isset($_SESSION['user']) || !isset($_SESSION['travelSelected'])) header("location: login.php") ?>
     <?php include_once('connection.php'); ?>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="images/logo.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar Nuevo Gasto</title>
     <link rel="stylesheet" href="header.css">
@@ -27,6 +28,13 @@
         }
 
         .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: 80vw;
+        }
+
+        .container-forms {
             display: flex;
             flex-direction: row;
             justify-content: space-evenly;
@@ -120,7 +128,6 @@
 
         .user>:nth-child(3) {
             width: 20%;
-            margin: 0;
         }
 
         .user input[type="text"] {
@@ -132,6 +139,113 @@
             color: #495057;
             border: 1px solid #ced4da;
             box-shadow: 0 0 5px #18c3d859;
+        }
+
+        div.container-messages {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+        }
+
+        div.container-messages div {
+            width: 65%;
+            margin: 5px auto;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px 0;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
+        }
+
+        /*** CUSTOM CHECKBOX ***/
+
+        .checkbox {
+            display: grid;
+            grid-gap: 0.5em;
+            font-size: 1.3rem;
+            color: #000;
+        }
+
+        .checkbox-control {
+            display: inline-grid;
+            width: 1em;
+            height: 1em;
+            border-radius: 0.25em;
+            border: 0.1em solid currentColor;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .checkbox-control svg {
+            transition: transform 0.1s ease-in 25ms;
+            transform: scale(0);
+            transform-origin: bottom left;
+            width: 17px;
+            height: 17px;
+        }
+
+        .checkbox-control svg image {
+            width: 17px;
+            height: 17px;
+        }
+
+
+        .checkbox-input {
+            display: grid;
+            grid-template-areas: "checkbox";
+
+        }
+
+        .checkbox-input input {
+            opacity: 0;
+            width: 1em;
+            height: 1em;
+            display: none;
+        }
+
+
+        .checkbox-input input:focus+.checkbox-control {
+            box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
+        }
+
+        .checkbox-input input:checked+.checkbox-control svg {
+            transform: scale(1);
+        }
+
+        div.checkbox-container {
+            display: grid;
+            place-content: center;
+            grid-gap: 2rem;
+            line-height: 1;
         }
     </style>
     <?php
@@ -152,35 +266,39 @@
 <body>
     <?php include_once("./header.php") ?>
     <div class="container">
-        <div class="container-spend">
-            <h1>AGREGAR UN NUEVO GASTO</h1>
-            <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
-            <form class="form-new-spend" action="#function.php" method="POST">
-                <div class="form-group">
-                    <label for="paid-by">Pagado por</label>
-                    <select name="paid-by">
-                        <?php
-                        foreach ($_SESSION['newSpend']['users'] as $user_data) {
-                            list($id, $user) = explode(" - ", $user_data);
-                            echo "<option name='$id'>$user</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="total-expend">Importe</label>
-                    <input type="number" name="total-expend" value="0" required>
-                </div>
-                <div class="form-group">
-                    <button class="button-primary" type="submit">Guardar gasto</button>
-                </div>
-            </form>
+        <div class="container-messages">
         </div>
-        <div class="container-advanced">
-            <h1>OPCIONES AVANZADAS</h1>
-            <div class="advanced-options">
-                <button id="btn-advanced" style="width: 100%;" class="button-primary">Habilitar</button>
-                <div class="individual-spend">
+        <div class="container-forms">
+            <div class="container-spend">
+                <h1>AGREGAR UN NUEVO GASTO</h1>
+                <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
+                <form class="form-new-spend" action="functions.php?action=new-spend" method="POST">
+                    <div class="form-group">
+                        <label for="paid-by">Pagado por</label>
+                        <select name="paid-by">
+                            <?php
+                            foreach ($_SESSION['newSpend']['users'] as $user_data) {
+                                list($id, $user) = explode(" - ", $user_data);
+                                echo "<option value='$id'>$user</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="total-expend">Importe</label>
+                        <input type="text" name="total-expend" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <button class="button-primary" type="submit">Guardar gasto</button>
+                    </div>
+                </form>
+            </div>
+            <div class="container-advanced">
+                <h1>OPCIONES AVANZADAS</h1>
+                <div class="advanced-options">
+                    <button id="btn-advanced" style="width: 100%;" class="button-primary">Habilitar</button>
+                    <div class="individual-spend">
+                    </div>
                 </div>
             </div>
         </div>
@@ -189,10 +307,50 @@
     <script>
         let numUsers = <?= sizeOf($_SESSION['newSpend']['users']) ?>;
         let btnAdvanced = document.getElementById("btn-advanced");
+        let formAddNewSpend = document.getElementsByClassName("form-new-spend")[0];
         let individualSpend = document.getElementsByClassName("individual-spend")[0];
         const userNames = document.getElementsByTagName("option");
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
+        let previousTotalExpend = totalExpend.value;
+
+        function generateMessages(type, text, parentName, seconds) {
+            let parent = document.getElementsByClassName(parentName)[0];
+            let msg = document.createElement("div");
+            if (type == "info") msg.className = "msg-info";
+            else if (type == "success") msg.className = "msg-success";
+            else if (type == "error") msg.className = "msg-error";
+            else if (type == "warning") msg.className = "msg-warning";
+            msg.appendChild(document.createTextNode(text));
+            parent.prepend(msg);
+            setTimeout(() => {
+                parent.firstElementChild.style.opacity = "1";
+            }, 1);
+            countdown(parent, seconds);
+        }
+
+        function countdown(parent, seconds) {
+            setTimeout(() => {
+                parent.lastElementChild.style.opacity = "0";
+                setTimeout(() => {
+                    parent.removeChild(parent.lastElementChild);
+                }, 400);
+            }, seconds * 1000);
+        }
+
+        function createSvgImage(parent) {
+            const linkSvg = "http://www.w3.org/2000/svg";
+            const xLink = "http://www.w3.org/1999/xlink";
+
+            var svg = document.createElementNS(linkSvg, 'svg');
+            svg.setAttributeNS(linkSvg, 'xlink', xLink);
+
+            var image = document.createElementNS(linkSvg, 'image');
+            image.setAttributeNS(xLink, 'href', 'images/checkbox.svg');
+
+            svg.appendChild(image);
+            parent.appendChild(svg);
+        }
 
         function createElement(tag, text, element, direction, attr) {
             let newElement = document.createElement(tag);
@@ -222,98 +380,324 @@
             element.parentNode.insertBefore(newElement, element.nextElementSibling);
         }
 
-        function isNumberKey(e) {
-            var charCode = (e.which) ? e.which : e.keyCode;
-            if (charCode > 31 && (charCode < 48 || charCode > 57) && charCode != 46)
-                return false;
-            return true;
-        }
-
-        function checkTotalPrice(price, inputPrice) {
-            var totalPrice = price * numUsers;
+        function checkTotalPrice(arrayPrices, inputPrice) {
             var decimal = 0;
-            var array = [];
+            /* function reduce: sum all the positions of the array */
+            var totalPrice = arrayPrices.reduce(function(a, b) {
+                return parseFloat(a) + parseFloat(b);
+            }, 0);
             if (totalPrice < inputPrice)
                 decimal = (inputPrice - totalPrice).toFixed(2);
-            for (let i = 0; i < numUsers; i++) {
-                if (i == 0) array.push((parseFloat(price) + parseFloat(decimal)).toFixed(2));
-                else array.push(price);
+
+            // console.log(totalPrice)
+            let subtractDecimal = "";
+            let num = totalPrice;
+            let firstTime = true;
+            while (true) {
+                if (num % 1 == 0) {
+                    subtractDecimal += "1";
+                    break;
+                } else {
+                    num = (num * 10).toFixed(2);
+                    if (firstTime) {
+                        firstTime = false;
+                        subtractDecimal = "0.";
+                    } else subtractDecimal += "0";
+                }
             }
-            return array;
+            // console.log("checkTotalPrice", inputPrice, arrayPrices, subtractDecimal, decimal)
+            let cont = 0;
+            while (decimal > 0) {
+                if (cont >= arrayPrices.length) cont = 0;
+                arrayPrices[cont] = (parseFloat(arrayPrices[cont]) + parseFloat(subtractDecimal)).toFixed(2);
+                decimal -= parseFloat(subtractDecimal);
+                cont++;
+                totalPrice = arrayPrices.reduce(function(a, b) {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0);
+                // console.log("LOG TOTAL PRICE: ", totalPrice)
+                if (totalPrice == inputPrice) break;
+            }
+            for (let i = 0; i < arrayPrices.length; i++) {
+                arrayPrices[i] = parseFloat(arrayPrices[i]).toFixed(2);
+            }
+            return arrayPrices;
         }
 
-        function changeInputUsers(previousText, newText) {
+        function changeInputUsers(newText) {
             if (boolAdvancedOption) {
                 let usersChecked = [];
-                let usersBox = document.getElementsByClassName("individual-spend")[0];
+                let arrayPercentages = [];
+                let arrayNewPrices = [];
                 let numOfUsersActivated = 0;
-                let arrayPrices = [];
-                for (const user of usersBox.children) {
-                    if (user.className == "user" && user.lastElementChild.checked)
+
+                for (const user of individualSpend.children) {
+                    var inputCheckbox = user.lastElementChild.getElementsByTagName("input")[0];
+                    if (user.className == "user" && inputCheckbox.checked) {
                         usersChecked.push(user);
+                        arrayPercentages.push(getPriceToPercentage(user.children[1].firstElementChild.value));
+                    }
                 }
-                
+                // console.log("percentage: ", arrayPercentages)
+                for (var i = 0; i < usersChecked.length; i++)
+                    arrayNewPrices.push(getPercentageToPrice(arrayPercentages[i], newText));
+
+                // console.log("new prices", arrayNewPrices);
+                let arrayOfCents = getCents(arrayNewPrices, arrayPercentages);
+                // console.log("arrayOfCents", arrayOfCents)
+
+                for (var i = 0; i < usersChecked.length; i++)
+                    arrayNewPrices[i] = roundToTwoDecimals(arrayNewPrices[i] + arrayOfCents[i], "up");
+
+                arrayNewPrices = checkTotalPrice(arrayNewPrices, parseFloat(newText));
+
+                for (var i = 0; i < usersChecked.length; i++)
+                    usersChecked[i].children[1].firstElementChild.value = arrayNewPrices[i];
+
+                // var aaa = parseFloat(usersChecked[0].children[1].firstElementChild.value);
+                // aaa += parseFloat(usersChecked[1].children[1].firstElementChild.value);
+                // aaa += parseFloat(usersChecked[2].children[1].firstElementChild.value);
+                // console.log("TOTAL FINAL: ", aaa);*/
             }
         }
 
-        totalExpend.onchange = (e) => {
-            console.log("eeee")
-        };
+        function roundToTwoDecimals(num, direction) {
+            return (direction === "up") ? Math.ceil(num * 100) / 100 : Math.floor(num * 100) / 100;
+        }
 
-        totalExpend.onkeypress = (e) => {
-            let status = isNumberKey(e);
-            if (status) {
-                var text = e.target.value + e.key;
-                var regex = new RegExp(/^[0-9]+.[0-9][0-9]$/);
-                console.log("match", regex.match(text));
-                changeInputUsers(e.target.value, text);
+
+        function getCents(array, percentages) {
+            /* function reduce: sum all the positions of the array */
+            var actualTotalPriceInputs = array.reduce(function(a, b) {
+                return a + b;
+            }, 0);
+            // console.log("actualTotalPriceInputs 2: ", array, percentages, actualTotalPriceInputs, previousTotalExpend, totalExpend.value, parseFloat(totalExpend.value) - actualTotalPriceInputs)
+            var arrayCents = [];
+            for (const percentage of percentages)
+                arrayCents.push(getPercentageToPrice(percentage, parseFloat(totalExpend.value) - actualTotalPriceInputs));
+            return arrayCents;
+        }
+
+        function validateWithRegex(rgx, text) {
+            var regex = new RegExp(rgx);
+            return text.match(regex);
+        }
+
+        function getPriceToPercentage(price) {
+            // console.log("getPriceToPercentage", price, previousTotalExpend, ((price * 100) / previousTotalExpend) / 100)
+            return roundToTwoDecimals(((price * 100) / previousTotalExpend) / 100);
+        }
+
+        function getPercentageToPrice(percentage, totalPrice) {
+            // console.log("getPercentageToPrice", percentage, roundToTwoDecimals(parseFloat(totalPrice)))
+            return roundToTwoDecimals(roundToTwoDecimals(parseFloat(totalPrice)) * percentage);
+        }
+
+        function redistributeUserPrice(input) {
+            const id = input.id;
+            const inputPrices = document.getElementsByName("price");
+            const inputCheckbox = document.getElementsByName("apply");
+            let numUsersActive = 0;
+            let arrayPrices = [];
+            let usersChecked = [];
+            for (const cb of inputCheckbox)
+                if (cb.checked) numUsersActive++;
+
+            if (numUsersActive != 0) {
+                var addPrice = roundToTwoDecimals(parseFloat(input.value) / numUsersActive);
+                // console.log(addPrice, parseFloat(input.value) / numUsersActive)
+                for (var i = 0; i < inputPrices.length; i++) {
+                    if (inputPrices[i].id != id && inputCheckbox[i].checked) {
+                        inputPrices[i].value = (parseFloat(inputPrices[i].value) + parseFloat(addPrice)).toFixed(2);
+                        arrayPrices.push(inputPrices[i].value);
+                        usersChecked.push(inputPrices[i]);
+                    }
+                }
+
+                var arrayNewPrices = checkTotalPrice(arrayPrices, parseFloat(totalExpend.value));
+                for (let i = 0; i < arrayNewPrices.length; i++)
+                    usersChecked[i].value = arrayNewPrices[i];
             }
-            return status;
+            input.value = 0;
+        }
+
+        function checkTotalInputPrice(id) {
+            const inputUsers = document.getElementsByName("price");
+            var sumTotal = 0;
+            for (const user of inputUsers) {
+                let inputCheckbox = user.parentElement.nextElementSibling.getElementsByTagName("input")[0];
+                // console.log(inputCheckbox)
+                if (user.id != id && inputCheckbox.checked)
+                    sumTotal += (isNaN(parseFloat(user.value))) ? 0 : parseFloat(user.value);
+            }
+            sumTotal = sumTotal.toFixed(2);
+            // console.log("sumTotal", sumTotal)
+            return (parseFloat(totalExpend.value) - sumTotal).toFixed(2);
+        }
+
+        function checkInputListener(text) {
+            // console.log(text, totalExpend.value, (text - parseFloat(totalExpend.value)))
+            var numToSubtract = (text - parseFloat(totalExpend.value)).toFixed(2);
+            return (text - numToSubtract).toFixed(2);
+        }
+
+        function singleUserInputListener(e) {
+            var text = e.target.value;
+
+            if (text != "") {
+                if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
+                    if (parseFloat(text) > parseFloat(totalExpend.value)) {
+                        text = checkInputListener(parseFloat(text));
+                        text = checkTotalInputPrice(e.target.id);
+                        // console.log(text)
+                    } else {
+                        const totalInputs = checkTotalInputPrice(e.target.id);
+                        if (totalInputs < parseFloat(text)) text = totalInputs;
+                    }
+                } else {
+                    text = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+                    if (isNaN(text)) text = "";
+                }
+            }
+            e.target.value = text;
+        }
+
+        function userCheckboxListener(e) {
+            var input = e.target;
+            var parent = input.parentElement.parentElement.parentElement.parentElement;
+            var inputPrice = parent.children[1].firstElementChild;
+            if (input.checked) {
+                parent.style.opacity = "1";
+                parent.style.cursor = "default";
+                inputPrice.style.cursor = "text";
+                inputPrice.removeAttribute("disabled");
+            } else {
+                parent.style.opacity = "0.4";
+                parent.style.cursor = "not-allowed";
+                inputPrice.style.cursor = "not-allowed";
+                inputPrice.setAttribute("disabled", "");
+
+                if (inputPrice.value != "0")
+                    redistributeUserPrice(inputPrice);
+            }
+        }
+
+        totalExpend.oninput = () => {
+            if (totalExpend.value == "") totalExpend.value = 1;
+            var text = totalExpend.value;
+
+            if (validateWithRegex(/^[0-9]*\.$/, text) || validateWithRegex(/^\s*-?\d+(\.\d{1,2})?\s*$/, text)) {
+                if (parseFloat(text) < 1) {
+                    totalExpend.value = 1;
+                    text = 1;
+                } else if (parseFloat(text) > 10000) {
+                    totalExpend.value = 10000;
+                    text = 10000;
+                }
+                changeInputUsers(text);
+            } else {
+                text = roundToTwoDecimals(parseFloat(text.replace(/^[1-9]{1,6}(\\.\\d{1,2})?$/)));
+                totalExpend.value = (isNaN(text)) ? 1 : text;
+            }
+
+            previousTotalExpend = totalExpend.value;
         };
 
         btnAdvanced.onclick = () => {
-            if (btnAdvanced.innerText === "Habilitar") {
-                boolAdvancedOption = true;
-                var totalPrice = parseInt(document.getElementsByName("total-expend")[0].value);
-                var price = (totalPrice / numUsers).toFixed(2);
+            var text = totalExpend.value;
+            if (parseFloat(text) >= 1 && parseFloat(text) <= 10000) {
+                if (btnAdvanced.innerText === "Habilitar") {
+                    generateMessages("info", "Opciones avanzadas habilitadas.", "container-messages", 2);
+                    boolAdvancedOption = true;
+                    var totalPrice = parseFloat(totalExpend.value);
+                    var arrayPrices = [];
+                    for (let i = 0; i < numUsers; i++) {
+                        arrayPrices.push(roundToTwoDecimals(totalPrice / numUsers));
+                    }
+                    var arrayNewPrices = checkTotalPrice(arrayPrices, totalPrice);
 
-                var arrayPrices = checkTotalPrice(price, totalPrice);
+                    btnAdvanced.innerText = "Deshabilitar";
 
-                btnAdvanced.innerText = "Deshabilitar";
-
-                var divHeader = createElement("div", null, individualSpend, null, {
-                    class: "user header"
-                });
-                createElement("p", "Nombre", divHeader, null, {})
-                createElement("p", "Precio", divHeader, null, {})
-                createElement("p", "Aplicar", divHeader, null, {})
-
-                for (let i = 0; i < userNames.length; i++) {
-                    var divUser = createElement("div", null, individualSpend, null, {
-                        class: "user"
+                    var divHeader = createElement("div", null, individualSpend, null, {
+                        class: "user header"
                     });
-                    createElement("p", userNames[i].innerText, divUser, null, {})
-                    var divInput = createElement("div", null, divUser, null, {})
-                    createElement("input", null, divInput, null, {
-                        name: "price",
-                        type: "text",
-                        value: arrayPrices[i],
-                        onkeypress: "return isNumberKey(event)"
-                    })
-                    createElement("input", null, divUser, null, {
-                        type: "checkbox",
-                        name: "apply",
-                        checked: ""
-                    })
+                    createElement("p", "Nombre", divHeader, null, {})
+                    createElement("p", "Precio", divHeader, null, {})
+                    createElement("p", "Aplicar", divHeader, null, {})
+
+                    for (let i = 0; i < userNames.length; i++) {
+                        var divUser = createElement("div", null, individualSpend, null, {
+                            class: "user"
+                        });
+                        createElement("p", userNames[i].innerText, divUser, null, {})
+                        var divInput = createElement("div", null, divUser, null, {})
+                        createElement("input", null, divInput, null, {
+                            id: i,
+                            name: "price",
+                            type: "text",
+                            value: arrayNewPrices[i],
+                            oninput: "singleUserInputListener(event);"
+                        })
+
+                        var divCbContainer = createElement("div", null, divUser, null, {
+                            class: "checkbox-container"
+                        })
+                        var labelCb = createElement("label", null, divCbContainer, null, {
+                            class: "checkbox"
+                        })
+                        var spanInput = createElement("span", null, labelCb, null, {
+                            class: "checkbox-input"
+                        })
+                        createElement("input", null, spanInput, null, {
+                            type: "checkbox",
+                            name: "apply",
+                            checked: "",
+                            onchange: "userCheckboxListener(event);"
+                        })
+                        var spanControl = createElement("span", null, spanInput, null, {
+                            class: "checkbox-control"
+                        })
+                        createSvgImage(spanControl);
+                    }
+
+                    individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
+                } else {
+                    generateMessages("info", "Opciones avanzadas deshabilitadas.", "container-messages", 2);
+                    boolAdvancedOption = false;
+                    individualSpend.style.height = "0";
+                    btnAdvanced.innerText = "Habilitar";
+                    while (individualSpend.firstChild)
+                        individualSpend.removeChild(individualSpend.firstChild);
                 }
-                individualSpend.style.height = (individualSpend.childElementCount * 52) + "px";
-            } else {
-                boolAdvancedOption = false;
-                individualSpend.style.height = "0";
-                btnAdvanced.innerText = "Habilitar";
-                while (individualSpend.firstChild)
-                    individualSpend.removeChild(individualSpend.firstChild);
-            }
+            } else generateMessages("error", "Valor invalido en el precio total del gasto.", "container-messages", 3);
+        }
+
+        formAddNewSpend.onsubmit = (e) => {
+            e.preventDefault();
+            var textMsg = "";
+            //solucionar NaN de totalInputs
+
+            var text = totalExpend.value;
+            if (parseFloat(text) >= 1 && parseFloat(text) <= 10000) {
+                if (boolAdvancedOption) {
+                    var total = checkTotalInputPrice(null);
+                    if (total == 0) {
+                        generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
+                        setTimeout(() => {
+                            formAddNewSpend.submit();
+                        }, 1600);
+                    } else if (total < 0) {
+                        generateMessages("error", `El dinero total de los usuarios supera el total por: ${Math.abs(total)}`, "container-messages", 3);
+                    } else {
+                        generateMessages("error", `El dinero total de los usuarios no alcanza el total por: ${total}`, "container-messages", 3);
+                    }
+                } else {
+                    generateMessages("success", "Los valores introducidos son correctos.", "container-messages", 1.5);
+                    setTimeout(() => {
+                        formAddNewSpend.submit();
+                    }, 1600);
+                }
+            } else generateMessages("error", "Valor invalido en el precio total del gasto.", "container-messages", 3);
         }
     </script>
 </body>
