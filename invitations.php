@@ -35,10 +35,14 @@
                     $query->execute(); // Execute the query
                     if ($query->rowCount() > 0) { // Chef if the query returned something.
                         $content = file_get_contents(__DIR__ . '/templates/invitation.html');
-                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
+                        $result = sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
+                        $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
+                    }
+                    if (!$result) {
+                        $has_errors = true;
+                        array_push($error_messages, "<b>ERROR:</b> El email $email no se ha enviado correctamente.");
                     }
                 }
             }
