@@ -7,12 +7,22 @@
     <title>Invitaciones</title>
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="header.css">
-	<link rel="stylesheet" type="text/css" href="footer.css">
+    <link rel="stylesheet" type="text/css" href="footer.css">
     <?php
     session_start();
+    include_once(__DIR__ . '/connection.php');
     $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : header("location:login.php?status=session_expired");
     $error_messages = []; // Create an error variable to store errors.
     $has_errors = false;
+
+    function sendMail($mail, $subject, $content)
+    {
+        return mail(
+            $mail,
+            $subject, //'¡Un nuevo viaje te espera!',
+            $content // "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje."
+        );
+    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
         if (isset($_POST['email-1'])) { // If there is at least one email iterate through them
@@ -22,13 +32,16 @@
                     $has_errors = true;
                     array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
                 } else {
-                    echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se han enviado los mails.', 'container-messages', 4); }</script>";
-                    mail(
-                        $email,
-                        '¡Un nuevo viaje te espera!',
-                        "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje."
-                    );
-                }
+                    $query = $bd->prepare("SELECT email FROM Users WHERE email = ?"); // Prepare the query.
+                    $query->bindParam(1, $email); // Bind parameters.
+                    $query->execute(); // Execute the query
+                    if ($query->rowCount() > 0) { // Chef if the query returned something.
+                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        sendMail($mail, "¡Te han invitado a un nuevo viaje!", $content);
+                    } else {
+                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        sendMail($mail, "Te han invitado a un nuevo viaje", $content);
+                    }
             }
         }
     }
@@ -178,35 +191,35 @@
             border: 1px solid #a0342c;
             box-shadow: 0 0 5px #f44336;
         }
-	    
-	main { 
-	    min-height: 82vh;
-	}
+
+        main {
+            min-height: 82vh;
+        }
     </style>
 </head>
 
 <body>
     <?php require_once('header.php'); ?>
     <main>
-    <p class="title">Invitaciones</p>
-    <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
-    <div class="container-messages">
-        <?php
-        if ($has_errors) // If user had errors during log in
-            foreach ($error_messages as $key => $error)
-                echo $error . "</br>";
-        ?>
-    </div>
-    <form class="invitations" action="./invitations.php" method="post">
-        <div class="box-mail">
-            <label for="email-1">Correo 1:</label>
-            <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
+        <p class="title">Invitaciones</p>
+        <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
+        <div class="container-messages">
+            <?php
+            if ($has_errors) // If user had errors during log in
+                foreach ($error_messages as $key => $error)
+                    echo $error . "</br>";
+            ?>
         </div>
-        <div class="box-btn">
-            <button class="add-mail button-primary" type="button">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
-	    <button class="send button-primary" type="submit" accesskey="e"><u>E</u>nviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
-        </div>
-    </form>
+        <form class="invitations" action="./invitations.php" method="post">
+            <div class="box-mail">
+                <label for="email-1">Correo 1:</label>
+                <input type="email" class="mails" name="email-1" placeholder="user@mail.com">
+            </div>
+            <div class="box-btn">
+                <button class="add-mail button-primary" type="button">Añadir otro correo <i class="fas fa-plus-square fa-v-align"></i></button>
+                <button class="send button-primary" type="submit" accesskey="e"><u>E</u>nviar Invitaciones <i class="fas fa-paper-plane fa-v-align"></i></button>
+            </div>
+        </form>
     </main>
     <?php require_once('footer.php'); ?>
     <script>
