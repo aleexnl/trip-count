@@ -38,6 +38,7 @@
                         $result = sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        $content = str_replace("%TOKEN_HASH%", $_SESSION['token'], $content);
                         $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
                     }
                     if (!$result) {
@@ -199,12 +200,44 @@
         main {
             min-height: 82vh;
         }
+
+        ul.breadcrumb {
+            padding: 10px 16px;
+            list-style: none;
+            background-color: #eee;
+            margin: 10px auto auto 0;
+        }
+
+        ul.breadcrumb li {
+            display: inline;
+            font-size: 18px;
+        }
+
+        ul.breadcrumb li+li:before {
+            padding: 8px;
+            color: black;
+            content: "/\00a0";
+        }
+
+        ul.breadcrumb li a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+
+        ul.breadcrumb li a:hover {
+            color: #01447e;
+            text-decoration: underline;
+        }
     </style>
 </head>
 
 <body>
     <?php require_once('templates/header.html'); ?>
     <main>
+        <ul class="breadcrumb">
+            <li><a href="home.php">Home</a></li>
+            <li><a href="#"> Invitaciones <?= $tripName ?></a></li>
+        </ul>
         <p class="title">Invitaciones</p>
         <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
         <div class="container-messages">

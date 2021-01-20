@@ -333,14 +333,9 @@
 <body>
 	<?php include_once(__DIR__ . '/templates/header.html'); ?>
 	<main>
-		<!-- <?php //generateBreadcrumb() 
-				?>
 		<ul class="breadcrumb">
 			<li><a href="#">Home</a></li>
-			<li><a href="#">Pictures</a></li>
-			<li><a href="#">Summer 15</a></li>
-			<li>Italy</li>
-		</ul> -->
+		</ul>
 		<div class="container-messages">
 		</div>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
