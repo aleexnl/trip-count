@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Grupo <?= $_SESSION['travelSelected'][0] ?></title>
+    <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <?php
     $foreign_exchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
     ?>
@@ -22,9 +23,17 @@
 
 
         header,
+        main,
         footer {
             width: 100vw;
             padding: 0 !important;
+        }
+
+        form.form-edit-travel {
+            width: 500px;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
         }
 
         .form-group {
@@ -109,6 +118,51 @@
             color: #01447e;
             text-decoration: underline;
         }
+      
+        div.container-messages {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+        }
+
+        div.container-messages div {
+            width: 65%;
+            margin: 5px auto;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px 0;
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
+        }
     </style>
 </head>
 
@@ -119,7 +173,9 @@
             <li><a href="home.php">Home</a></li>
             <li><a href="#"> Editar viaje <?php $_SESSION['travelSelected'][0] ?></a></li>
         </ul>
-        <h1 class="text-center">Editar viaje del grupo <?= $_SESSION['travelSelected'][0] ?></h1>
+        <div class="container-messages">
+        </div>
+        <h1 class="text-center">Editar viaje del Grupo <?= $_SESSION['travelSelected'][0] ?></h1>
         <form class="form-edit-travel" method="POST">
             <div class="form-multiple-group">
                 <div class="form-group">
@@ -142,25 +198,62 @@
             </div>
             <div class="form-group">
                 <label for="description">Descripción</label>
-                <input type="text" name="description" value="<?= $_SESSION['travelSelected'][2] ?>" required>
+                <input type="text" name="description" value="<?= $_SESSION['travelSelected'][2] ?>">
             </div>
             <div class="form-btn-group">
-                <button class="button-primary" type="submit">Guardar cambios</button>
-                <button class="button-primary" onclick="">Añadir nuevos usuarios</button>
+                <button class="button-primary">Guardar cambios <i class="fas fa-save"></i></button>
+                <button class="btn-add-users button-primary">Añadir nuevos usuarios <i class="fas fa-user-edit"></i></button>
             </div>
         </form>
     </main>
     <?php include_once('templates/footer.html') ?>
     <script>
-        function validateInputTextLength(name, size) {
-            let input = document.getElementsByName(name)[0];
-            if (input.value.length < size) return true;
-            else return false;
+        let btnAddUsers = document.getElementsByClassName("btn-add-users")[0];
+        let formEditTravel = document.getElementsByClassName("form-edit-travel")[0];
+
+        function generateMessages(type, text, parentName, seconds) {
+            let parent = document.getElementsByClassName(parentName)[0];
+            let msg = document.createElement("div");
+            if (type == "info") msg.className = "msg-info";
+            else if (type == "success") msg.className = "msg-success";
+            else if (type == "error") msg.className = "msg-error";
+            else if (type == "warning") msg.className = "msg-warning";
+            msg.appendChild(document.createTextNode(text));
+            parent.prepend(msg);
+            setTimeout(() => {
+                parent.firstElementChild.style.opacity = "1";
+            }, 1);
+            countdown(parent, seconds);
         }
 
-        function isNull(name) {
-            return document.getElementsByName(name)[0].value.replace(/ /g, "");
+        function countdown(parent, seconds) {
+            setTimeout(() => {
+                parent.lastElementChild.style.opacity = "0";
+                setTimeout(() => {
+                    parent.removeChild(parent.lastElementChild);
+                }, 400);
+            }, seconds * 1000);
         }
+
+        btnAddUsers.onclick = (e) => {
+            e.preventDefault();
+            window.location.href = "invitations.php";
+        }
+
+        formEditTravel.onsubmit = (e) => {
+            e.preventDefault();
+            formEditTravel.action = "functions.php?action=save-travel";
+            formEditTravel.submit();
+        }
+    </script>
+    <script>
+        <?php
+        if (isset($_SESSION['msg'])) {
+            foreach ($_SESSION['msg'] as $msg)
+                echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);\n";
+            $_SESSION['msg'] = [];
+        }
+        ?>
     </script>
 </body>
 

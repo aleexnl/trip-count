@@ -17,5 +17,5 @@
 			<p><i class="fas fa-user"></i> Carlos</p>
 		</a> -->
 	</div>
-	<p class='hello'> Hola, <span class='welcome'><?= isset($_SESSION['user'][0]) ? $_SESSION['user'][1] : header("location:login.php"); ?></span></p>
+	<p class='hello'> Hola, <span class='welcome'><?= isset($_SESSION['user'][0]) ? $_SESSION['user'][1] : '' ; ?></span></p>
 </header>

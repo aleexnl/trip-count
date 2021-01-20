@@ -614,10 +614,11 @@
 
 <script>
 	<?php
-	/* esto da error*/
-	foreach ($_SESSION['msg'] as $msg)
-		echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);\n";
-	$_SESSION['msg'] = [];
+	if (isset($_SESSION['msg'])) {
+		foreach ($_SESSION['msg'] as $msg)
+			echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);\n";
+		$_SESSION['msg'] = [];
+	}
 
 	echo ("var tableRows = document.getElementsByName('main-travels')[0].children;
 	for (const row of tableRows) {

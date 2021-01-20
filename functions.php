@@ -132,14 +132,21 @@ if (isset($_POST['nameTrip'])) {
 
     $_SESSION['travelSelected'] = $travel;
     header("location: editTravel.php");
-} else if (isset($_GET['action']) == "save-travel" && isset($_GET['group']) && $_GET['group'] >= 1) {
+} else if (isset($_GET['action']) == "save-travel") {
+    $id_travel = $_SESSION['travelSelected'][0];
 
-    // $id_travel = filter_var($_GET['group'], FILTER_SANITIZE_STRING);
-    // $travel_details = $bd->prepare("SELECT trip_id FROM Travels WHERE trip_id = $id_travel");
-    // $travel_details->execute();
-    // $id_travel = $travel_details->fetch();
+    $params = [];
+    foreach ($_POST as $value)
+        array_push($params, filter_var($value, FILTER_SANITIZE_STRING));
 
-    // $_SESSION['travelSelected'] = $_GET['group'];
+    insertQuery($bd, "UPDATE Travels SET `name` = ? , `coin`= ? , `description` = ?  WHERE trip_id=$id_travel;", $params);
 
-    // header("location: editTravel.php");
+    $_SESSION['travelSelected'][1] = $params[0];
+    $_SESSION['travelSelected'][2] = $params[2];
+    $_SESSION['travelSelected'][3] = $params[1];
+
+    if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
+    $msg = ["success", "Los cambios del viaje han sido guardados correctamente.", "container-messages", 5];
+    array_push($_SESSION['msg'], $msg);
+    header("location: editTravel.php");
 }
