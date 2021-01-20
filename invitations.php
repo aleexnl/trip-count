@@ -37,7 +37,7 @@
                         $content = file_get_contents(__DIR__ . '/templates/invitation.html');
                         $result = sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
-                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.php');
+                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
                         str_replace("%TOKEN_HASH%", $_SESSION['token'], $content);
                         $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
                     }
