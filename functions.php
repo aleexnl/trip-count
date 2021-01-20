@@ -49,10 +49,21 @@ if (isset($_POST['nameTrip'])) {
             array_push($params, filter_var($value, FILTER_SANITIZE_STRING));
         insertQuery($bd, "INSERT INTO `Travels`(`name`, `description`, `coin`) VALUES (?, ?, ?);", $params); // INSERT NEW TRAVEL
 
-        $travelId = $bd->lastInsertId();
-        insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $travelId)", []); // INSERT NEW GROUP
+        $id_travel = $bd->lastInsertId();
+        $new_travel = $bd->prepare("SELECT `trip_id`, `creation_date` FROM Travels WHERE trip_id = $id_travel");
+        $new_travel->execute();
+        $travel = $new_travel->fetch();
+        $string = $travel[1] . $travel[0];
+        insertQuery($bd, "UPDATE Travels SET token=md5('$string') WHERE trip_id=$id_travel;", []); // INSERT NEW TRAVEL
+
+        insertQuery($bd, "INSERT INTO `Groups` VALUES (null, $userId, $id_travel)", []); // INSERT NEW GROUP
+
+        $new_token = $bd->prepare("SELECT `token` FROM Travels WHERE trip_id = $id_travel");
+        $new_token->execute();
+        $token = $new_token->fetch();
 
         $_SESSION['trip_name'] = $params[0];
+        $_SESSION['token'] = $token[0];
         header("location: ./invitations.php");
     } else header("location:login.php?status=session_expired");
 } else if (isset($_GET['action']) == "new-spend" && isset($_GET['id']) && isset($_SESSION['user'][0])) {
@@ -113,4 +124,22 @@ if (isset($_POST['nameTrip'])) {
     $msg = ["success", "Se ha agregado un nuevo gasto al viaje " . $_SESSION['newSpend']['tripName'] . " de $price.", "container-messages", 5];
     array_push($_SESSION['msg'], $msg);
     header("location: home.php");
+} else if (isset($_GET['action']) == "edit-travel" && isset($_GET['group']) && $_GET['group'] >= 1) {
+    $id_travel = filter_var($_GET['group'], FILTER_SANITIZE_STRING);
+    $travel_details = $bd->prepare("SELECT `trip_id`, `name`, `description`, `coin` FROM Travels WHERE trip_id = $id_travel");
+    $travel_details->execute();
+    $travel = $travel_details->fetch();
+
+    $_SESSION['travelSelected'] = $travel;
+    header("location: editTravel.php");
+} else if (isset($_GET['action']) == "save-travel" && isset($_GET['group']) && $_GET['group'] >= 1) {
+
+    // $id_travel = filter_var($_GET['group'], FILTER_SANITIZE_STRING);
+    // $travel_details = $bd->prepare("SELECT trip_id FROM Travels WHERE trip_id = $id_travel");
+    // $travel_details->execute();
+    // $id_travel = $travel_details->fetch();
+
+    // $_SESSION['travelSelected'] = $_GET['group'];
+
+    // header("location: editTravel.php");
 }

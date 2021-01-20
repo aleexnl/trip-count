@@ -220,6 +220,42 @@
 		.spend-details-list {
 			margin: 20px auto;
 		}
+
+		ul.breadcrumb {
+			padding: 10px 16px;
+			list-style: none;
+			background-color: #eee;
+			margin: 10px auto auto 0;
+		}
+
+		ul.breadcrumb li {
+			display: inline;
+			font-size: 18px;
+		}
+
+		ul.breadcrumb li+li:before {
+			padding: 8px;
+			color: black;
+			content: "/\00a0";
+		}
+
+		ul.breadcrumb li a {
+			color: #0275d8;
+			text-decoration: none;
+		}
+
+		ul.breadcrumb li a:hover {
+			color: #01447e;
+			text-decoration: underline;
+		}
+
+		button.btn-edit-travel {
+			padding: 5px !important;
+			box-shadow: 0 0 4px black !important;
+			color: black;
+			display: flex;
+			margin: auto;
+		}
 	</style>
 	<?php
 	$userId = $_SESSION['user'][0];
@@ -273,9 +309,10 @@
 			<td>$travel[coin]</td>\n
 			<td>$travel[creation_date]</td>\n
 			<td>$travel[modify_date]</td>\n
+			<td><button class='btn-edit-travel' onclick='editTravel($travel[0], event)'><i class='fas fa-pencil-alt'></i></button></td>\n
 			</tr>\n
 			<tr class='travel-details'>\n
-			<td colspan='5' class='hidden'></td>\n
+			<td colspan='6' class='hidden'></td>\n
 			</tr>
 		");
 
@@ -296,6 +333,14 @@
 <body>
 	<?php include_once(__DIR__ . '/templates/header.html'); ?>
 	<main>
+		<!-- <?php //generateBreadcrumb() 
+				?>
+		<ul class="breadcrumb">
+			<li><a href="#">Home</a></li>
+			<li><a href="#">Pictures</a></li>
+			<li><a href="#">Summer 15</a></li>
+			<li>Italy</li>
+		</ul> -->
 		<div class="container-messages">
 		</div>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
@@ -307,6 +352,7 @@
 					<th>Moneda</th>
 					<th><a class='order_creation' href="<?= $creation_href ?>"><?= $creation_date_text ?></a></th>
 					<th><a class='order_update' href="<?= $modify_href ?>"><?= $modify_date_text ?></a></th>
+					<th>Editar</th>
 				</tr>
 			</thead>
 			<tbody name="main-travels">
@@ -323,11 +369,16 @@
 	?>
 </body>
 <script>
-	<?= $json_with_travel_details ?>
+	<?= "$json_with_travel_details\n" ?>
 	let newTrip = document.getElementsByClassName("add_travel")[0];
 	let foreignExchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
 	let lastElementCreated = null;
 
+	function editTravel(id, event) {
+		event.preventDefault();
+		event.stopPropagation();
+		window.location.href = `functions.php?action=edit-travel&group=${id}`;
+	}
 
 	function generateMessages(type, text, parentName, seconds) {
 		let parent = document.getElementsByClassName(parentName)[0];
@@ -568,16 +619,17 @@
 
 <script>
 	<?php
+	/* esto da error*/
 	foreach ($_SESSION['msg'] as $msg)
-		echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);";
+		echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);\n";
 	$_SESSION['msg'] = [];
 
-	echo ("
-	var tableRows = document.getElementsByName('main-travels')[0].children\n
-	for (const row of tableRows)\n
-		row.onclick = function() {\n
-			showTravelDetails(travelDetails[row.id])\n
-		}");
+	echo ("var tableRows = document.getElementsByName('main-travels')[0].children;
+	for (const row of tableRows) {
+		row.onclick = function() {
+			showTravelDetails(travelDetails[row.id])
+		}
+	}\n");
 	?>
 </script>
 
