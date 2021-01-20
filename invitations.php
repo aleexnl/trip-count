@@ -34,7 +34,7 @@
                     $query->bindParam(1, $email); // Bind parameters.
                     $query->execute(); // Execute the query
                     if ($query->rowCount() > 0) { // Chef if the query returned something.
-                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        $content = file_get_contents(__DIR__ . '/templates/invitation.html');
                         sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
