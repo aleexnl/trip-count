@@ -15,9 +15,9 @@
     $error_messages = []; // Create an error variable to store errors.
     $has_errors = false;
 
-    function sendMail($mail, $subject, $content)
+    function sendMail($mail, $subject, $content, $headers)
     {
-        return mail($mail, $subject, $content);
+        return mail($mail, $subject, $content, $headers);
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
