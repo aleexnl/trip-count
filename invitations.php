@@ -28,17 +28,17 @@
                     $has_errors = true;
                     array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
                 } else {
-                    $headers = "MIME-Version: 1.0" . "\r\n";
-                    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                    $headers[] = 'MIME-Version: 1.0';
+                    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                     $query = $bd->prepare("SELECT email FROM Users WHERE email = ?"); // Prepare the query.
                     $query->bindParam(1, $email); // Bind parameters.
                     $query->execute(); // Execute the query
                     if ($query->rowCount() > 0) { // Chef if the query returned something.
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, $headers);
+                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($email, "Te han invitado a un nuevo viaje", $content, $headers);
+                        sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
                     }
                 }
             }
