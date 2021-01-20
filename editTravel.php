@@ -6,7 +6,7 @@
     <?php if (!isset($_SESSION['user'])) header("location: pages/login.php") ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Grupo <?= $_SESSION['travelSelected'][0] ?></title>
+    <title>Editar viaje <?= $_SESSION['travelSelected'][0] ?></title>
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <?php
     $foreign_exchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
@@ -171,7 +171,7 @@
     <main>
         <ul class="breadcrumb">
             <li><a href="home.php">Home</a></li>
-            <li><a href="#"> Editar viaje <?php $_SESSION['travelSelected'][0] ?></a></li>
+            <li><a href="#"> Editar viaje <?= $_SESSION['travelSelected'][0] ?></a></li>
         </ul>
         <div class="container-messages">
         </div>
@@ -237,7 +237,8 @@
 
         btnAddUsers.onclick = (e) => {
             e.preventDefault();
-            window.location.href = "invitations.php";
+            e.stopPropagation();
+            window.location = "functions.php?action=save-travel-to-invitations";
         }
 
         formEditTravel.onsubmit = (e) => {

@@ -11,7 +11,7 @@
     <?php
     session_start();
     include_once(__DIR__ . '/connection.php');
-    $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : header("location:login.php?status=session_expired");
+    $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : '' ;
     $error_messages = []; // Create an error variable to store errors.
     $has_errors = false;
 
