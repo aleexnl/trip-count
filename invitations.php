@@ -17,7 +17,7 @@
 
     function sendMail($mail, $subject, $content)
     {
-        return mail($mail, $subject, $content );
+        return mail($mail, $subject, $content);
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
@@ -28,20 +28,22 @@
                     $has_errors = true;
                     array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
                 } else {
+                    $headers  = 'MIME-Version: 1.0' . "\r\n";
+                    $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
                     $query = $bd->prepare("SELECT email FROM Users WHERE email = ?"); // Prepare the query.
                     $query->bindParam(1, $email); // Bind parameters.
                     $query->execute(); // Execute the query
                     if ($query->rowCount() > 0) { // Chef if the query returned something.
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content);
+                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, $headers);
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($email, "Te han invitado a un nuevo viaje", $content);
+                        sendMail($email, "Te han invitado a un nuevo viaje", $content, $headers);
                     }
+                }
             }
         }
     }
-}
 
     if ($_SESSION['first_load_invitation_page']) {
         $_SESSION['first_load_invitation_page'] = false;
