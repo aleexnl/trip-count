@@ -247,6 +247,14 @@
             grid-gap: 2rem;
             line-height: 1;
         }
+
+
+        #img_url {
+            background: #ddd;
+            width: 100px;
+            height: 90px;
+            display: block;
+        }
     </style>
     <?php
     $travel = $bd->prepare("SELECT g.group_id, g.user_id, g.trip_id, u.name, t.name AS 'trip_name' FROM `Groups` g, Users u, Travels t WHERE g.trip_id=t.trip_id AND g.user_id=u.user_id AND g.trip_id=$_SESSION[travelSelected]");
@@ -272,7 +280,7 @@
             <div class="container-spend">
                 <h1>AGREGAR UN NUEVO GASTO</h1>
                 <p class="destiny">Destino: <b><?php echo $_SESSION['newSpend']['tripName'] ?></b></p>
-                <form class="form-new-spend" method="POST">
+                <form class="form-new-spend" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="paid-by">Pagado por</label>
                         <select name="paid-by">
@@ -287,6 +295,15 @@
                     <div class="form-group">
                         <label for="total-expend">Importe</label>
                         <input type="text" name="total-expend" value="10" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="file">Subir fotos</label>
+                        <!-- CAMBIAR LOS ESTILOS (PREVIEW DE LA IMAGEN) -->
+                        <!-- <img src="" id="img_url" alt="your image"> -->
+                        <!-- <br> -->
+                        <input type="file" name="files[]" id="img_file" multiple onChange="img_pathUrl(this);">
+                        <!-- <input type="file" name="files[]" id="hidden">
+                        <input type="file" name="files[]" id="hidden"-->
                     </div>
                     <div class="form-group">
                         <button class="button-primary" type="submit">Guardar gasto</button>
@@ -313,6 +330,27 @@
         let totalExpend = document.getElementsByName("total-expend")[0];
         let boolAdvancedOption = false;
         let previousTotalExpend = totalExpend.value;
+
+        function img_pathUrl(input) {
+            let fileBuffer = Array.from(input.files);
+            const validExt = ["jpg", "png", "jpeg"];
+
+            // document.getElementById('img_url').src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+            for (let i = fileBuffer.length - 1; i >= 0; i--) {
+                const file = input.files[i].name.split(".");
+                let ext = file[file.length - 1];
+                if (validExt.indexOf(ext) == -1)
+                    fileBuffer.splice(i, 1);
+            }
+
+            const dT = new ClipboardEvent('').clipboardData || new DataTransfer();
+            for (let file of fileBuffer)
+                dT.items.add(file);
+            input.files = dT.files;
+
+            // console.log(input.files);
+            // const image = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
+        }
 
         function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];

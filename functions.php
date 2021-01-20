@@ -3,6 +3,34 @@
 require_once("./connection.php");
 session_start();
 
+function uploadFilesInServer($group_id, $new_group_expend_id)
+{
+    $folder_name = md5($group_id);
+
+    $valid_ext = array("jpg", "png", "jpeg");
+    $count_files = count($_FILES['files']['name']);
+    $upload_location = __DIR__ . "/media/$folder_name/";
+
+    if (!is_dir($upload_location))
+        mkdir($upload_location, 0777);
+
+    for ($i = 0; $i < $count_files; $i++) {
+        $filename = $_FILES['files']['name'][$i];
+
+        $file_extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $file_extension = strtolower($file_extension);
+        if (in_array($file_extension, $valid_ext)) {
+            $filename = $new_group_expend_id . "_" . basename($filename, ".$file_extension") . "_" . $i . "." . $file_extension;
+            $path = $upload_location . $filename;
+            if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $path)) {
+                if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
+                $msg = ["error", "No se ha podido subir la imagen '$filename'.", "container-messages", 5];
+                array_push($_SESSION['msg'], $msg);
+            }
+        }
+    }
+}
+
 function insertQuery($bd, $sql, $params)
 {
     $query = $bd->prepare($sql); // Prepare the query.
@@ -41,6 +69,7 @@ if (isset($_POST['nameTrip'])) {
         header("location: home.php?msg=ID del vuelo no encontrado.");
     }
 } else if ((isset($_GET['action']) == "new-spend" || isset($_GET['action']) == "new-spend-advanced") && isset($_POST['paid-by']) && isset($_POST['total-expend']) >= 1 && isset($_POST['total-expend']) <= 10000) {
+
     $group_id = $_SESSION['newSpend']['groupId'];
     $paid_by = $_POST['paid-by'];
     $price = $_POST['total-expend'];
@@ -52,6 +81,8 @@ if (isset($_POST['nameTrip'])) {
     ];
     insertQuery($bd, "INSERT INTO Group_Expenses(paid_by, price, group_id) VALUES (?, ?, ?);", $params); // INSERT NEW GROUP EXPEND
     $new_group_expend_id = $bd->lastInsertId();
+
+    uploadFilesInServer($group_id, $new_group_expend_id);
     if ($_GET['action'] == "new-spend") {
         $params = [
             filter_var($paid_by, FILTER_SANITIZE_STRING),
