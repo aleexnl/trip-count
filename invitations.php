@@ -10,9 +10,15 @@
     <link rel="stylesheet" type="text/css" href="footer.css">
     <?php
     session_start();
+    include_once(__DIR__ . '/connection.php');
     $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : header("location:login.php?status=session_expired");
     $error_messages = []; // Create an error variable to store errors.
     $has_errors = false;
+
+    function sendMail($mail, $subject, $content, $headers)
+    {
+        return mail($mail, $subject, $content, $headers);
+    }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
         if (isset($_POST['email-1'])) { // If there is at least one email iterate through them
@@ -22,12 +28,22 @@
                     $has_errors = true;
                     array_push($error_messages, "<b>ERROR:</b> El email $email no es valido. Porfavor introduce una dirección de correo valida, como user@gmail.com.");
                 } else {
-                    echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se han enviado los mails.', 'container-messages', 4); }</script>";
-                    mail(
-                        $email,
-                        '¡Un nuevo viaje te espera!',
-                        "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje."
-                    );
+                    $headers[] = 'MIME-Version: 1.0';
+                    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                    $query = $bd->prepare("SELECT email FROM Users WHERE email = ?"); // Prepare the query.
+                    $query->bindParam(1, $email); // Bind parameters.
+                    $query->execute(); // Execute the query
+                    if ($query->rowCount() > 0) { // Chef if the query returned something.
+                        $content = file_get_contents(__DIR__ . '/templates/invitation.html');
+                        $result = sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
+                    } else {
+                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
+                    }
+                    if (!$result) {
+                        $has_errors = true;
+                        array_push($error_messages, "<b>ERROR:</b> El email $email no se ha enviado correctamente.");
+                    }
                 }
             }
         }
@@ -187,7 +203,7 @@
 </head>
 
 <body>
-    <?php include_once('header.php'); ?>
+    <?php require_once('templates/header.html'); ?>
     <main>
         <p class="title">Invitaciones</p>
         <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
@@ -210,7 +226,7 @@
             </div>
         </form>
     </main>
-    <?php include_once('footer.php'); ?>
+    <?php require_once('templates/footer.html'); ?>
     <script>
         function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];
