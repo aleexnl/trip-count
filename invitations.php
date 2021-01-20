@@ -17,11 +17,7 @@
 
     function sendMail($mail, $subject, $content)
     {
-        return mail(
-            $mail,
-            $subject, //'¡Un nuevo viaje te espera!',
-            $content // "¡Buenas tardes viajer@!, te han invitado a un nuevo viaje."
-        );
+        return mail($mail, $subject, $content );
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') { // Check server request is a POST
@@ -37,10 +33,10 @@
                     $query->execute(); // Execute the query
                     if ($query->rowCount() > 0) { // Chef if the query returned something.
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($mail, "¡Te han invitado a un nuevo viaje!", $content);
+                        sendMail($email, "¡Te han invitado a un nuevo viaje!", $content);
                     } else {
                         $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
-                        sendMail($mail, "Te han invitado a un nuevo viaje", $content);
+                        sendMail($email, "Te han invitado a un nuevo viaje", $content);
                     }
             }
         }
