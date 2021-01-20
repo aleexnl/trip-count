@@ -41,6 +41,7 @@
             }
         }
     }
+}
 
     if ($_SESSION['first_load_invitation_page']) {
         $_SESSION['first_load_invitation_page'] = false;
@@ -195,7 +196,7 @@
 </head>
 
 <body>
-    <?php require_once('header.php'); ?>
+    <?php require_once('templates/header.html'); ?>
     <main>
         <p class="title">Invitaciones</p>
         <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
@@ -217,7 +218,7 @@
             </div>
         </form>
     </main>
-    <?php require_once('footer.php'); ?>
+    <?php require_once('templates/footer.html'); ?>
     <script>
         function generateMessages(type, text, parentName, seconds) {
             let parent = document.getElementsByClassName(parentName)[0];
