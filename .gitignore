@@ -9,6 +9,7 @@
 .htaccess
 composer.*
 .env*
+media
 connection_compo.php
 
 # User-specific files
