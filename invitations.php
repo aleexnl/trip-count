@@ -37,7 +37,7 @@
                         $content = file_get_contents(__DIR__ . '/templates/invitation.html');
                         $result = sendMail($email, "¡Te han invitado a un nuevo viaje!", $content, implode("\r\n", $headers));
                     } else {
-                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.html');
+                        $content = file_get_contents(__DIR__ . '/templates/new_user_invitation.php');
                         $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
                     }
                     if (!$result) {
