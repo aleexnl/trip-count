@@ -11,8 +11,9 @@
     <?php
     session_start();
     include_once(__DIR__ . '/connection.php');
-    $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : '' ;
+    $tripName = isset($_SESSION['trip_name']) ? $_SESSION['trip_name'] : '';
     $error_messages = []; // Create an error variable to store errors.
+    $sended_mails = [];
     $has_errors = false;
 
     function sendMail($mail, $subject, $content, $headers)
@@ -41,15 +42,17 @@
                         $content = str_replace("%TOKEN_HASH%", $_SESSION['token'], $content);
                         $result = sendMail($email, "Te han invitado a un nuevo viaje", $content, implode("\r\n", $headers));
                     }
-                    if (!$result) {
+                    if ($result) {
+                        $sended_mails[] = $email;
+                    } else {
                         $has_errors = true;
-                        array_push($error_messages, "<b>ERROR:</b> El email $email no se ha enviado correctamente.");
+                        $error_messages[] = "<b>ERROR:</b> El email $email no se ha enviado correctamente.";
                     }
                 }
             }
         }
     }
-    
+
     if (isset($_SESSION['first_load_invitation_page']) && $_SESSION['first_load_invitation_page']) {
         $_SESSION['first_load_invitation_page'] = false;
         echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
@@ -68,10 +71,18 @@
         <p class="destiny">Introduce los correos de tus compañer@s con los que vas a viajar.<br> <i class="fas fa-plane"></i><?= $tripName ?><i class="fas fa-plane"></i></p>
         <div class="container-messages">
             <?php
-            if ($has_errors) // If user had errors during log in
+            if ($has_errors) { // If user had errors during log in
                 foreach ($error_messages as $key => $error)
-                    echo $error . "</br>";
+                    echo "<div class=msg-error>";
+                echo $error;
+                echo "<div>";
+            }
+            foreach ($sended_mails as $key => $mail)
+                echo "<div class=msg-success>";
+            echo $mail . "se ha enviado correctamente.";
+            echo "<div>";
             ?>
+
         </div>
         <form class="invitations" action="./invitations.php" method="post">
             <div class="box-mail">
