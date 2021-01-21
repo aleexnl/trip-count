@@ -6,92 +6,8 @@
     <?php if (!isset($_SESSION['user'])) header("location: pages/login.php") ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <title>Balance de Gastos - Grupo <?= $_SESSION['travel_id'] ?></title>
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-
-        header,
-        main,
-        footer {
-            width: 100vw;
-            padding: 0 !important;
-        }
-
-        main {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 84vh;
-        }
-
-        table,
-        td {
-            border: 1px solid black;
-        }
-
-        table {
-            margin-top: 10px;
-            border-collapse: collapse;
-        }
-
-        table thead {
-            background-color: #323039;
-            color: #fff;
-        }
-
-        table tbody {
-            background-color: #a6d2f7;
-        }
-
-        table button.order_creation,
-        table button.order_update {
-            background-color: transparent;
-            border: none;
-            outline: none;
-        }
-
-        table thead th,
-        table tbody td {
-            padding: 10px;
-        }
-
-        ul.breadcrumb {
-            padding: 10px 16px;
-            list-style: none;
-            background-color: #eee;
-            margin: 10px auto auto 0;
-        }
-
-        ul.breadcrumb li {
-            display: inline;
-            font-size: 18px;
-        }
-
-        ul.breadcrumb li+li:before {
-            padding: 8px;
-            color: black;
-            content: "/\00a0";
-        }
-
-        ul.breadcrumb li a {
-            color: #0275d8;
-            text-decoration: none;
-        }
-
-        ul.breadcrumb li a:hover {
-            color: #01447e;
-            text-decoration: underline;
-        }
-    </style>
     <?php
 
     function calculateResult($paid, $amount)
@@ -142,7 +58,11 @@
     ?>
 </head>
 
+<<<<<<< HEAD
+<body id="balancepage">
+=======
 <body>
+>>>>>>> dev
     <?php include_once('templates/header.html') ?>
     <main>
         <ul class="breadcrumb">

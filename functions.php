@@ -6,7 +6,6 @@ session_start();
 function uploadFilesInServer($group_id, $new_group_expend_id)
 {
     $folder_name = md5($group_id);
-
     $valid_ext = array("jpg", "png", "jpeg", "txt", "pdf");
     $count_files = count($_FILES['files']['name']);
     $upload_location = __DIR__ . "/media/$folder_name/";

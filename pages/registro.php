@@ -75,7 +75,7 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
 }
 ?>
 
-<body>
+<body id="loginandregister">
 
     <div class="content">
         <div class="centered-form">

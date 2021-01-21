@@ -48,7 +48,7 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
 }
 ?>
 
-<body>
+<body id="loginandregister">
 
     <div class="content">
         <div class="centered-form">
@@ -87,7 +87,6 @@ if (isset($_POST['userMail'], $_POST['userPass'])) { // Check that the server re
             </form>
         </div>
     </div>
-
     <?php include_once(__DIR__ . '/../templates/footer.html'); ?>
 </body>
 

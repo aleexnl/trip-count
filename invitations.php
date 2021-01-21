@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitaciones</title>
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="header.css">
-    <link rel="stylesheet" type="text/css" href="footer.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
     <?php
     session_start();
     include_once(__DIR__ . '/connection.php');
@@ -55,6 +54,11 @@
         echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
     }
     ?>
+<<<<<<< HEAD
+</head>
+
+<body id="invitacions">
+=======
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
@@ -232,6 +236,7 @@
 </head>
 
 <body>
+>>>>>>> dev
     <?php require_once('templates/header.html'); ?>
     <main>
         <ul class="breadcrumb">
