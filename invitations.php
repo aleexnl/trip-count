@@ -54,9 +54,189 @@
         echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
     }
     ?>
+<<<<<<< HEAD
 </head>
 
 <body id="invitacions">
+=======
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+        .button-primary {
+            padding: 1rem 0.5rem;
+            border: 0;
+            background-color: #18c3f8;
+            color: #ffffff;
+            font-size: 1.25rem;
+            border-radius: 7px;
+            box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+            cursor: pointer;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background-color: #fff;
+            font-family: "Roboto", sans-serif;
+            text-rendering: auto;
+        }
+
+        p.title {
+            text-align: center;
+            font-size: 4em;
+            font-weight: bold;
+            margin: 2% 0 0 0;
+        }
+
+        p.destiny {
+            text-align: center;
+            font-size: 2.5em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        div.container-messages {
+            width: 100%;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+        }
+
+        div.container-messages div {
+            width: 65%;
+            margin: 5px auto;
+            border-radius: 5px;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        form.invitations {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 80%;
+            padding: 10px;
+            margin: 0 auto;
+        }
+
+        form.invitations>div.box-mail {
+            width: 60%;
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 10px;
+        }
+
+        form.invitations>div.box-mail>label {
+            font-size: 2em;
+        }
+
+        form.invitations>div.box-mail>input[type="email"] {
+            z-index: 2;
+            width: 75%;
+            font-size: 1em;
+            background-image: url(images/envelope.png);
+            padding-left: 35px;
+            background-position: 6px;
+            background-size: 23px;
+            background-repeat: no-repeat;
+            border-radius: 7px;
+            border: 2px solid #464646cc;
+            box-shadow: 0 0 3px black;
+        }
+
+        form.invitations>div.box-mail>input[type="email"]:hover {
+            border: 2px solid #000;
+        }
+
+        form.invitations>div.box-mail>input[type="email"]:focus {
+            outline: none;
+            border: 2px solid #000;
+        }
+
+        form.invitations>div.box-btn {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 80%;
+        }
+
+        form.invitations>div.box-btn>button:focus {
+            outline: none;
+            border: 2px solid #549ab3;
+        }
+
+        .fa-v-align {
+            vertical-align: text-bottom;
+        }
+
+        .msg-info {
+            color: #fff;
+            background-color: #2196F3;
+            border: 1px solid #58748a;
+            box-shadow: 0 0 5px #2196F3;
+        }
+
+        .msg-success {
+            color: #fff;
+            background-color: #4CAF50;
+            border: 1px solid #39883c;
+            box-shadow: 0 0 5px #4CAF50;
+        }
+
+        .msg-warning {
+            color: #fff;
+            background-color: #ff9800;
+            border: 1px solid #ad7c33;
+            box-shadow: 0 0 5px #ff9800;
+        }
+
+        .msg-error {
+            color: #fff;
+            background-color: #f44336;
+            border: 1px solid #a0342c;
+            box-shadow: 0 0 5px #f44336;
+        }
+
+        main {
+            min-height: 82vh;
+        }
+
+        ul.breadcrumb {
+            padding: 10px 16px;
+            list-style: none;
+            background-color: #eee;
+            margin: 10px auto auto 0;
+        }
+
+        ul.breadcrumb li {
+            display: inline;
+            font-size: 18px;
+        }
+
+        ul.breadcrumb li+li:before {
+            padding: 8px;
+            color: black;
+            content: "/\00a0";
+        }
+
+        ul.breadcrumb li a {
+            color: #0275d8;
+            text-decoration: none;
+        }
+
+        ul.breadcrumb li a:hover {
+            color: #01447e;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+>>>>>>> dev
     <?php require_once('templates/header.html'); ?>
     <main>
         <ul class="breadcrumb">

@@ -58,7 +58,11 @@
     ?>
 </head>
 
+<<<<<<< HEAD
 <body id="balancepage">
+=======
+<body>
+>>>>>>> dev
     <?php include_once('templates/header.html') ?>
     <main>
         <ul class="breadcrumb">
