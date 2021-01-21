@@ -55,6 +55,7 @@ body#loginandregister {
     background-color: #ffffff;
     font-family: "Roboto", sans-serif;
     text-rendering: auto;
+    margin: 0;
 }
 
 body#loginandregister .content {
@@ -261,7 +262,7 @@ body#home main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 84vh;
+    min-height: 82vh;
 }
 
 body#home main>button {
@@ -843,14 +844,16 @@ body#enterpay .container {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width: 80vw;
+    width: 100vw;
+    align-items: center;
+    min-height: 80vh;
 }
 
 body#enterpay .container-forms {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 80vw;
+    width: 100vw;
 }
 
 body#enterpay .container-spend,
@@ -1034,7 +1037,7 @@ ul.breadcrumb {
     padding: 10px 16px;
     list-style: none;
     background-color: #eee;
-    margin: 10px auto auto 0;
+    margin: 10px auto 0 0;
 }
 
 ul.breadcrumb li {
@@ -1090,7 +1093,7 @@ body#balancepage main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 84vh;
+    min-height: 80vh;
 }
 
 body#balancepage table,

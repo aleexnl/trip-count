@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar viaje <?= $_SESSION['travelSelected'][0] ?></title>
+    <link rel="shortcut icon" href="images/logo.ico">
     <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <?php

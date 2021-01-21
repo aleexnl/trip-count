@@ -9,7 +9,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Home</title>
-	<script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="images/logo.ico">
+    <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
 	<?php
 	$userId = $_SESSION['user'][0];
 	$sql = "";
