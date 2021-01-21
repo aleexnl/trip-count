@@ -3,180 +3,15 @@
 
 <head>
 	<?php session_start(); ?>
+	<?php if (!isset($_SESSION['user'])) header("location: login.php") ?>
 	<?php require_once('connection.php'); ?>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="home.css">
+	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Home</title>
-	<script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
-	<style>
-		body {
-			font-family: 'Roboto', sans-serif;
-			padding: 0;
-			margin: 0;
-		}
-		th a {
-			color: #fff;
-		}
-
-		p.title {
-			text-align: center;
-			font-size: 4em;
-			font-weight: bold;
-			margin: 2% 0 0 0;
-		}
-
-		div.container-messages {
-			width: 100%;
-			display: flex;
-			flex-flow: column wrap;
-			justify-content: center;
-			white-space: pre-line;
-		}
-
-		div.container-messages div {
-			width: 65%;
-			margin: 5px auto;
-			border-radius: 5px;
-			text-align: center;
-			padding: 10px 0;
-		}
-
-		form.new-trip {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: center;
-			width: 35%;
-			padding: 10px;
-			margin: 0 auto 0 auto;
-		}
-
-		form.new-trip>div {
-			width: 100%;
-			display: flex;
-			margin-bottom: 25px;
-		}
-
-		form.new-trip>div.coin {
-			width: 100%;
-			display: flex;
-			margin-bottom: 0;
-			place-content: center;
-		}
-
-		form.new-trip>div>label {
-			font-size: 23px;
-		}
-
-		form.new-trip>label {
-			font-size: 20px;
-		}
-
-		form.new-trip>div>label[for="nameTrip"] {
-			width: 42%;
-		}
-
-		form.new-trip>div>label[for="descriptionTrip"] {
-			width: 27%;
-		}
-
-		form.new-trip>div>input[type="text"] {
-			width: -webkit-fill-available;
-			width: -moz-available;
-			background-color: #fff;
-			border: 0;
-			border-bottom: 2px solid #000;
-			font-size: 19px;
-			padding: 1px 5px 2px 5px;
-		}
-
-		select[name="coinTrip"] {
-			margin-left: 15px;
-			border: 0;
-			font-size: 17px;
-			background-color: #fff;
-			border-bottom: 2px solid #000;
-		}
-
-		form.new-trip>div>input[type="text"]:focus,
-		form.new-trip>div>input[type="text"]:hover,
-		select[name="coinTrip"]:focus,
-		select[name="coinTrip"]:hover {
-			background-color: #0000001f;
-			border-top-left-radius: 5px;
-			border-top-right-radius: 5px;
-			outline: none;
-		}
-
-		form.new-trip>p.author {
-			width: 100%;
-			font-size: 17px;
-			text-align: center;
-			margin-top: 25px;
-		}
-
-		form.new-trip>div.box-btn {
-			width: 80%;
-			margin-top: 20px;
-			display: flex;
-			justify-content: space-evenly;
-		}
-
-		button {
-			font-size: 1.2em;
-			background-color: #18c3f8;
-			box-shadow: 0 0 4px #18c3f8;
-			border: 2px solid #18c3f8;
-			padding: 10px;
-			border-radius: 5px;
-			color: #f3f3f3;
-			cursor: pointer;
-		}
-
-		button:focus {
-			outline: none;
-			border: 2px solid #549ab3;
-		}
-
-		.fa-v-align {
-			vertical-align: text-bottom;
-		}
-
-		.msg-info {
-			color: #fff;
-			background-color: #2196F3;
-			border: 1px solid #58748a;
-			box-shadow: 0 0 5px #2196F3;
-		}
-
-		.msg-success {
-			color: #fff;
-			background-color: #4CAF50;
-			border: 1px solid #39883c;
-			box-shadow: 0 0 5px #4CAF50;
-		}
-
-		.msg-warning {
-			color: #fff;
-			background-color: #ff9800;
-			border: 1px solid #ad7c33;
-			box-shadow: 0 0 5px #ff9800;
-		}
-
-		.msg-error {
-			color: #fff;
-			background-color: #f44336;
-			border: 1px solid #a0342c;
-			box-shadow: 0 0 5px #f44336;
-		}
-	</style>
-</head>
-
-<body>
+    <link rel="shortcut icon" href="images/logo.ico">
+    <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
 	<?php
-	require_once('header.php');
-
 	$userId = $_SESSION['user'][0];
 	$sql = "";
 	$creation_date_text = "Fecha de Creación ▲";
@@ -203,9 +38,60 @@
 
 	$queryTravels = $bd->prepare($sql);
 	$queryTravels->execute();
-	?>
 
+	$table_main_rows = "";
+	$json_with_travel_details = "const travelDetails = {";
+	$cont = 1;
+	$array_index = [];
+	foreach ($queryTravels as $travel) {
+		$travel_details = $bd->prepare("SELECT u.name, ge.description, ge.price FROM Group_Expenses ge, Users u WHERE ge.group_id = (SELECT DISTINCT group_id FROM `Groups` WHERE trip_id = $travel[0]) AND ge.paid_by=u.user_id ORDER BY ge.date");
+		$travel_details->execute();
+
+		$json_with_travel_details .= "$travel[0]: { id: $travel[0], coin: '$travel[coin]',  creation_date: '$travel[creation_date]', expenses: [";
+		$sum_total = '0.00';
+
+		foreach ($travel_details as $details) {
+			$sum_total = number_format(floatval($sum_total) + floatval($details[2]), 2);
+			$json_with_travel_details .= "{ paid_by: '$details[0]', content: '$details[1]', amount: '$details[2]' }, ";
+		}
+		$json_with_travel_details .= "], total_amount: '$sum_total' }, ";
+
+		$table_main_rows .= ("
+			<tr id='$travel[0]'>\n
+			<td>$travel[name]</td>\n
+			<td>$travel[description]</td>\n
+			<td>$travel[coin]</td>\n
+			<td>$travel[creation_date]</td>\n
+			<td>$travel[modify_date]</td>\n
+			<td><button class='btn-edit-travel' onclick='editTravel($travel[0], event)'><i class='fas fa-pencil-alt'></i></button></td>\n
+			</tr>\n
+			<tr class='travel-details'>\n
+			<td colspan='6' class='hidden'></td>\n
+			</tr>
+		");
+
+		if ($cont % 2 == 1) array_push($array_index, $cont);
+		$cont += 2;
+	}
+	$json_with_travel_details .= "};";
+
+	$background_color_table = "";
+	for ($i = 0; $i < sizeOf($array_index); $i++)
+		if ($i % 2 == 1) $background_color_table .= "table tbody tr:nth-child($array_index[$i]) { background-color: #c9e3f9; }\n";
+	?>
+	<style>
+		<?= $background_color_table ?>
+	</style>
+</head>
+
+<body id="home">
+	<?php include_once(__DIR__ . '/templates/header.html'); ?>
 	<main>
+		<ul class="breadcrumb">
+			<li><a href="#">Home</a></li>
+		</ul>
+		<div class="container-messages">
+		</div>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
 		<table>
 			<thead>
@@ -215,35 +101,33 @@
 					<th>Moneda</th>
 					<th><a class='order_creation' href="<?= $creation_href ?>"><?= $creation_date_text ?></a></th>
 					<th><a class='order_update' href="<?= $modify_href ?>"><?= $modify_date_text ?></a></th>
+					<th>Editar</th>
 				</tr>
 			</thead>
-			<tbody>
-				<?php
-				foreach ($queryTravels as $travel) {
-					echo "<tr>";
-					echo "<td>$travel[name]</td>";
-					echo "<td>$travel[description]</td>";
-					echo "<td>$travel[coin]</td>";
-					echo "<td>$travel[creation_date]</td>";
-					echo "<td>$travel[modify_date]</td>";
-					echo "</tr>";
-				}
-				?>
+			<tbody name="main-travels">
+				<?= $table_main_rows ?>
 			</tbody>
 		</table>
 		<button class='add_travel button-primary'>Añadir Viaje <i class="fas fa-atlas fa-v-align"></i></button>
 	</main>
 
 	<?php
-	require_once('footer.php');
+	include_once(__DIR__ . '/templates/footer.html');
 	unset($queryTravels);
 	unset($bd);
 	?>
 </body>
 <script>
+	<?= "$json_with_travel_details\n" ?>
 	let newTrip = document.getElementsByClassName("add_travel")[0];
 	let foreignExchange = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHF', 'CLP', 'CNY', 'COP', 'CRC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'EUR', 'FJD', 'GBP', 'GEL', 'GHS', 'GMD', 'GNF', 'GTQ', 'GYD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'INR', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'JPY', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'USD', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'YER', 'ZAR', 'ZMW'];
+	let lastElementCreated = null;
 
+	function editTravel(id, event) {
+		event.preventDefault();
+		event.stopPropagation();
+		window.location.href = `functions.php?action=edit-travel&group=${id}`;
+	}
 
 	function generateMessages(type, text, parentName, seconds) {
 		let parent = document.getElementsByClassName(parentName)[0];
@@ -254,12 +138,18 @@
 		else if (type == "warning") msg.className = "msg-warning";
 		msg.appendChild(document.createTextNode(text));
 		parent.prepend(msg);
+		setTimeout(() => {
+			parent.firstElementChild.style.opacity = "1";
+		}, 1);
 		countdown(parent, seconds);
 	}
 
 	function countdown(parent, seconds) {
 		setTimeout(() => {
-			parent.removeChild(parent.lastElementChild);
+			parent.lastElementChild.style.opacity = "0";
+			setTimeout(() => {
+				parent.removeChild(parent.lastElementChild);
+			}, 400);
 		}, seconds * 1000);
 	}
 
@@ -370,13 +260,6 @@
 			let divBoxBtn = createElement("div", null, form, null, {
 				class: "box-btn"
 			})
-			let btnRedo = createElement("button", "Restablecer ", divBoxBtn, null, {
-				class: "redo",
-				type: "reset"
-			})
-			createElement("i", null, btnRedo, null, {
-				class: "fas fa-redo-alt fa-v-align"
-			})
 			let btnCreateTrip = createElement("button", "Crear Viaje ", divBoxBtn, null, {
 				class: "redo"
 			})
@@ -404,6 +287,104 @@
 			}
 		}
 	}
+
+	let previousID = null;
+
+	function showTravelDetails(details) {
+		if (details != undefined) {
+			console.log(details);
+			const tdContainer = document.getElementById(details.id).nextElementSibling.children[0];
+			if (tdContainer.children[0] == undefined) {
+				if (previousID != null) {
+					let previousElementSelected = document.getElementById(previousID).nextElementSibling.children[0];
+					previousElementSelected.removeChild(previousElementSelected.children[0]);
+					previousElementSelected.className = "hidden";
+					document.getElementById(previousID).className = "";
+				}
+
+				document.getElementById(details.id).nextElementSibling.children[0].className = "";
+				document.getElementById(details.id).className = "bg-cornflowerblue";
+
+				var divBox = createElement("div", null, tdContainer, null, {
+					class: "box-details"
+				})
+				createElement("p", "Detalles del viaje", divBox, null, {})
+				var divGeneralDetails = createElement("div", null, divBox, null, {
+					class: "general-details"
+				})
+				createElement("p", `Fecha de salida: ${details.creation_date}`, divGeneralDetails, null, {})
+				createElement("p", `Total gastado: ${details.total_amount} ${details.coin}`, divGeneralDetails, null, {})
+
+				var divBtnDetails = createElement("div", null, divBox, null, {
+					class: "button-details"
+				})
+				var btnNewSpend = createElement("button", "Agregar gasto ", divBtnDetails, null, {
+					class: "button-primary",
+					onclick: `window.location.href = 'functions.php?action=new-spend&id=${details.id}'`
+				})
+				createElement("i", null, btnNewSpend, null, {
+					class: "fas fa-comment-dollar fa-v-align"
+				})
+				var btnBalance = createElement("button", "Balance ", divBtnDetails, null, {
+					class: "button-primary",
+					onclick: `window.location.href = 'functions.php?action=balance&id=${details.id}'`
+				})
+				createElement("i", null, btnBalance, null, {
+					class: "fas fa-balance-scale-right fa-v-align"
+				})
+				createElement("button", "Gestionar usuarios", divBtnDetails, null, {
+					class: "button-primary"
+				})
+				var tableList = createElement("table", null, divBox, null, {
+					class: "spend-details-list"
+				})
+				var tableHead = createElement("thead", null, tableList, null, {})
+				createElement("th", "Pagado por", tableHead, null, {})
+				createElement("th", "Concepto", tableHead, null, {})
+				createElement("th", "Gasto", tableHead, null, {})
+				var tableBody = createElement("tbody", null, tableList, null, {})
+				if (details.expenses.length > 0) {
+					for (const spend of details.expenses) {
+						var tr = createElement("tr", null, tableBody, null, {})
+						createElement("td", spend.paid_by, tr, null, {})
+						createElement("td", spend.content, tr, null, {})
+						createElement("td", `${spend.amount} ${details.coin}`, tr, null, {})
+					}
+				} else
+					createElement("td", "No hay ningún gasto registrado", tableBody, null, {
+						colspan: 3,
+						class: "text-center"
+					})
+
+				previousID = details.id;
+			} else {
+				if (previousID == details.id) {
+					let previousElementSelected = document.getElementById(previousID).nextElementSibling.children[0];
+					previousElementSelected.removeChild(previousElementSelected.children[0]);
+					previousElementSelected.className = "hidden";
+					document.getElementById(previousID).className = "";
+					previousID = null;
+				}
+			}
+		}
+	}
+</script>
+
+<script>
+	<?php
+	if (isset($_SESSION['msg'])) {
+		foreach ($_SESSION['msg'] as $msg)
+			echo "generateMessages('$msg[0]', '$msg[1]', '$msg[2]', $msg[3]);\n";
+		$_SESSION['msg'] = [];
+	}
+
+	echo ("var tableRows = document.getElementsByName('main-travels')[0].children;
+	for (const row of tableRows) {
+		row.onclick = function() {
+			showTravelDetails(travelDetails[row.id])
+		}
+	}\n");
+	?>
 </script>
 
 </html>

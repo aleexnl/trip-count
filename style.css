@@ -1,0 +1,1152 @@
+/* Importem les fonts */
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=East+Sea+Dokdo&display=swap");
+
+
+/* Index */
+
+body#index #cabecera {
+    text-align: center;
+    margin: 20vh auto 10vh auto;
+    max-height: 30vw;
+}
+
+body#index #cabecera img {
+    max-height: 25vh;
+}
+
+body#index #centro {
+    display: flex;
+}
+
+body#index .registrarse {
+    margin: auto 10% auto auto;
+}
+
+body#index .entrar {
+    margin: auto auto auto 10%;
+}
+
+body#index a {
+    padding: 1.25rem 0.8rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.2rem;
+    border-radius: 7px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#index a:hover {
+    background-color: #323039;
+    color: white;
+    transition: 0.3s;
+}
+
+
+/* Login y Registro */
+
+body#loginandregister {
+    background-color: #ffffff;
+    font-family: "Roboto", sans-serif;
+    text-rendering: auto;
+    margin: 0;
+}
+
+body#loginandregister .content {
+    width: 80%;
+    margin: auto;
+}
+
+body#loginandregister .button-primary {
+    padding: 1rem 0.5rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#loginandregister .centered-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+body#loginandregister .form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0 1rem 0;
+}
+
+body#loginandregister .form-group>input {
+    margin: 5px 0 0 0;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+body#loginandregister .form-group>label {
+    color: #495057;
+    font-size: 1.1rem;
+}
+
+body#loginandregister .form-checkbox {
+    display: flex;
+    flex-direction: row;
+}
+
+
+/* Footer */
+
+footer {
+    background-color: #323039;
+    text-align: center;
+    padding: 0.5vw;
+    border-top: 1px solid black;
+    height: 8vh;
+}
+
+footer p {
+    font-size: 1.4vw;
+    font-family: "Roboto", sans-serif;
+    color: #fff;
+}
+
+
+/* Estilos de los mensajes del servidor.*/
+
+.message {
+    display: none;
+    padding: 0.55em 2em;
+    margin: 1.2em 0 1.2em 0;
+    border-radius: 10px;
+}
+
+.success-message {
+    display: block;
+    color: green;
+    background-color: rgba(173, 255, 47, 0.2);
+    border: 1px solid green;
+}
+
+.error-message {
+    display: block;
+    color: red;
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 1px solid red;
+    box-shadow: 0px 18px 40px -12px rgba(255, 0, 0, 0.35);
+}
+
+.msg-info {
+    color: #fff;
+    background-color: #2196F3;
+    border: 1px solid #58748a;
+    box-shadow: 0 0 5px #2196F3;
+}
+
+.msg-success {
+    color: #fff;
+    background-color: #4CAF50;
+    border: 1px solid #39883c;
+    box-shadow: 0 0 5px #4CAF50;
+}
+
+.msg-warning {
+    color: #fff;
+    background-color: #ff9800;
+    border: 1px solid #ad7c33;
+    box-shadow: 0 0 5px #ff9800;
+}
+
+.msg-error {
+    color: #fff;
+    background-color: #f44336;
+    border: 1px solid #a0342c;
+    box-shadow: 0 0 5px #f44336;
+}
+
+
+/* Index */
+
+body#index #cabecera {
+    text-align: center;
+    margin: 20vh auto 10vh auto;
+    max-height: 30vw;
+}
+
+body#index #cabecera img {
+    max-height: 25vh;
+}
+
+body#index #centro {
+    display: flex;
+}
+
+body#index .registrarse {
+    margin: auto 10% auto auto;
+}
+
+body#index .entrar {
+    margin: auto auto auto 10%;
+}
+
+body#index a {
+    padding: 1.25rem 0.8rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.2rem;
+    border-radius: 7px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#index a:hover {
+    background-color: #323039;
+    color: white;
+    transition: 0.3s;
+}
+
+
+/* HOME */
+
+
+body#home table,
+body#home td {
+    border: 1px solid black;
+}
+
+body#home table {
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+
+body#home table thead {
+    background-color: #323039;
+    color: #fff;
+}
+
+body#home table tbody {
+    background-color: #a6d2f7;
+}
+
+body#home table button.order_creation,
+body#home table button.order_update {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+body#home table thead th,
+body#home table tbody td {
+    padding: 10px;
+}
+
+body#home main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 82vh;
+}
+
+body#home main>button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+body#home {
+    font-family: 'Roboto', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+body#home th a {
+    color: #fff;
+}
+
+body#home tr {
+    cursor: pointer;
+}
+
+body#home p.title {
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+    margin: 2% 0 0 0;
+}
+
+body#home div.container-messages {
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    white-space: pre-line;
+}
+
+body#home div.container-messages div {
+    width: 65%;
+    margin: 5px auto;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px 0;
+    transition: 2s;
+}
+
+body#home form.new-trip {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 35%;
+    padding: 10px;
+    margin: 0 auto 0 auto;
+}
+
+body#home form.new-trip>div {
+    width: 100%;
+    display: flex;
+    margin-bottom: 25px;
+}
+
+body#home form.new-trip>div.coin {
+    width: 100%;
+    display: flex;
+    margin-bottom: 0;
+    place-content: center;
+}
+
+body#home form.new-trip>div>label {
+    font-size: 23px;
+}
+
+body#home form.new-trip>label {
+    font-size: 20px;
+}
+
+body#home form.new-trip>div>label[for="nameTrip"] {
+    width: 42%;
+}
+
+body#home form.new-trip>div>label[for="descriptionTrip"] {
+    width: 27%;
+}
+
+body#home form.new-trip>div>input[type="text"] {
+    width: -webkit-fill-available;
+    width: -moz-available;
+    background-color: #fff;
+    border: 0;
+    border-bottom: 2px solid #000;
+    font-size: 19px;
+    padding: 1px 5px 2px 5px;
+}
+
+body#home select[name="coinTrip"] {
+    margin-left: 15px;
+    border: 0;
+    font-size: 17px;
+    background-color: #fff;
+    border-bottom: 2px solid #000;
+}
+
+body#home form.new-trip>div>input[type="text"]:focus,
+body#home form.new-trip>div>input[type="text"]:hover,
+body#home select[name="coinTrip"]:focus,
+body#home select[name="coinTrip"]:hover {
+    background-color: #0000001f;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    outline: none;
+}
+
+body#home form.new-trip>p.author {
+    width: 100%;
+    font-size: 17px;
+    text-align: center;
+    margin-top: 25px;
+}
+
+body#home form.new-trip>div.box-btn {
+    width: 80%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+body#home button {
+    font-size: 1.2em;
+    background-color: #18c3f8;
+    box-shadow: 0 0 4px #18c3f8;
+    border: 2px solid #18c3f8;
+    padding: 10px;
+    border-radius: 5px;
+    color: #f3f3f3;
+    cursor: pointer;
+}
+
+body#home button:focus {
+    outline: none;
+    border: 2px solid #549ab3;
+}
+
+body#home .fa-v-align {
+    vertical-align: text-bottom;
+}
+
+body#home .text-center {
+    text-align: center;
+}
+
+body#home .hidden {
+    display: none;
+}
+
+body#home .bg-cornflowerblue {
+    background-color: #2a76ff !important;
+    color: white !important;
+}
+
+body#home .travel-details {
+    background-color: #e4f2ff;
+    cursor: default;
+    box-shadow: 0 0 2px 1px inset black;
+}
+
+body#home .travel-details>td {
+    padding: 0 10px;
+    overflow: hidden;
+    transition: 2s;
+}
+
+body#home .box-details>p {
+    font-size: 2.5em;
+    text-align: center;
+    margin: 0.5em 0 0.3em 0;
+}
+
+body#home .box-details>div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+body#home .spend-details-list {
+    margin: 20px auto;
+}
+
+body#home ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 10px auto 2rem 0;
+}
+
+body#home ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+body#home ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+body#home ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+body#home ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+body#home button.btn-edit-travel {
+    padding: 5px !important;
+    box-shadow: 0 0 4px black !important;
+    color: black;
+    display: flex;
+    margin: auto;
+}
+
+
+/* Header */
+
+
+header {
+    display: flex;
+    flex-direction: row;
+    padding: 0 20px;
+    border-bottom: 1px solid black;
+    justify-content: space-around;
+    align-items: center;
+    height: 8vh;
+    background-color: #323039;
+    box-shadow: 0 0 9px 2px black;
+    color: #fff;
+}
+
+header>a>img {
+    outline: none;
+    border: none;
+    font-size: 2vw;
+    height: 6vh;
+}
+
+header>div.menu {
+    display: flex;
+    flex-direction: row;
+    padding: 0 20px;
+}
+
+header>div.menu>a.link {
+    margin-right: 25px;
+    font-size: 1.4em;
+    text-decoration: none;
+    color: #fff;
+    text-shadow: 0 0 2px black;
+    transition: 0.3s;
+}
+
+header>div.menu>a.link:hover,
+header>div.menu>a.link.active {
+    color: #00daff;
+    transition: 0.3s;
+}
+
+header>p.hello {
+    font-size: 1.2vw;
+    font-family: 'Roboto', sans-serif;
+}
+
+header>p.hello>span.welcome {
+    font-weight: bold;
+}
+
+
+/* INVITATIONS */
+
+body#invitacions .button-primary {
+    padding: 1rem 0.5rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#invitacions {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    background-color: #fff;
+    font-family: "Roboto", sans-serif;
+    text-rendering: auto;
+}
+
+body#invitacions p.title {
+    text-align: center;
+    font-size: 4em;
+    font-weight: bold;
+    margin: 2% 0 0 0;
+}
+
+body#invitacions p.destiny {
+    text-align: center;
+    font-size: 2.5em;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+body#invitacions div.container-messages {
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+body#invitacions div.container-messages div {
+    width: 65%;
+    margin: 5px auto;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px 0;
+}
+
+body#invitacions form.invitations {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+body#invitacions form.invitations>div.box-mail {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 10px;
+}
+
+body#invitacions form.invitations>div.box-mail>label {
+    font-size: 2em;
+}
+
+body#invitacions form.invitations>div.box-mail>input[type="email"] {
+    z-index: 2;
+    width: 75%;
+    font-size: 1em;
+    background-image: url(images/envelope.png);
+    padding-left: 35px;
+    background-position: 6px;
+    background-size: 23px;
+    background-repeat: no-repeat;
+    border-radius: 7px;
+    border: 2px solid #464646cc;
+    box-shadow: 0 0 3px black;
+}
+
+body#invitacions form.invitations>div.box-mail>input[type="email"]:hover {
+    border: 2px solid #000;
+}
+
+body#invitacions form.invitations>div.box-mail>input[type="email"]:focus {
+    outline: none;
+    border: 2px solid #000;
+}
+
+body#invitacions form.invitations>div.box-btn {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 80%;
+}
+
+body#invitacions form.invitations>div.box-btn>button:focus {
+    outline: none;
+    border: 2px solid #549ab3;
+}
+
+body#invitacions .fa-v-align {
+    vertical-align: text-bottom;
+}
+
+body#invitacions main {
+    min-height: 82vh;
+}
+
+body#invitacions ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 10px auto auto 0;
+}
+
+body#invitacions ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+body#invitacions ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+body#invitacions ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+body#invitacions ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+
+/* EDIT TRAVEL */
+
+body#edittravel {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+body#edittravel header,
+body#edittravel main,
+body#edittravel footer {
+    width: 100vw;
+    padding: 0 !important;
+}
+
+body#edittravel main {
+    height: 100vh;
+}
+
+body#edittravel form.form-edit-travel {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+body#edittravel .form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+}
+
+body#edittravel .form-multiple-group {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0 1rem 0;
+}
+
+body#edittravel .form-btn-group {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+    justify-content: space-between;
+}
+
+body#edittravel p.destiny {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+body#edittravel .form-group input,
+body#edittravel .form-group select {
+    margin: 5px 0 0 0;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 5px #18c3d859;
+}
+
+body#edittravel .form-group label {
+    font-size: 1.2rem;
+}
+
+body#edittravel .text-center {
+    text-align: center;
+}
+
+body#edittravel button {
+    padding: 1rem 0.5rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#edittravel ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 10px auto 4rem 0;
+}
+
+body#edittravel ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+body#edittravel ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+body#edittravel ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+body#edittravel ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+body#edittravel div.container-messages {
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+body#edittravel div.container-messages div {
+    width: 65%;
+    margin: 5px auto;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px 0;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+
+/* ENTER PAYMENT */
+
+body#enterpay {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+body#enterpay header,
+body#enterpay footer {
+    width: 100vw;
+    padding: 0 !important;
+}
+
+body#enterpay .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 100vw;
+    align-items: center;
+    min-height: 80vh;
+}
+
+body#enterpay .container-forms {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100vw;
+}
+
+body#enterpay .container-spend,
+body#enterpay .container-advanced {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body#enterpay form.form-new-spend,
+body#enterpay div.advanced-options {
+    width: 20vw;
+}
+
+body#enterpay .form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 1rem 0 1rem 0;
+}
+
+body#enterpay p.destiny {
+    text-align: center;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+body#enterpay .form-group>input,
+body#enterpay .form-group>select {
+    margin: 5px 0 0 0;
+    padding: 0.7rem 1.5rem;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 5px #18c3d859;
+}
+
+body#enterpay .form-group>label {
+    font-size: 1.2rem;
+}
+
+body#enterpay button {
+    padding: 1rem 0.5rem;
+    border: 0;
+    background-color: #18c3f8;
+    color: #ffffff;
+    font-size: 1.25rem;
+    border-radius: 7px;
+    box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
+    cursor: pointer;
+}
+
+body#enterpay .individual-spend {
+    transition: 1s;
+    height: 0;
+    max-height: 600px;
+    /* background-color: cyan; */
+    margin-top: 10px;
+    overflow: auto;
+}
+
+body#enterpay .individual-spend>.header {
+    background-color: #000;
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+body#enterpay .user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid black;
+    background-color: aliceblue;
+}
+
+body#enterpay .user>:nth-child(1) {
+    width: 55%;
+}
+
+body#enterpay .user>:nth-child(2) {
+    width: 25%;
+}
+
+body#enterpay .user>:nth-child(3) {
+    width: 20%;
+}
+
+body#enterpay .user input[type="text"] {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+    font-size: 1rem;
+    border-radius: 7px;
+    color: #495057;
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 5px #18c3d859;
+}
+
+body#enterpay div.container-messages {
+    width: 100%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+}
+
+body#enterpay div.container-messages div {
+    width: 65%;
+    margin: 5px auto;
+    border-radius: 5px;
+    text-align: center;
+    padding: 10px 0;
+    opacity: 0;
+    transition: 0.5s;
+}
+
+body#enterpay .checkbox {
+    display: grid;
+    grid-gap: 0.5em;
+    font-size: 1.3rem;
+    color: #000;
+}
+
+body#enterpay .checkbox-control {
+    display: inline-grid;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.25em;
+    border: 0.1em solid currentColor;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+body#enterpay .checkbox-control svg {
+    transition: transform 0.1s ease-in 25ms;
+    transform: scale(0);
+    transform-origin: bottom left;
+    width: 17px;
+    height: 17px;
+}
+
+body#enterpay .checkbox-control svg image {
+    width: 17px;
+    height: 17px;
+}
+
+
+body#enterpay .checkbox-input {
+    display: grid;
+    grid-template-areas: "checkbox";
+
+}
+
+.checkbox-input input {
+    opacity: 0;
+    width: 1em;
+    height: 1em;
+    display: none;
+}
+
+
+.checkbox-input input:focus+.checkbox-control {
+    box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
+}
+
+.checkbox-input input:checked+.checkbox-control svg {
+    transform: scale(1);
+}
+
+div.checkbox-container {
+    display: grid;
+    place-content: center;
+    grid-gap: 2rem;
+    line-height: 1;
+}
+
+ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 10px auto 0 0;
+}
+
+ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+
+#img_url {
+    background: #ddd;
+    width: 100px;
+    height: 90px;
+    display: block;
+}
+
+
+/* BALANCE */
+
+body#balancepage {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+body#balancepage header,
+body#balancepage main,
+body#balancepage footer {
+    width: 100vw;
+    padding: 0 !important;
+}
+
+body#balancepage main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+body#balancepage table,
+body#balancepage td {
+    border: 1px solid black;
+}
+
+body#balancepage table {
+    margin: 0 auto auto auto;
+    border-collapse: collapse;
+}
+
+body#balancepage table thead {
+    background-color: #323039;
+    color: #fff;
+}
+
+body#balancepage table tbody {
+    background-color: #a6d2f7;
+}
+
+body#balancepage table button.order_creation,
+body#balancepage table button.order_update {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+body#balancepage table thead th,
+body#balancepage table tbody td {
+    padding: 10px;
+}
+
+body#balancepage ul.breadcrumb {
+    padding: 10px 16px;
+    list-style: none;
+    background-color: #eee;
+    margin: 10px auto auto 0;
+}
+
+body#balancepage ul.breadcrumb li {
+    display: inline;
+    font-size: 18px;
+}
+
+body#balancepage ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+
+body#balancepage body#balancepage ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+
+body#balancepage ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
