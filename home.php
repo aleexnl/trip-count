@@ -571,8 +571,12 @@
 				createElement("i", null, btnNewSpend, null, {
 					class: "fas fa-comment-dollar fa-v-align"
 				})
-				var btnBalance = createElement("button", "Balance", divBtnDetails, null, {
-					class: "button-primary"
+				var btnBalance = createElement("button", "Balance ", divBtnDetails, null, {
+					class: "button-primary",
+					onclick: `window.location.href = 'functions.php?action=balance&id=${details.id}'`
+				})
+				createElement("i", null, btnBalance, null, {
+					class: "fas fa-balance-scale-right fa-v-align"
 				})
 				createElement("button", "Gestionar usuarios", divBtnDetails, null, {
 					class: "button-primary"

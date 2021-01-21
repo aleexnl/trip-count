@@ -7,7 +7,7 @@ function uploadFilesInServer($group_id, $new_group_expend_id)
 {
     $folder_name = md5($group_id);
 
-    $valid_ext = array("jpg", "png", "jpeg");
+    $valid_ext = array("jpg", "png", "jpeg", "txt", "pdf");
     $count_files = count($_FILES['files']['name']);
     $upload_location = __DIR__ . "/media/$folder_name/";
 
@@ -152,4 +152,7 @@ if (isset($_POST['nameTrip'])) {
 } else if (isset($_GET['action']) && $_GET['action'] == "save-travel-to-invitations") {
     $_SESSION['trip_name'] = $_SESSION['travelSelected'][1];
     header("location: invitations.php");
+} else if (isset($_GET['action']) && $_GET['action'] == "balance" && isset($_GET['id']) && $_GET['id'] >= 1) {
+    $_SESSION["travel_id"] = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+    header("location: balance.php");
 }
