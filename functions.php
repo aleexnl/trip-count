@@ -7,7 +7,7 @@ function uploadFilesInServer($group_id, $new_group_expend_id)
 {
     $folder_name = md5($group_id);
 
-    $valid_ext = array("jpg", "png", "jpeg");
+    $valid_ext = array("jpg", "png", "jpeg", "txt", "pdf");
     $count_files = count($_FILES['files']['name']);
     $upload_location = __DIR__ . "/media/$folder_name/";
 
@@ -66,7 +66,7 @@ if (isset($_POST['nameTrip'])) {
         $_SESSION['token'] = $token[0];
         header("location: ./invitations.php");
     } else header("location:login.php?status=session_expired");
-} else if (isset($_GET['action']) == "new-spend" && isset($_GET['id']) && isset($_SESSION['user'][0])) {
+} else if (isset($_GET['action']) && $_GET['action'] == "new-spend" && isset($_GET['id']) && isset($_SESSION['user'][0])) {
     $id_travel = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
     $travel_details = $bd->prepare("SELECT trip_id FROM Travels WHERE trip_id = $id_travel");
     $travel_details->execute();
@@ -79,7 +79,7 @@ if (isset($_POST['nameTrip'])) {
         $_SESSION['travelSelected'] = null;
         header("location: home.php?msg=ID del vuelo no encontrado.");
     }
-} else if ((isset($_GET['action']) == "new-spend" || isset($_GET['action']) == "new-spend-advanced") && isset($_POST['paid-by']) && isset($_POST['total-expend']) >= 1 && isset($_POST['total-expend']) <= 10000) {
+} else if ((isset($_GET['action']) && $_GET['action'] == "new-spend" || isset($_GET['action']) && $_GET['action'] == "new-spend-advanced") && isset($_POST['paid-by']) && isset($_POST['total-expend']) >= 1 && isset($_POST['total-expend']) <= 10000) {
 
     $group_id = $_SESSION['newSpend']['groupId'];
     $paid_by = $_POST['paid-by'];
@@ -124,7 +124,7 @@ if (isset($_POST['nameTrip'])) {
     $msg = ["success", "Se ha agregado un nuevo gasto al viaje " . $_SESSION['newSpend']['tripName'] . " de $price.", "container-messages", 5];
     array_push($_SESSION['msg'], $msg);
     header("location: home.php");
-} else if (isset($_GET['action']) == "edit-travel" && isset($_GET['group']) && $_GET['group'] >= 1) {
+} else if (isset($_GET['action']) && $_GET['action'] == "edit-travel" && isset($_GET['group']) && $_GET['group'] >= 1) {
     $id_travel = filter_var($_GET['group'], FILTER_SANITIZE_STRING);
     $travel_details = $bd->prepare("SELECT `trip_id`, `name`, `description`, `coin` FROM Travels WHERE trip_id = $id_travel");
     $travel_details->execute();
@@ -132,7 +132,7 @@ if (isset($_POST['nameTrip'])) {
 
     $_SESSION['travelSelected'] = $travel;
     header("location: editTravel.php");
-} else if (isset($_GET['action']) == "save-travel") {
+} else if (isset($_GET['action']) && $_GET['action'] == "save-travel") {
     $id_travel = $_SESSION['travelSelected'][0];
 
     $params = [];
@@ -149,4 +149,10 @@ if (isset($_POST['nameTrip'])) {
     $msg = ["success", "Los cambios del viaje han sido guardados correctamente.", "container-messages", 5];
     array_push($_SESSION['msg'], $msg);
     header("location: editTravel.php");
+} else if (isset($_GET['action']) && $_GET['action'] == "save-travel-to-invitations") {
+    $_SESSION['trip_name'] = $_SESSION['travelSelected'][1];
+    header("location: invitations.php");
+} else if (isset($_GET['action']) && $_GET['action'] == "balance" && isset($_GET['id']) && $_GET['id'] >= 1) {
+    $_SESSION["travel_id"] = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+    header("location: balance.php");
 }

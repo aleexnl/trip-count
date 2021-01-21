@@ -364,7 +364,7 @@
 
         function img_pathUrl(input) {
             let fileBuffer = Array.from(input.files);
-            const validExt = ["jpg", "png", "jpeg"];
+            const validExt = ["jpg", "png", "jpeg", "txt", "pdf"];
 
             // document.getElementById('img_url').src = (window.URL ? URL : webkitURL).createObjectURL(input.files[0]);
             for (let i = fileBuffer.length - 1; i >= 0; i--) {
