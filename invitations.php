@@ -72,15 +72,19 @@
         <div class="container-messages">
             <?php
             if ($has_errors) { // If user had errors during log in
-                foreach ($error_messages as $key => $error)
+                foreach ($error_messages as $key => $error) {
                     echo "<div class=msg-error>";
-                echo $error;
-                echo "<div>";
+                    echo "<p>" . $error . "</p>";
+                    echo "</div>";
+                }
             }
-            foreach ($sended_mails as $key => $mail)
-                echo "<div class=msg-success>";
-            echo $mail . "se ha enviado correctamente.";
-            echo "<div>";
+            if (count($sended_mails) > 0) {
+                foreach ($sended_mails as $key => $mail) {
+                    echo "<div class=msg-success>";
+                    echo "<p>" . $mail . "se ha enviado correctamente.</p>";
+                    echo "</div>";
+                }
+            }
             ?>
 
         </div>
