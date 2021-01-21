@@ -55,6 +55,7 @@ body#loginandregister {
     background-color: #ffffff;
     font-family: "Roboto", sans-serif;
     text-rendering: auto;
+    margin: 0;
 }
 
 body#loginandregister .content {
@@ -67,7 +68,7 @@ body#loginandregister .button-primary {
     border: 0;
     background-color: #18c3f8;
     color: #ffffff;
-    font-size: 2vw;
+    font-size: 1.25rem;
     border-radius: 7px;
     box-shadow: 0px 18px 40px -12px rgba(24, 195, 216, 0.35);
     cursor: pointer;
@@ -90,7 +91,7 @@ body#loginandregister .form-group {
 body#loginandregister .form-group>input {
     margin: 5px 0 0 0;
     padding: 0.7rem 1.5rem;
-    font-size: 1.5vw;
+    font-size: 1.25rem;
     border-radius: 7px;
     color: #495057;
     border: 1px solid #ced4da;
@@ -106,10 +107,6 @@ body#loginandregister .form-checkbox {
     flex-direction: row;
 }
 
-body#loginandregister div.centered-form>h1 {
-    font-size: 3vw;
-}
-
 
 /* Footer */
 
@@ -122,7 +119,7 @@ footer {
 }
 
 footer p {
-    font-size: 1.2vw;
+    font-size: 1.4vw;
     font-family: "Roboto", sans-serif;
     color: #fff;
 }
@@ -265,7 +262,7 @@ body#home main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 84vh;
+    min-height: 82vh;
 }
 
 body#home main>button {
@@ -289,7 +286,7 @@ body#home tr {
 
 body#home p.title {
     text-align: center;
-    font-size: 2.5vw;
+    font-size: 4em;
     font-weight: bold;
     margin: 2% 0 0 0;
 }
@@ -335,7 +332,7 @@ body#home form.new-trip>div.coin {
 }
 
 body#home form.new-trip>div>label {
-    font-size: 1.25vw;
+    font-size: 23px;
 }
 
 body#home form.new-trip>label {
@@ -356,14 +353,14 @@ body#home form.new-trip>div>input[type="text"] {
     background-color: #fff;
     border: 0;
     border-bottom: 2px solid #000;
-    font-size: 1vw;
+    font-size: 19px;
     padding: 1px 5px 2px 5px;
 }
 
 body#home select[name="coinTrip"] {
     margin-left: 15px;
     border: 0;
-    font-size: 1.25vw;
+    font-size: 17px;
     background-color: #fff;
     border-bottom: 2px solid #000;
 }
@@ -393,7 +390,7 @@ body#home form.new-trip>div.box-btn {
 }
 
 body#home button {
-    font-size: 1.5vw;
+    font-size: 1.2em;
     background-color: #18c3f8;
     box-shadow: 0 0 4px #18c3f8;
     border: 2px solid #18c3f8;
@@ -438,7 +435,7 @@ body#home .travel-details>td {
 }
 
 body#home .box-details>p {
-    font-size: 2.5vw;
+    font-size: 2.5em;
     text-align: center;
     margin: 0.5em 0 0.3em 0;
 }
@@ -544,10 +541,6 @@ header>p.hello>span.welcome {
     font-weight: bold;
 }
 
-header>div.menu>a.link>p {
-    font-size: 2vw;
-}
-
 
 /* INVITATIONS */
 
@@ -574,14 +567,14 @@ body#invitacions {
 
 body#invitacions p.title {
     text-align: center;
-    font-size: 3vw;
+    font-size: 4em;
     font-weight: bold;
     margin: 2% 0 0 0;
 }
 
 body#invitacions p.destiny {
     text-align: center;
-    font-size: 2vw;
+    font-size: 2.5em;
     margin-top: 20px;
     margin-bottom: 10px;
 }
@@ -847,14 +840,16 @@ body#enterpay .container {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width: 80vw;
+    width: 100vw;
+    align-items: center;
+    min-height: 80vh;
 }
 
 body#enterpay .container-forms {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
-    width: 80vw;
+    width: 100vw;
 }
 
 body#enterpay .container-spend,
@@ -1038,7 +1033,7 @@ ul.breadcrumb {
     padding: 10px 16px;
     list-style: none;
     background-color: #eee;
-    margin: 10px auto auto 0;
+    margin: 10px auto 0 0;
 }
 
 ul.breadcrumb li {
@@ -1094,7 +1089,7 @@ body#balancepage main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 84vh;
+    min-height: 80vh;
 }
 
 body#balancepage table,
