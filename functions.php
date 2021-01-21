@@ -23,7 +23,7 @@ function uploadFilesInServer($group_id, $new_group_expend_id)
             $path = $upload_location . $filename;
             if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $path)) {
                 if (!isset($_SESSION['msg'])) $_SESSION['msg'] = [];
-                $msg = ["error", "No se ha podido subir la imagen '$filename'.", "container-messages", 5];
+                $msg = ["error", "No se ha podido subir la imagen $filename.", "container-messages", 5];
                 array_push($_SESSION['msg'], $msg);
             }
         }

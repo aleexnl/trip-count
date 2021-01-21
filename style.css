@@ -455,7 +455,7 @@ body#home ul.breadcrumb {
     padding: 10px 16px;
     list-style: none;
     background-color: #eee;
-    margin: 10px auto auto 0;
+    margin: 10px auto 2rem 0;
 }
 
 body#home ul.breadcrumb li {

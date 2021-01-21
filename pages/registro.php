@@ -70,7 +70,7 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
             header("refresh:1;url=login.php");
         } else { // If there is a user registered with the same email.
             $has_errors = true;
-            array_push($error_messages, "<b>ERROR:</b> Ya hay un usuario registrado con este nombre.");
+            array_push($error_messages, "<b>ERROR:</b> Ya hay un usuario registrado con este correo.");
         }
     }
     unset($_POST['userMail'], $_POST['userPass'], $_POST['userPass2']);
