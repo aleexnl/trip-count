@@ -4,8 +4,11 @@
 <head>
     <?php require_once('functions.php') ?>
     <?php if (!isset($_SESSION['user'])) header("location: pages/login.php") ?>
+    <?php if (!isset($_SESSION['travel_id'])) header("location: home.php") ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/logo.ico">
+    <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <title>Balance de Gastos - Grupo <?= $_SESSION['travel_id'] ?></title>
     <?php
