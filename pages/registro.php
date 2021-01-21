@@ -65,6 +65,7 @@ if (isset($_POST['userMail'], $_POST['userPass'], $_POST['userName'], $_POST['us
             $query->bindParam(2, $password);
             $query->execute(); // Execute the query
             $msg = 'Nuevo usuario creado correctamente, redireccionando...';
+            session_destroy();
             header("refresh:1;url=login.php");
         } else { // If there is a user registered with the same email.
             $has_errors = true;
