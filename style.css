@@ -285,7 +285,7 @@ body#home tr {
 
 body#home p.title {
     text-align: center;
-    font-size: 4em;
+    font-size: 2.5vw;
     font-weight: bold;
     margin: 2% 0 0 0;
 }
@@ -331,7 +331,7 @@ body#home form.new-trip>div.coin {
 }
 
 body#home form.new-trip>div>label {
-    font-size: 23px;
+    font-size: 1.25vw;
 }
 
 body#home form.new-trip>label {
@@ -352,14 +352,14 @@ body#home form.new-trip>div>input[type="text"] {
     background-color: #fff;
     border: 0;
     border-bottom: 2px solid #000;
-    font-size: 19px;
+    font-size: 1vw;
     padding: 1px 5px 2px 5px;
 }
 
 body#home select[name="coinTrip"] {
     margin-left: 15px;
     border: 0;
-    font-size: 17px;
+    font-size: 1.25vw;
     background-color: #fff;
     border-bottom: 2px solid #000;
 }
@@ -389,7 +389,7 @@ body#home form.new-trip>div.box-btn {
 }
 
 body#home button {
-    font-size: 1.2em;
+    font-size: 1.5vw;
     background-color: #18c3f8;
     box-shadow: 0 0 4px #18c3f8;
     border: 2px solid #18c3f8;
@@ -434,7 +434,7 @@ body#home .travel-details>td {
 }
 
 body#home .box-details>p {
-    font-size: 2.5em;
+    font-size: 2.5vw;
     text-align: center;
     margin: 0.5em 0 0.3em 0;
 }
@@ -538,6 +538,10 @@ header>p.hello {
 
 header>p.hello>span.welcome {
     font-weight: bold;
+}
+
+header>div.menu>a.link>p {
+    font-size: 2vw;
 }
 
 
