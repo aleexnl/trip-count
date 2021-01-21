@@ -9,8 +9,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<title>Home</title>
-    <link rel="shortcut icon" href="images/logo.ico">
-    <script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
+	<link rel="shortcut icon" href="images/logo.ico">
+	<script src="https://kit.fontawesome.com/b17b075250.js" crossorigin="anonymous"></script>
 	<?php
 	$userId = $_SESSION['user'][0];
 	$sql = "";
@@ -86,10 +86,10 @@
 
 <body id="home">
 	<?php include_once(__DIR__ . '/templates/header.html'); ?>
+	<ul class="breadcrumb">
+		<li><a href="#">Home</a></li>
+	</ul>
 	<main>
-		<ul class="breadcrumb">
-			<li><a href="#">Home</a></li>
-		</ul>
 		<div class="container-messages">
 		</div>
 		<p class="title"><i class="far fa-calendar-alt"></i> Tus viajes</p>
