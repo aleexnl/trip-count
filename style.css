@@ -862,7 +862,7 @@ body#enterpay .container-advanced {
 
 body#enterpay form.form-new-spend,
 body#enterpay div.advanced-options {
-    width: 20vw;
+    width: 300px;
 }
 
 body#enterpay .form-group {
