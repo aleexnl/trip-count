@@ -48,8 +48,8 @@
             }
         }
     }
-
-    if ($_SESSION['first_load_invitation_page']) {
+    
+    if (isset($_SESSION['first_load_invitation_page']) && $_SESSION['first_load_invitation_page']) {
         $_SESSION['first_load_invitation_page'] = false;
         echo "<script>window.onload = () => { generateMessages('success', 'SUCCESS: Se ha agregado el nuevo viaje: $tripName.', 'container-messages', 4); }</script>";
     }

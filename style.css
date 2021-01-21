@@ -1,4 +1,3 @@
-
 /* Importem les fonts */
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
@@ -88,7 +87,7 @@ body#loginandregister .form-group {
     margin: 1rem 0 1rem 0;
 }
 
-body#loginandregister .form-group > input {
+body#loginandregister .form-group>input {
     margin: 5px 0 0 0;
     padding: 0.7rem 1.5rem;
     font-size: 1.25rem;
@@ -97,7 +96,7 @@ body#loginandregister .form-group > input {
     border: 1px solid #ced4da;
 }
 
-body#loginandregister .form-group > label {
+body#loginandregister .form-group>label {
     color: #495057;
     font-size: 1.1rem;
 }
@@ -133,12 +132,14 @@ footer p {
     margin: 1.2em 0 1.2em 0;
     border-radius: 10px;
 }
+
 .success-message {
     display: block;
     color: green;
     background-color: rgba(173, 255, 47, 0.2);
     border: 1px solid green;
 }
+
 .error-message {
     display: block;
     color: red;
@@ -705,6 +706,10 @@ body#edittravel footer {
     padding: 0 !important;
 }
 
+body#edittravel main {
+    height: 100vh;
+}
+
 body#edittravel form.form-edit-travel {
     width: 500px;
     display: flex;
@@ -771,7 +776,7 @@ body#edittravel ul.breadcrumb {
     padding: 10px 16px;
     list-style: none;
     background-color: #eee;
-    margin: 10px auto auto 0;
+    margin: 10px auto 4rem 0;
 }
 
 body#edittravel ul.breadcrumb li {
@@ -1090,7 +1095,7 @@ body#balancepage td {
 }
 
 body#balancepage table {
-    margin-top: 10px;
+    margin: 0 auto auto auto;
     border-collapse: collapse;
 }
 
